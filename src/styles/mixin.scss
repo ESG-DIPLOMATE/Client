@@ -1,0 +1,14 @@
+@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin block-padding {
+  width: calc(100% - 40px);
+}
+
+@mixin size($width, $height) {
+  width: $width;
+  height: $height;
+}
