@@ -10,6 +10,7 @@ import Vote from "./pages/vote";
 import Community from "./pages/community";
 import StartTest from "./pages/test/StartTest";
 import Result from "./pages/test/Result";
+import VoteResults from "./pages/vote/VoteResults";
 
 export const routes = [
   {
@@ -55,6 +56,10 @@ export const routes = [
       {
         path: "vote",
         element: <Vote />,
+      },
+      {
+        path: "voteResults",
+        element: <VoteResults />,
       },
       {
         path: "community",
