@@ -137,7 +137,6 @@ export default function Test() {
   const hasSelectedOption = answers[currentQuestion] !== undefined;
 
   return (
-    <div className={$.wrapper}>
       <div className={$.container}>
         <div className={$.header}>
           {/* <div className={$.titleContainer}>
@@ -183,6 +182,5 @@ export default function Test() {
           </div>
         </div>
       </div>
-    </div>
   );
 }

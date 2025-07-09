@@ -24,7 +24,6 @@ const QuestionCard = ({
       <div className={$.header}>
         <div className={$.questionNumber}>문항 {questionNumber}번</div>
         <div className={$.progressBar}>
-          <div className={$.progressLabel}>진행도 바</div>
           <div className={$.progressTrack}>
             <div
               className={$.progressFill}
