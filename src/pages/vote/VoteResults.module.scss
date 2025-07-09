@@ -1,0 +1,109 @@
+@use "@/_colors.scss" as *;
+
+.wrapper {
+  height: 100dvh;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.PaddingContainer {
+  color: $Gray400;
+}
+
+.Container {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+
+  .title {
+    font-size: 24px;
+    font-weight: 700;
+  }
+}
+
+.monthSelector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 100px;
+  margin-bottom: 24px;
+
+  button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: $Gray300;
+  }
+
+  span {
+    font-size: 18px;
+    font-weight: 700;
+    color: $Gray400;
+  }
+}
+
+.placeholderBox {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  background: #dee2e6;
+  border-radius: 8px;
+}
+
+.rank {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: $White50;
+  color: $Gray300;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  border: 1px solid #80bfff;
+}
+
+.section {
+  margin-bottom: 32px;
+
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: $Gray400;
+    margin-bottom: 16px;
+  }
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.placeholderBox {
+  width: 100%;
+  height: 80px;
+  background: #dee2e6;
+  border-radius: 8px;
+}
