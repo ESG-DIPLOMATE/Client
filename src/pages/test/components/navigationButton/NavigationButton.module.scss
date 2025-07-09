@@ -1,0 +1,79 @@
+@use "@/_colors.scss" as *;
+@use "@/styles/mixin.scss" as *;
+
+.btn {
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &.previous {
+    background-color: white;
+    color: $Gray400;
+    border: 2px solid #e9ecef;
+
+    &:hover:not(.disabled) {
+      background-color: #f8f9fa;
+      border-color: #adb5bd;
+    }
+
+    &:active:not(.disabled) {
+      transform: translateY(1px);
+    }
+  }
+
+  &.next {
+    background: linear-gradient(135deg, #4c9eff 0%, #1976d2 100%);
+    color: white;
+    border: 2px solid transparent;
+    box-shadow: 0 4px 12px rgba(76, 158, 255, 0.3);
+
+    &:hover:not(.disabled) {
+      background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+      box-shadow: 0 6px 16px rgba(76, 158, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    &:active:not(.disabled) {
+      transform: translateY(0);
+    }
+  }
+
+  &.submit {
+    background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+    color: white;
+    border: 2px solid transparent;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+
+    &:hover:not(.disabled) {
+      background: linear-gradient(135deg, #388e3c 0%, #2e7d32 100%);
+      box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+      transform: translateY(-2px);
+    }
+
+    &:active:not(.disabled) {
+      transform: translateY(0);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .btn {
+    padding: 12px 24px;
+    font-size: 14px;
+    min-width: 80px;
+  }
+}

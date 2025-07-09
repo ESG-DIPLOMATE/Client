@@ -1,17 +1,19 @@
-import Layout from './pages/_layout';
-import Login from './pages/login';
-import Signup from './pages/signup';
-import Main from './pages/main';
-import Mypage from './pages/mypage';
-import News from './pages/news';
-import Test from './pages/test';
-import Diary from './pages/diary';
-import Vote from './pages/vote';
-import Community from './pages/community';
+import Layout from "./pages/_layout";
+import Login from "./pages/login";
+import Signup from "./pages/signup";
+import Main from "./pages/main";
+import Mypage from "./pages/mypage";
+import News from "./pages/news";
+import Test from "./pages/test";
+import Diary from "./pages/diary";
+import Vote from "./pages/vote";
+import Community from "./pages/community";
+import StartTest from "./pages/test/StartTest";
+import Result from "./pages/test/Result";
 
 export const routes = [
   {
-    path: '/',
+    path: "/",
     element: <Layout />,
     children: [
       {
@@ -19,35 +21,43 @@ export const routes = [
         element: <Main />,
       },
       {
-        path: 'login',
+        path: "login",
         element: <Login />,
       },
       {
-        path: 'signup',
+        path: "signup",
         element: <Signup />,
       },
       {
-        path: 'mypage',
+        path: "mypage",
         element: <Mypage />,
       },
       {
-        path: 'news',
+        path: "news",
         element: <News />,
       },
       {
-        path: 'test',
+        path: "startTest",
+        element: <StartTest />,
+      },
+      {
+        path: "test",
         element: <Test />,
       },
       {
-        path: 'diary',
+        path: "testResult",
+        element: <Result />,
+      },
+      {
+        path: "diary",
         element: <Diary />,
       },
       {
-        path: 'vote',
+        path: "vote",
         element: <Vote />,
       },
       {
-        path: 'community',
+        path: "community",
         element: <Community />,
       },
     ],

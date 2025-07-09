@@ -1,0 +1,143 @@
+@use "@/_colors.scss" as *;
+@use "@/styles/mixin.scss" as *;
+
+.container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.header {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-bottom: 1px solid #e9ecef;
+
+  .questionNumber {
+    font-size: 14px;
+    font-weight: 600;
+    color: $Gray400;
+    margin-bottom: 10px;
+  }
+
+  .progressBar {
+    .progressTrack {
+      width: 100%;
+      height: 6px;
+      background-color: #e9ecef;
+      border-radius: 3px;
+      overflow: hidden;
+
+      .progressFill {
+        height: 100%;
+        background: linear-gradient(90deg, #4c9eff 0%, #1976d2 100%);
+        transition: width 0.3s ease;
+        border-radius: 3px;
+      }
+    }
+  }
+}
+
+.content {
+  padding: 10px;
+
+  .questionText {
+    font-size: 15px;
+    font-weight: 600;
+    color: $Gray400;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    padding: 16px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border-left: 4px solid #4c9eff;
+  }
+
+  .optionsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .optionItem {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background-color: white;
+
+      &:hover {
+        background-color: #f8f9fa;
+        border-color: #4c9eff;
+      }
+
+      &.selected {
+        background-color: #e3f2fd;
+        border-color: #4c9eff;
+
+        .optionRadio {
+          border-color: #4c9eff;
+
+          .radioSelected {
+            background-color: #4c9eff;
+          }
+        }
+      }
+
+      .optionRadio {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #dee2e6;
+        border-radius: 50%;
+        margin-right: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: border-color 0.2s ease;
+
+        .radioSelected {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: #4c9eff;
+        }
+      }
+
+      .optionText {
+        font-size: 16px;
+        color: $Gray400;
+        font-weight: 500;
+        flex: 1;
+        line-height: 1.4;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 16px;
+  }
+
+  .content {
+    padding: 15px;
+
+    .questionText {
+      font-size: 16px;
+      padding: 12px;
+    }
+
+    .optionsContainer {
+      .optionItem {
+        padding: 12px;
+
+        .optionText {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
