@@ -1,0 +1,11 @@
+.layout {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0px;
+  img {
+    width: 15px;
+    height: 15px;
+    padding: 4.5px;
+    box-sizing: content-box;
+  }
+}
