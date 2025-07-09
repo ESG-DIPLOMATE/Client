@@ -1,0 +1,18 @@
+@use "@/_colors.scss" as *;
+
+.chip {
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 20px;
+  background: #f1f3f5;
+  color: $Gray400;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.3s, color 0.3s;
+}
+
+.active {
+  background: linear-gradient(135deg, #4c9eff 0%, #1976d2 100%);
+  color: #fff;
+}
