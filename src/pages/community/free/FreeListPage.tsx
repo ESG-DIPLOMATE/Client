@@ -67,7 +67,7 @@ function FreeListPage() {
           <div className={$.headerActions}></div>
         </div>
         <div className={$.buttonWrapper}>
-          <TextButton text="새 토론 글 작성하기" onClick={handleNewPost} />
+          <TextButton text="새 토론 글 작성하기" underline icon onClick={handleNewPost} />
           <div className={$.dropdownWrapper}>
             <DropDownButton
               options={sortOptions}

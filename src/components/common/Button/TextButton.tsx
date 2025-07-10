@@ -2,14 +2,24 @@ import { HiOutlinePencilSquare } from "react-icons/hi2";
 import $ from "./TextButton.module.scss";
 
 interface TextButtonProps {
-  text?: string;
+  text: string;
   onClick: () => void;
+  underline?: boolean;
+  icon?: boolean;
 }
 
-export default function TextButton({ text, onClick }: TextButtonProps) {
+export default function TextButton({
+  text,
+  onClick,
+  underline = false,
+  icon = false,
+}: TextButtonProps) {
   return (
-    <button className={$.newPostBtn} onClick={onClick}>
-      <HiOutlinePencilSquare size={18} />
+    <button
+      className={`${$.newPostBtn} ${underline ? $.underline : ""}`}
+      onClick={onClick}
+    >
+      {icon && <HiOutlinePencilSquare size={18} />}
       <span>{text}</span>
     </button>
   );

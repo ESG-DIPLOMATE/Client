@@ -70,7 +70,7 @@ function DebateListPage() {
             <div className={$.headerActions}></div>
           </div>
           <div className={$.buttonWrapper}>
-            <TextButton text="새 토론 글 작성하기" onClick={handleNewDebate} />
+            <TextButton text="새 토론 글 작성하기" underline icon onClick={handleNewDebate} />
             <div className={$.dropdownWrapper}>
               <DropDownButton
                 options={sortOptions}

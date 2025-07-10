@@ -3,19 +3,17 @@
 .wrapper {
   height: 100dvh;
   padding: 0 20px;
-  display: flex;
-  flex-direction: column;
 }
 
 .PaddingContainer {
   color: $Gray400;
 }
 
-.Container {
-  flex: 1 1 auto;
+.container {
+  height: calc(100% - 48px);
   overflow-y: auto;
-  padding-top: 24px;
-  padding-bottom: 24px;
+  overflow-x: hidden;
+
   &::-webkit-scrollbar {
     display: none;
   }
