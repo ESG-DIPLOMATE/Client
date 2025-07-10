@@ -11,6 +11,9 @@ import Community from "./pages/community";
 import StartTest from "./pages/test/StartTest";
 import Result from "./pages/test/Result";
 import VoteResults from "./pages/vote/VoteResults";
+import StampHistory from "./pages/mypage/stamp/stampHistory";
+import MyWritings from "./pages/mypage/myWritings";
+import MyNews from "./pages/mypage/myNews";
 
 export const routes = [
   {
@@ -32,6 +35,18 @@ export const routes = [
       {
         path: "mypage",
         element: <Mypage />,
+      },
+      {
+        path: "mywritings",
+        element: <MyWritings />,
+      },
+      {
+        path: "mynews",
+        element: <MyNews />,
+      },
+      {
+        path: "stampHistory",
+        element: <StampHistory />,
       },
       {
         path: "news",

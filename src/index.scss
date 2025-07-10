@@ -22,6 +22,11 @@ textarea {
   margin: 0;
   padding: 0;
   border: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   font-family: "NanumSquare", "-apple-system", "BlinkMacSystemFont", "system-ui",
     "Roboto", "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo",
     "Noto Sans KR", "Malgun Gothic", sans-serif;
