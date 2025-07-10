@@ -16,9 +16,9 @@
   .BackgroundImg {
     position: absolute;
     left: 50%;
-    top: 22vh; 
+    top: 23vh; 
     transform: translateX(-50%);
-    width: 43%;
+    width: 48%;
     z-index: -9; 
 }
 }
@@ -26,7 +26,7 @@
 .formContainer {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 10px;
 }
 
 .inputsWrapper {
@@ -49,4 +49,14 @@
   flex: 1;
 }
 
+.errorWrapper {
+  height: 16px; 
+}
 
+.errorText {
+  color: #e03131; 
+  font-size: 12px;
+  margin-left: 10px;
+  margin-top: -5px;
+  z-index: 999;
+}
