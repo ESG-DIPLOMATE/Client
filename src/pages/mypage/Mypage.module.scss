@@ -1,0 +1,139 @@
+@use "@/_colors.scss" as *;
+
+.wrapper {
+  height: 100dvh;
+  padding: 0 20px;
+}
+
+.PaddingContainer {
+  color: $Gray400;
+}
+
+.Container {
+  height: calc(100% - 48px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 20px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pageTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: $Gray400;
+}
+
+.logoutButton {
+  background: none;
+  border: none;
+  color: $Gray400;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.section {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sectionRow {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: $Gray400;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  color: #495057;
+}
+
+.label {
+  font-weight: 600;
+  color: $Gray400;
+}
+
+.stampHistoryLink {
+  margin-top: 10px;
+  text-align: right;
+  color: #4c9eff;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.citizenType {
+  font-size: 16px;
+  color: #495057;
+  font-weight: 600;
+}
+
+.placeholderBox {
+  width: 100%;
+  height: 80px;
+  background: #dee2e6;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.withdrawWrapper {
+  text-align: center;
+}
+
+.withdrawButton {
+  background: none;
+  border: none;
+  color: $Gray400;
+  font-size: 12px;
+  margin-top: 30px;
+  cursor: pointer;
+  text-decoration: underline;
+}

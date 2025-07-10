@@ -20,7 +20,6 @@ export default function StartTest() {
         <AppBar leftRole="back" onClickLeftButton={onBack} />
       </div>
       <div className={$.Container}>
-        {" "}
         <div className={$.contentWrapper}>
           <section className={$.introSection}>
             <h1>글로벌 시민력 테스트</h1>

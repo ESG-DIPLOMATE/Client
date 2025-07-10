@@ -1,0 +1,25 @@
+@use "@/_colors.scss" as *;
+
+.newPostBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: $Gray400;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: rgba(59, 130, 246, 0.8);
+    text-decoration-color: rgba(59, 130, 246, 0.8);
+  }
+
+  &:active {
+    color: rgba(59, 130, 246, 0.9);
+  }
+}

@@ -1,0 +1,22 @@
+.bar {
+    display: flex;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #6c757d;
+  
+    span {
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+  
+  .icon {
+    color: #6c757d;
+  }
+  
