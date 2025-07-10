@@ -3,6 +3,7 @@ import $ from "./News.module.scss";
 import KeywordChip from "@/components/Chip/KeywordChip";
 import { useNavigate } from "react-router-dom";
 import AppBar from "@/components/common/Appbar";
+import NewsCard from "./components/NewsCard";
 
 export default function News() {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ export default function News() {
   const keywords = ["전체", "ESG", "기후", "문화", "경제", "인권"];
 
   const [selectedKeyword, setSelectedKeyword] = useState("전체");
+  const [bookmarks, setBookmarks] = useState<number[]>([]);
 
   const handleKeywordClick = (keyword: string) => {
     setSelectedKeyword(keyword);
@@ -21,10 +23,28 @@ export default function News() {
     navigate(-1);
   };
 
+  const toggleBookmark = (id: number) => {
+    setBookmarks((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const newsListforMe = [
+    { id: 1, title: "맞춤형 뉴스 제목 1", description: "맞춤형 뉴스 설명 1" },
+    { id: 2, title: "맞춤형 뉴스 제목 2", description: "맞춤형 뉴스 설명 2" },
+    { id: 3, title: "맞춤형 뉴스 제목 3", description: "맞춤형 뉴스 설명 3" },
+  ];
+
+  const newsList = [
+    { id: 1, title: "뉴스 제목 1", description: "뉴스 설명 1" },
+    { id: 2, title: "뉴스 제목 2", description: "뉴스 설명 2" },
+    { id: 3, title: "뉴스 제목 3", description: "뉴스 설명 3" },
+  ];
+
   return (
     <div className={$.wrapper}>
       <div className={$.PaddingContainer}>
-        <AppBar leftRole="back" onClickLeftButton={onBack} />
+      <AppBar leftRole="back" onClickLeftButton={onBack} />
       </div>
       <div className={$.container}>
         <header className={$.header}>
@@ -33,12 +53,17 @@ export default function News() {
 
         <section className={$.section}>
           <p className={$.subTitle}>
-            맞춤형 외교뉴스 -<span className={$.typeName}>{typeName}</span>
+            맞춤형 외교뉴스 - <span className={$.typeName}>{typeName}</span>
           </p>
-          <div className={$.card}>
-            <div className={$.placeholderBox}></div>
-            <div className={$.placeholderBox}></div>
-          </div>
+          {newsListforMe.map((news) => (
+            <NewsCard
+              key={news.id}
+              title={news.title}
+              description={news.description}
+              isBookmarked={bookmarks.includes(news.id)}
+              onBookmarkToggle={() => toggleBookmark(news.id)}
+            />
+          ))}
         </section>
 
         <section className={$.section}>
@@ -56,11 +81,15 @@ export default function News() {
             ))}
           </div>
 
-          <div className={$.card}>
-            <div className={$.placeholderBox}></div>
-            <div className={$.placeholderBox}></div>
-            <div className={$.placeholderBox}></div>
-          </div>
+          {newsList.map((news) => (
+            <NewsCard
+              key={news.id}
+              title={news.title}
+              description={news.description}
+              isBookmarked={bookmarks.includes(news.id)}
+              onBookmarkToggle={() => toggleBookmark(news.id)}
+            />
+          ))}
         </section>
       </div>
     </div>

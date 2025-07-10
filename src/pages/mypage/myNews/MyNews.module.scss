@@ -1,0 +1,48 @@
+@use "@/_colors.scss" as *;
+
+.wrapper {
+  height: 100dvh;
+  padding: 0 20px;
+}
+
+.PaddingContainer {
+  color: $Gray400;
+}
+
+.container {
+  height: calc(100% - 48px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 700;
+  color: $Gray400;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+}
+
+.keywordScroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 16px;
+}
+
+.emptyText {
+  text-align: center;
+  color: #495057;
+  font-size: 14px;
+  margin-top: 40px;
+}
