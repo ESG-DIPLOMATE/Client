@@ -81,7 +81,7 @@ function DiaryListPage() {
           <div className={$.headerActions}></div>
         </div>
         <div className={$.buttonWrapper}>
-          <TextButton text="새 일지 작성하기" onClick={handleNewDiary} />
+          <TextButton text="새 일지 작성하기" underline icon onClick={handleNewDiary} />
           <div className={$.dropdownWrapper}>
             <DropDownButton
               options={sortOptions}
