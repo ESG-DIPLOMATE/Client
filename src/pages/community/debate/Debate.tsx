@@ -1,57 +1,46 @@
-import { useState } from "react";
-import AppBar from "@/components/common/Appbar";
-import $ from "./Diary.module.scss";
-import PreviewCard, { type Preview } from "@/components/Card/PreviewCard";
 import { useNavigate } from "react-router-dom";
+import PreviewCard, { type Preview } from "@/components/Card/PreviewCard";
+import AppBar from "@/components/common/Appbar";
 import DropDownButton, {
   type Option,
 } from "@/components/common/Button/DropDownButton";
 import TextButton from "@/components/common/Button/TextButton";
+import $ from "../../diary/Diary.module.scss";
+import { useState } from "react";
 
 type SortOption = "latest" | "likes" | "views";
 
-const diaryEntries: Preview[] = [
+const debates: Preview[] = [
   {
     id: 1,
-    title: "내 실천일지",
-    preview: "오늘 외교 관련 행사에 다녀왔습니다...",
+    category: "환경",
+    title: "지구온난화 대책",
+    preview: "기후 위기 대응 어떻게 생각하시나요?",
+    authorId: "debater01",
     date: "2025-07-10",
   },
   {
     id: 2,
-    title: "또 다른 일지",
-    preview: "외교 활동 보고서를 작성 중입니다...",
+    category: "문화",
+    title: "한류 확산의 영향",
+    preview: "문화 교류에 한류가 미치는 영향은 무엇일까요?",
     date: "2025-07-09",
-  },
-  {
-    id: 3,
-    title: "동현이의 실천일지",
-    preview: "오늘 유엔 관련 뉴스 스크랩을 했습니다.",
-    authorId: "donghyun",
-    date: "2025-07-08",
-  },
-  {
-    id: 4,
-    title: "지윤이의 외교 기록",
-    preview: "외교 행사에서 만난 사람들과 교류했어요.",
-    authorId: "jiyoon",
-    date: "2025-07-07",
   },
 ];
 
-const sortOptions: readonly Option<SortOption>[] = [
+const sortOptions: readonly Option<"latest" | "likes" | "views">[] = [
   { value: "latest", label: "최신순" },
   { value: "likes", label: "좋아요순" },
   { value: "views", label: "조회순" },
 ] as const;
 
-function Diary() {
+function Debate() {
   const navigate = useNavigate();
   const [currentSort, setCurrentSort] = useState<SortOption>("latest");
-  const [entries, setEntries] = useState<Preview[]>([...diaryEntries]);
+  const [entries, setEntries] = useState<Preview[]>([...debates]);
 
-  const handleNewDiary = () => {
-    navigate("/diary/new");
+  const handleNewDebate = () => {
+    navigate("/debate/new");
   };
 
   const handleSortChange = (sort: SortOption) => {
@@ -77,11 +66,11 @@ function Diary() {
       </div>
       <div className={$.container}>
         <div className={$.header}>
-          <h2>외교 실천일지</h2>
+          <h2>외교 토론 게시판</h2>
           <div className={$.headerActions}></div>
         </div>
         <div className={$.buttonWrapper}>
-            <TextButton text="새 일지 작성하기" onClick={handleNewDiary} />
+          <TextButton text="새 토론 글 작성하기" onClick={handleNewDebate} />
           <div className={$.dropdownWrapper}>
             <DropDownButton
               options={sortOptions}
@@ -94,12 +83,11 @@ function Diary() {
 
         <div className={$.diaryList}>
           {entries.map((entry) => (
-            <PreviewCard key={entry.id} post={entry} type="diary" />
+            <PreviewCard key={entry.id} post={entry} type="debate" />
           ))}
         </div>
       </div>
     </div>
   );
 }
-
-export default Diary;
+export default Debate;

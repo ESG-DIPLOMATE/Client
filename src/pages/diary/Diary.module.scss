@@ -1,0 +1,59 @@
+@use "@/_colors.scss" as *;
+
+.wrapper {
+  height: 100dvh;
+  padding: 0 20px;
+}
+
+.PaddingContainer {
+  color: $Gray400;
+}
+
+.container {
+  height: calc(100% - 48px);
+  overflow: visible;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid $Gray100;
+  
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: $Gray400;
+    margin: 0;
+  }
+}
+
+.buttonWrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  padding: 10px 0;
+}
+
+.headerActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.diaryList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dropdownWrapper {
+  position: relative;
+  z-index: 2000;
+}

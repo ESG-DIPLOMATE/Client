@@ -14,6 +14,8 @@ import VoteResults from "./pages/vote/VoteResults";
 import StampHistory from "./pages/mypage/stamp/stampHistory";
 import MyWritings from "./pages/mypage/myWritings";
 import MyNews from "./pages/mypage/myNews";
+import Debate from "./pages/community/debate/Debate";
+import Free from "./pages/community/free/Free";
 
 export const routes = [
   {
@@ -79,6 +81,14 @@ export const routes = [
       {
         path: "community",
         element: <Community />,
+      },
+      {
+        path: "debate",
+        element: <Debate />,
+      },
+      {
+        path: "free",
+        element: <Free />,
       },
     ],
   },
