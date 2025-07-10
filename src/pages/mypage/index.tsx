@@ -57,7 +57,7 @@ export default function Mypage() {
               </div>
               <div
                 className={$.stampHistoryLink}
-                onClick={() => navigate("/stampHistory")}
+                onClick={() => navigate("stampHistory")}
               >
                 스탬프 히스토리 →
               </div>
@@ -71,7 +71,7 @@ export default function Mypage() {
             <section className={$.section}>
               <h2
                 className={$.sectionTitle}
-                onClick={() => navigate("/mywritings")}
+                onClick={() => navigate("mywritings")}
               >
                 내가 작성한 글 모아보기
               </h2>
@@ -80,7 +80,7 @@ export default function Mypage() {
             <section className={$.section}>
               <h2
                 className={$.sectionTitle}
-                onClick={() => navigate("/mynews")}
+                onClick={() => navigate("mynews")}
               >
                 스크랩한 외교뉴스
               </h2>

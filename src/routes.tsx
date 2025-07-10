@@ -41,8 +41,9 @@ export const routes = [
 
       {
         path: "mypage",
-        element: <Mypage />,
+        element: <Layout />,
         children: [
+          { index: true, element: <Mypage /> },
           { path: "mywritings", element: <MyWritings /> },
           { path: "mynews", element: <MyNews /> },
           { path: "stampHistory", element: <StampHistory /> },
