@@ -29,7 +29,6 @@ export const routes = [
     element: <Layout />,
     children: [
       { index: true, element: <Main /> },
-
       { path: "login", element: <Login /> },
       { path: "signup", element: <Signup /> },
       { path: "news", element: <News /> },

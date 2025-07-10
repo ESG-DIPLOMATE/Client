@@ -16,11 +16,9 @@ function Main() {
 
   return (
     <div className={$.container}>
-      {/* Header */}
       <div className={$.header}>
         <div className={$.logo}>한터내셔널:나도 외교관</div>
         <div className={$.headerIcons}>
-          <HiOutlineBell size={24} onClick={() => navigate("/alarm")} />
           <HiOutlineUser size={24} onClick={() => navigate("/mypage")} />
         </div>
       </div>
@@ -30,7 +28,6 @@ function Main() {
         alt="로그인 외교돌이"
       />
 
-      {/* Introduction */}
       <div className={$.introBox}>
         <p className={$.introText}>
           외교는 외교관만의 일이 아닙니다. 누구나 일상 속에서 ESG 가치와 외교를
@@ -39,7 +36,6 @@ function Main() {
         </p>
       </div>
 
-      {/* Global Citizen Test */}
       <button className={$.testButton} onClick={handleTestStart}>
         글로벌 시민력 테스트 하러가기
       </button>
@@ -55,10 +51,8 @@ function Main() {
         </div>
       </div>
 
-      {/* 구분선 */}
       <div className={$.divider} />
 
-      {/* 외교실천일지 */}
       <section className={$.section}>
         <div className={$.sectionHeader}>
           <h2>외교실천일지</h2>
@@ -70,10 +64,8 @@ function Main() {
         </div>
       </section>
 
-      {/* 구분선 */}
       <div className={$.divider} />
 
-      {/* 외교뉴스 */}
       <section className={$.section}>
         <div className={$.sectionHeader}>
           <h2>외교뉴스</h2>
@@ -85,10 +77,8 @@ function Main() {
         </div>
       </section>
 
-      {/* 구분선 */}
       <div className={$.divider} />
 
-      {/* 커뮤니티 */}
       <section className={$.section}>
         <div className={$.sectionHeader}>
           <h2>커뮤니티</h2>
