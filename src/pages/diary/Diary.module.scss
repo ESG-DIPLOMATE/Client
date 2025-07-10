@@ -11,8 +11,9 @@
 
 .container {
   height: calc(100% - 48px);
-  overflow: visible;
-
+  overflow-y: auto;
+  overflow-x: hidden;
+  
   &::-webkit-scrollbar {
     display: none;
   }

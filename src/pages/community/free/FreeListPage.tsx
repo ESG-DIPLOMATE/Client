@@ -1,29 +1,27 @@
 import { useNavigate } from "react-router-dom";
 import PreviewCard, { type Preview } from "@/components/Card/PreviewCard";
-import AppBar from "@/components/common/Appbar";
 import DropDownButton, {
   type Option,
 } from "@/components/common/Button/DropDownButton";
 import TextButton from "@/components/common/Button/TextButton";
+import AppBar from "@/components/common/Appbar";
 import $ from "../../diary/Diary.module.scss";
 import { useState } from "react";
 
 type SortOption = "latest" | "likes" | "views";
 
-const debates: Preview[] = [
+const posts: Preview[] = [
   {
     id: 1,
-    category: "환경",
-    title: "지구온난화 대책",
-    preview: "기후 위기 대응 어떻게 생각하시나요?",
-    authorId: "debater01",
+    title: "내가 쓴 글",
+    preview: "자유롭게 의견 나누어 봅시다.",
     date: "2025-07-10",
   },
   {
     id: 2,
-    category: "문화",
-    title: "한류 확산의 영향",
-    preview: "문화 교류에 한류가 미치는 영향은 무엇일까요?",
+    title: "다른 사람이 쓴 글",
+    preview: "이곳은 자유게시판입니다.",
+    authorId: "otherUser",
     date: "2025-07-09",
   },
 ];
@@ -34,13 +32,13 @@ const sortOptions: readonly Option<"latest" | "likes" | "views">[] = [
   { value: "views", label: "조회순" },
 ] as const;
 
-function Debate() {
+function FreeListPage() {
   const navigate = useNavigate();
   const [currentSort, setCurrentSort] = useState<SortOption>("latest");
-  const [entries, setEntries] = useState<Preview[]>([...debates]);
+  const [entries, setEntries] = useState<Preview[]>([...posts]);
 
-  const handleNewDebate = () => {
-    navigate("/debate/new");
+  const handleNewPost = () => {
+    navigate("/free/new");
   };
 
   const handleSortChange = (sort: SortOption) => {
@@ -58,7 +56,6 @@ function Debate() {
 
     setEntries(sorted);
   };
-
   return (
     <div className={$.wrapper}>
       <div className={$.PaddingContainer}>
@@ -66,11 +63,11 @@ function Debate() {
       </div>
       <div className={$.container}>
         <div className={$.header}>
-          <h2>외교 토론 게시판</h2>
+          <h2>외교 자유 게시판</h2>
           <div className={$.headerActions}></div>
         </div>
         <div className={$.buttonWrapper}>
-          <TextButton text="새 토론 글 작성하기" onClick={handleNewDebate} />
+          <TextButton text="새 토론 글 작성하기" onClick={handleNewPost} />
           <div className={$.dropdownWrapper}>
             <DropDownButton
               options={sortOptions}
@@ -82,12 +79,18 @@ function Debate() {
         </div>
 
         <div className={$.diaryList}>
-          {entries.map((entry) => (
-            <PreviewCard key={entry.id} post={entry} type="debate" />
+          {posts.map((entry) => (
+            <PreviewCard
+              key={entry.id}
+              post={entry}
+              type="free"
+              onClick={() => navigate(`/free/${entry.id}`)}
+            />
           ))}
         </div>
       </div>
     </div>
   );
 }
-export default Debate;
+
+export default FreeListPage;

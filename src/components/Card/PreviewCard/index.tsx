@@ -14,18 +14,20 @@ export interface Preview {
 interface PreviewCardProps {
   post: Preview;
   type: "free" | "diary" | "debate";
+  onClick?: () => void;
 }
 
-const PreviewCard = ({ post, type }: PreviewCardProps) => {
+const PreviewCard = ({ post, type, onClick }: PreviewCardProps) => {
   const isMine = !post.authorId;
   const [isLiked, setIsLiked] = useState(false);
 
-  const handleLike = () => {
+  const handleLike = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setIsLiked((prev) => !prev);
   };
 
   return (
-    <div className={$.postCard}>
+    <div className={$.postCard} onClick={onClick}>
       <div className={$.header}>
         <div className={$.headerLeft}>
           {type === "debate" && post.category && (

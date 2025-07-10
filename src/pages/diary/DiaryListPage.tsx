@@ -45,7 +45,7 @@ const sortOptions: readonly Option<SortOption>[] = [
   { value: "views", label: "조회순" },
 ] as const;
 
-function Diary() {
+function DiaryListPage() {
   const navigate = useNavigate();
   const [currentSort, setCurrentSort] = useState<SortOption>("latest");
   const [entries, setEntries] = useState<Preview[]>([...diaryEntries]);
@@ -81,7 +81,7 @@ function Diary() {
           <div className={$.headerActions}></div>
         </div>
         <div className={$.buttonWrapper}>
-            <TextButton text="새 일지 작성하기" onClick={handleNewDiary} />
+          <TextButton text="새 일지 작성하기" onClick={handleNewDiary} />
           <div className={$.dropdownWrapper}>
             <DropDownButton
               options={sortOptions}
@@ -94,7 +94,12 @@ function Diary() {
 
         <div className={$.diaryList}>
           {entries.map((entry) => (
-            <PreviewCard key={entry.id} post={entry} type="diary" />
+            <PreviewCard
+              key={entry.id}
+              post={entry}
+              type="diary"
+              onClick={() => navigate(`/diary/${entry.id}`)}
+            />
           ))}
         </div>
       </div>
@@ -102,4 +107,4 @@ function Diary() {
   );
 }
 
-export default Diary;
+export default DiaryListPage;

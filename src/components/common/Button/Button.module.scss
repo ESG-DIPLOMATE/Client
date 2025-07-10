@@ -1,5 +1,5 @@
-@use '@/_colors.scss' as *; 
-@use '@/styles/mixin.scss' as *;
+@use "@/_colors.scss" as *;
+@use "@/styles/mixin.scss" as *;
 
 .button {
   border: none;
@@ -11,31 +11,23 @@
 }
 
 .large {
-    height: 56px;
-    font-size: 16px;
+  height: 56px;
+  font-size: 16px;
 }
 
 .small {
-    height: 40px;
-    font-size: 14px;
+  height: 40px;
+  font-size: 14px;
 }
 
 .primary {
   background-color: $Blue400;
   color: $White50;
-
-  &:hover {
-    background-color: $Blue400;
-  }
 }
 
 .secondary {
   background-color: $Gray200;
   color: $White50;
-
-  &:hover {
-    background-color: $Gray100;
-  }
 }
 
 .kakao {
@@ -44,15 +36,14 @@
 }
 
 .icon {
-    width: 24px;
-    height: 24px;
-    margin-right: 8px;
-    vertical-align: middle;
-  }  
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
 
 .disabled {
   background-color: $Gray100;
   color: $Gray300;
   cursor: not-allowed;
 }
-
