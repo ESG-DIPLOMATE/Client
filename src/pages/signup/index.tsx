@@ -20,16 +20,17 @@ export default function Signup() {
   const isFormValid =
     id && pw && pwConfirm && passwordsMatch && idCheckStatus === "available";
 
-  const handleIdCheck = async () => {
-    try {
-      setIdCheckStatus("checking");
-      await checkUserId(id);
-      setIdCheckStatus("available");
-    } catch (e) {
-      console.error(e);
-      setIdCheckStatus("unavailable");
-    }
-  };
+    const handleIdCheck = async () => {
+      try {
+        setIdCheckStatus("checking");
+        const res = await checkUserId(id);
+        const isAvailable = res.data.available;
+        setIdCheckStatus(isAvailable ? "available" : "unavailable");
+      } catch (e) {
+        console.error(e);
+        setIdCheckStatus("unavailable");
+      }
+    };
 
   const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newId = e.target.value;
