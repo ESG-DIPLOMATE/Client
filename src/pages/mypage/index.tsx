@@ -1,22 +1,44 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import $ from "./Mypage.module.scss";
 import AppBar from "@/components/common/Appbar";
+import { getMyPage } from "@/apis/mypage/mypage";
+import type { MyPageResponse } from "@/apis/mypage/mypage.type";
+import TextButton from "@/components/common/Button/TextButton";
 
 export default function Mypage() {
   const navigate = useNavigate();
 
-  const data = {
-    userId: "lde7953",
-    maskedPassword: "qlalfqjsgh0*****",
-    currentLevel: "LEVEL_1",
-    currentLevelDisplay: "외교관 Lv.1",
-    totalStamps: 7,
-    stampsToNextLevel: 3,
-    citizenType: "평화중재형",
-  };
+  const [data, setData] = useState<MyPageResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getMyPage();
+        setData(res);
+      } catch (error) {
+        console.error("마이페이지 데이터 불러오기 실패", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const onBack = () => {
     navigate(-1);
   };
+
+  if (loading) {
+    return <div className={$.wrapper}>로딩중...</div>;
+  }
+
+  if (!data) {
+    return <div className={$.wrapper}>데이터를 불러올 수 없습니다.</div>;
+  }
+
   return (
     <div className={$.wrapper}>
       <div className={$.PaddingContainer}>
@@ -40,10 +62,6 @@ export default function Mypage() {
                 <span>{data.userId}</span>
               </div>
               <div className={$.row}>
-                <span className={$.label}>비밀번호</span>
-                <span>{data.maskedPassword}</span>
-              </div>
-              <div className={$.row}>
                 <span className={$.label}>나의 외교 ESG 레벨</span>
                 <span>{data.currentLevelDisplay}</span>
               </div>
@@ -52,7 +70,7 @@ export default function Mypage() {
                 <span>총 {data.totalStamps}개</span>
               </div>
               <div className={$.row}>
-                <span className={$.label}>Lv.2까지 남은 스탬프</span>
+                <span className={$.label}>레벨업까지 남은 스탬프</span>
                 <span>{data.stampsToNextLevel}개</span>
               </div>
               <div
@@ -65,7 +83,14 @@ export default function Mypage() {
 
             <section className={$.sectionRow}>
               <h2 className={$.sectionTitle}>글로벌 시민력 테스트 결과</h2>
-              <p className={$.citizenType}>{data.citizenType}</p>
+              {data.citizenType === "미진단" ? (
+                <TextButton
+                  text="테스트 하러가기"
+                  onClick={() => navigate("/startTest")}
+                />
+              ) : (
+                <p className={$.citizenType}>{data.citizenType}</p>
+              )}
             </section>
 
             <section className={$.section}>
@@ -78,10 +103,7 @@ export default function Mypage() {
             </section>
 
             <section className={$.section}>
-              <h2
-                className={$.sectionTitle}
-                onClick={() => navigate("mynews")}
-              >
+              <h2 className={$.sectionTitle} onClick={() => navigate("mynews")}>
                 스크랩한 외교뉴스
               </h2>
             </section>
