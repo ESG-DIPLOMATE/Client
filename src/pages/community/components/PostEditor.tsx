@@ -41,8 +41,12 @@ export default function PostEditor<T extends string>({
   const [postTitle, setPostTitle] = useState(defaultValues?.title || "");
   const [content, setContent] = useState(defaultValues?.content || "");
   const [dropdownValue, setDropdownValue] = useState<T | undefined>(
-    defaultValues?.dropdownValue
+    defaultValues?.dropdownValue ??
+      (dropdownOptions && dropdownOptions.length > 0
+        ? dropdownOptions[0].value
+        : undefined)
   );
+
   const [images, setImages] = useState<File[]>(defaultValues?.images || []);
 
   const maxTitleLength = 20;
@@ -96,7 +100,7 @@ export default function PostEditor<T extends string>({
               <label>{dropdownLabel}</label>
               <DropDownButton
                 options={dropdownOptions}
-                value={dropdownValue || dropdownOptions[0].value}
+                value={dropdownValue ?? dropdownOptions[0].value}
                 onChange={setDropdownValue}
                 size="medium"
               />
