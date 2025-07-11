@@ -27,16 +27,16 @@ textarea {
   &::-webkit-scrollbar {
     display: none;
   }
-  font-family: "NanumSquare", "-apple-system", "BlinkMacSystemFont", "system-ui",
-    "Roboto", "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo",
-    "Noto Sans KR", "Malgun Gothic", sans-serif;
+  font-family: "Noto Sans KR", "Noto Sans SC", "NanumSquare", "-apple-system",
+    "BlinkMacSystemFont", "system-ui", "Malgun Gothic", "Noto Sans CJK KR",
+    "SimSun", "MingLiU", "MS Mincho", sans-serif;
 }
 
 input,
 textarea ::placeholder {
-  font-family: "NanumSquare", "-apple-system", "BlinkMacSystemFont", "system-ui",
-    "Roboto", "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo",
-    "Noto Sans KR", "Malgun Gothic", sans-serif;
+  font-family: "Noto Sans KR", "Noto Sans SC", "NanumSquare", "-apple-system",
+    "BlinkMacSystemFont", "system-ui", "Malgun Gothic", "Noto Sans CJK KR",
+    "SimSun", "MingLiU", "MS Mincho", sans-serif;
 }
 
 a {
