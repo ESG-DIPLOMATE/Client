@@ -1,4 +1,4 @@
-import type { NewsResponse } from "./news.type";
+import type { MyScrapResponse, NewsResponse } from "./news.type";
 import instance from "../instance";
 
 //맞춤형 뉴스 조회
@@ -24,5 +24,16 @@ export const getAllNews = async (filter: string, page = 0, size = 20) => {
       size,
     },
   });
+  return data;
+};
+
+//스크랩한 뉴스 조회
+export const getMyScraps = async (page = 0, size = 20) => {
+  const { data } = await instance.get<MyScrapResponse>(
+    "/api/v1/news/scrap/my-scraps",
+    {
+      params: { page, size },
+    }
+  );
   return data;
 };

@@ -1,12 +1,14 @@
 export interface NewsItem {
   id: number;
+  scrapId: number;
+  newsId: number;
   title: string;
   summary: string;
   url: string;
   publishDate: string;
+  scrapedAt: string;
   category: string;
   categoryDisplay: string;
-  matchScore: number;
   scrapped: boolean;
 }
 
@@ -34,4 +36,17 @@ export interface NewsResponse {
   news: NewsItem[];
   pagination: Pagination;
   filter: Filter;
+}
+
+//스크랩한 뉴스 조회 응답 타입
+export interface MyScrapResponse {
+  scraps: NewsItem[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    pageSize: number;
+    totalCount: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+  };
 }
