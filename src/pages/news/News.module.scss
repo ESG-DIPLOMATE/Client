@@ -45,9 +45,15 @@
 }
 
 .subTitle {
-  font-size: 14px;
+  font-size: 16px;
   color: $Gray400;
   margin-bottom: 16px;
+}
+
+.cardWrapper {
+  background-color: $White50;
+  padding: 15px;
+  border-radius: 10px;
 }
 
 .typeName {
