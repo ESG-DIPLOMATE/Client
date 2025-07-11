@@ -8,6 +8,13 @@ import CommentInput from "@/components/common/comment/CommentInput";
 import AppBar from "@/components/common/Appbar";
 import { useNavigate } from "react-router-dom";
 
+export interface PostEditorFormData {
+  title: string;
+  content: string;
+  dropdownValue?: string;
+  images?: File[];
+}
+
 export type PostDetailProps = {
   isMine: boolean;
   type: "free" | "diary" | "debate";
@@ -59,9 +66,7 @@ export default function PostDetail({
           <span className={$.date}>작성일 | {date}</span>
           {type !== "free" && category && (
             <span className={$.category}>
-              {type === "diary"
-                ? `실천항목 | ${category}`
-                : `분야 | ${category}`}
+              {type === "diary" ? `항목 | ${category}` : `분야 | ${category}`}
             </span>
           )}
         </div>

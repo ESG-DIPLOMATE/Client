@@ -1,4 +1,8 @@
 import PostEditor from "../components/PostEditor";
+import { compressImages } from "@/utils/imageCompressor";
+// import { useNavigate } from "react-router-dom";
+import type { PostEditorFormData } from "../components/detail";
+import { createDiscussBoard } from "@/apis/community/community";
 
 const DISCUSS_OPTIONS = [
   { label: "환경", value: "ENVIRONMENT" },
@@ -8,8 +12,26 @@ const DISCUSS_OPTIONS = [
 ] as const;
 
 export default function DebatePostPage() {
-  const handleSubmit = (data: unknown) => {
-    console.log("토론글 작성 데이터", data);
+  // const navigate = useNavigate();
+
+  const handleSubmit = async (data: PostEditorFormData) => {
+    try {
+      const compressedImages = data.images
+        ? await compressImages(data.images)
+        : undefined;
+
+      await createDiscussBoard({
+        title: data.title,
+        content: data.content,
+        discussType: data.dropdownValue!,
+        images: compressedImages,
+      });
+
+      // navigate(`/discuss-board/new/${response.data.postId}`);
+    } catch (e) {
+      console.error(e);
+      alert("작성 실패");
+    }
   };
 
   return (

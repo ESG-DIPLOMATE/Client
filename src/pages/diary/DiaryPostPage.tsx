@@ -1,4 +1,8 @@
 import PostEditor from "../community/components/PostEditor";
+import { compressImages } from "@/utils/imageCompressor";
+// import { useNavigate } from "react-router-dom";
+import type { PostEditorFormData } from "../community/components/detail";
+import { createDiary } from "@/apis/community/community";
 
 const PRACTICE_OPTIONS = [
   { label: "탄소감축", value: "탄소감축" },
@@ -9,15 +13,33 @@ const PRACTICE_OPTIONS = [
 ] as const;
 
 export default function DiaryPostPage() {
-  const handleSubmit = (data: unknown) => {
-    console.log("실천일지 작성 데이터", data);
+  // const navigate = useNavigate();
+
+  const handleSubmit = async (data: PostEditorFormData) => {
+    try {
+      const compressedImages = data.images
+        ? await compressImages(data.images)
+        : undefined;
+
+      await createDiary({
+        title: data.title,
+        content: data.content,
+        practiceCategory: data.dropdownValue!,
+        images: compressedImages,
+      });
+
+      // navigate(`/diary/${response.data.id}`);
+    } catch (e) {
+      console.error(e);
+      alert("작성 실패");
+    }
   };
 
   return (
     <PostEditor
       type="diary"
       title="나의 외교실천일지"
-      dropdownLabel="실천항목"
+      dropdownLabel="항목"
       dropdownOptions={PRACTICE_OPTIONS}
       onSubmit={handleSubmit}
     />
