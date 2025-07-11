@@ -9,13 +9,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid $Gray100;
+  border: none;
   border-radius: 6px;
-  background: white;
+  background: transparent;
   cursor: pointer;
   user-select: none;
-  width: 100%;
-  min-width: 100px;
+width: 120px;
   padding: 6px 12px;
   font-weight: 500;
   color: $Gray400;
@@ -47,7 +46,7 @@
   right: 0;
   background: white;
   border: 1px solid $Gray200;
-  border-radius: 6px;
+  // border-radius: 6px;
   z-index: 1000;
   width: 100px;
   overflow: hidden;

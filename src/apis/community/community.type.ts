@@ -26,3 +26,26 @@ export interface CommunityPopularResponse {
   popularFreeBoards: PopularFreeBoard[];
   popularDiscussBoards: PopularDiscussBoard[];
 }
+
+// 자유게시글 생성 파라미터
+export interface CreateFreeBoardParams {
+  title: string;
+  content: string;
+  images?: File[];
+}
+
+// 실천일지 생성 파라미터
+export interface CreateDiaryParams {
+  title: string;
+  content: string;
+  practiceCategory: string;
+  images?: File[];
+}
+
+// 토론글 생성 파라미터
+export interface CreateDiscussBoardParams {
+  title: string;
+  content: string;
+  discussType: string;
+  images?: File[];
+}

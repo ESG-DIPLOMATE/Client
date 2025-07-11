@@ -13,7 +13,8 @@
   height: calc(100% - 48px);
   overflow-y: auto;
   overflow-x: hidden;
-  
+  padding-bottom: 30px;
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -25,20 +26,40 @@
   justify-content: space-between;
   padding-bottom: 16px;
   border-bottom: 1px solid $Gray100;
-  
+
   h2 {
     font-size: 24px;
     font-weight: 700;
     color: $Gray400;
     margin: 0;
   }
+
+  .writeButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(76, 158, 255, 0.1);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
 }
 
-.buttonWrapper{
+.buttonWrapper {
   display: flex;
   flex-direction: column;
   align-items: end;
-  padding: 10px 0;
+  margin-bottom: 10px;
 }
 
 .headerActions {
@@ -57,4 +78,80 @@
 .dropdownWrapper {
   position: relative;
   z-index: 2000;
+}
+
+.viewAllSection {
+  margin: 16px 0;
+
+  .viewAllText {
+    font-size: 16px;
+    font-weight: 600;
+    color: $Gray400;
+  }
+
+  .divider {
+    width: 100%;
+    height: 0.5px;
+    background-color: $Gray100;
+  }
+}
+
+.description {
+  padding: 10px;
+  margin: 10px 0;
+
+  .descriptionContent {
+    margin-bottom: 20px;
+
+    h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: $Gray400;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: $Gray300;
+      margin: 0;
+    }
+  }
+
+  .practiceItems {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+
+  .practiceColumn {
+    h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: $Gray400;
+      margin-bottom: 8px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        font-size: 13px;
+        color: $Gray300;
+        margin-bottom: 4px;
+        line-height: 1.4;
+
+        strong {
+          color: $Gray400;
+        }
+      }
+    }
+  }
 }

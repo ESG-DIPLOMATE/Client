@@ -45,7 +45,7 @@ export default function Community() {
 
         <section className={$.section}>
           <div className={$.sectionTitle} onClick={() => navigate("/free")}>
-            자유 게시판
+            자유 게시판 바로가기
           </div>
 
           {freePosts.map((post) => (
@@ -55,18 +55,12 @@ export default function Community() {
 
         <section className={$.section}>
           <div className={$.sectionTitle} onClick={() => navigate("/debate")}>
-            토론 게시판
+            토론 게시판 바로가기
           </div>
 
           {discussPosts.map((post) => (
             <TitleCard key={post.id} title={post.title} />
           ))}
-        </section>
-
-        <section className={$.section}>
-          <div className={$.sectionTitle} onClick={() => navigate("/my-posts")}>
-            내가 작성한 글 모아보기
-          </div>
         </section>
       </div>
     </div>

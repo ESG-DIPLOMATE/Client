@@ -4,9 +4,9 @@ import AppBar from "@/components/common/Appbar";
 import DropDownButton, {
   type Option,
 } from "@/components/common/Button/DropDownButton";
-import TextButton from "@/components/common/Button/TextButton";
 import $ from "../../diary/Diary.module.scss";
 import { useState } from "react";
+import { FiEdit3 } from "react-icons/fi";
 
 type SortOption = "latest" | "likes" | "views";
 
@@ -67,18 +67,41 @@ function DebateListPage() {
         <div className={$.container}>
           <div className={$.header}>
             <h2>외교 토론 게시판</h2>
-            <div className={$.headerActions}></div>
-          </div>
-          <div className={$.buttonWrapper}>
-            <TextButton text="새 토론 글 작성하기" underline icon onClick={handleNewDebate} />
-            <div className={$.dropdownWrapper}>
-              <DropDownButton
-                options={sortOptions}
-                value={currentSort}
-                onChange={handleSortChange}
-                size="small"
-              />
+            <div className={$.headerActions}>
+              <button className={$.writeButton} onClick={handleNewDebate}>
+                <FiEdit3 size={20} color="#4c9eff" />
+              </button>
             </div>
+          </div>
+
+          <div className={$.description}>
+            <div className={$.descriptionContent}>
+              <h3>💡 외교 자유 게시판은</h3>
+              <p>
+                <strong>환경·문화·평화·경제</strong> 4개 분야의 국제 이슈에 대해
+                누구나 자유롭게 의견을 나누고, 서로의 시각을 넓힐 수 있는
+                공간입니다.
+              </p>
+              <p style={{ marginTop: "10px" }}>
+                내가 가진 생각이나 궁금증, 제안하고 싶은 아이디어를 올려보세요.
+                다양한 의견이 모여 세상에 작은 변화를 만들어갈 수 있습니다!
+              </p>
+            </div>
+          </div>
+
+          <div className={$.viewAllSection}>
+            <div className={$.header}>
+              <span className={$.viewAllText}>외교 토론 참여하기</span>
+              <div className={$.dropdownWrapper}>
+                <DropDownButton
+                  options={sortOptions}
+                  value={currentSort}
+                  onChange={handleSortChange}
+                  size="small"
+                />
+              </div>
+            </div>
+            <div className={$.divider}></div>
           </div>
 
           <div className={$.diaryList}>

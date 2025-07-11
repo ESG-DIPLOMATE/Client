@@ -1,76 +1,47 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AppBar from "@/components/common/Appbar";
 import KeywordChip from "@/components/Chip/KeywordChip";
 import PreviewCard from "@/components/Card/PreviewCard";
 import $ from "./MyWritings.module.scss";
+import { getMyPosts } from "@/apis/mypage/mypage";
+import type { MyPost, PostFilter } from "@/apis/mypage/mypage.type";
 
-const dummyPosts = [
-  {
-    id: 1,
-    title: "자유게시판 글 제목",
-    content: "자유롭게 쓴 글 내용 미리보기...",
-    postType: "FREE_BOARD",
-    discussType: null,
-    action: "",
-    likes: 5,
-    viewCount: 100,
-    commentCount: 3,
-    createdAt: "2025-07-10T16:02:37.713Z",
-    updatedAt: "2025-07-10T16:02:37.713Z",
-  },
-  {
-    id: 2,
-    title: "토론게시판 글 제목",
-    content: "토론 글 내용 미리보기...",
-    postType: "DISCUSS_BOARD",
-    discussType: "ENVIRONMENT",
-    action: "",
-    likes: 8,
-    viewCount: 230,
-    commentCount: 10,
-    createdAt: "2025-07-09T12:15:22.000Z",
-    updatedAt: "2025-07-09T12:15:22.000Z",
-  },
-  {
-    id: 3,
-    title: "실천일지 글 제목",
-    content: "오늘 외교 실천한 이야기...",
-    postType: "DIARY_BOARD",
-    discussType: null,
-    action: "탄소감축",
-    likes: 2,
-    viewCount: 50,
-    commentCount: 1,
-    createdAt: "2025-07-08T10:00:00.000Z",
-    updatedAt: "2025-07-08T10:00:00.000Z",
-  },
-];
+const filterLabelToQuery: Record<string, PostFilter> = {
+  전체: "ALL",
+  자유게시판: "FREE",
+  토론게시판: "DISCUSS",
+  실천일지: "DIARY",
+};
+
+const filters = ["전체", "자유게시판", "토론게시판", "실천일지"];
 
 export default function MyWritings() {
   const navigate = useNavigate();
-  const filters = ["전체", "자유게시판", "토론게시판", "실천일지"];
-  const [selectedFilter, setSelectedFilter] = useState("전체");
+  const [selectedFilter, setSelectedFilter] = useState<string>("전체");
+  const [posts, setPosts] = useState<MyPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchPosts = async (filterLabel: string) => {
+    try {
+      setLoading(true);
+      const query = filterLabelToQuery[filterLabel];
+      const res = await getMyPosts(query, 0, 20);
+      setPosts(res.posts);
+    } catch (error) {
+      console.error("내 게시글 가져오기 실패", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPosts(selectedFilter);
+  }, [selectedFilter]);
 
   const handleFilterChange = (filter: string) => {
     setSelectedFilter(filter);
   };
-
-  const filteredPosts =
-    selectedFilter === "전체"
-      ? dummyPosts
-      : dummyPosts.filter((post) => {
-          if (selectedFilter === "자유게시판") {
-            return post.postType === "FREE_BOARD";
-          }
-          if (selectedFilter === "토론게시판") {
-            return post.postType === "DISCUSS_BOARD";
-          }
-          if (selectedFilter === "실천일지") {
-            return post.postType === "DIARY_BOARD";
-          }
-          return true;
-        });
 
   return (
     <div className={$.wrapper}>
@@ -95,10 +66,12 @@ export default function MyWritings() {
             ))}
           </div>
 
-          {filteredPosts.length === 0 ? (
+          {loading ? (
+            <p className={$.emptyText}>로딩중...</p>
+          ) : posts.length === 0 ? (
             <p className={$.emptyText}>작성한 글이 없습니다.</p>
           ) : (
-            filteredPosts.map((post) => (
+            posts.map((post) => (
               <PreviewCard
                 key={post.id}
                 post={{

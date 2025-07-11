@@ -3,10 +3,10 @@ import PreviewCard, { type Preview } from "@/components/Card/PreviewCard";
 import DropDownButton, {
   type Option,
 } from "@/components/common/Button/DropDownButton";
-import TextButton from "@/components/common/Button/TextButton";
 import AppBar from "@/components/common/Appbar";
 import $ from "../../diary/Diary.module.scss";
 import { useState } from "react";
+import { FiEdit3 } from "react-icons/fi";
 
 type SortOption = "latest" | "likes" | "views";
 
@@ -64,18 +64,40 @@ function FreeListPage() {
       <div className={$.container}>
         <div className={$.header}>
           <h2>외교 자유 게시판</h2>
-          <div className={$.headerActions}></div>
-        </div>
-        <div className={$.buttonWrapper}>
-          <TextButton text="새 토론 글 작성하기" underline icon onClick={handleNewPost} />
-          <div className={$.dropdownWrapper}>
-            <DropDownButton
-              options={sortOptions}
-              value={currentSort}
-              onChange={handleSortChange}
-              size="small"
-            />
+          <div className={$.headerActions}>
+            <button className={$.writeButton} onClick={handleNewPost}>
+              <FiEdit3 size={20} color="#4c9eff" />
+            </button>
           </div>
+        </div>
+
+        <div className={$.description}>
+          <div className={$.descriptionContent}>
+            <h3>💡 외교 자유 게시판은</h3>
+            <p>
+              외교 이야기는 물론, 일상에서 느낀 점이나 관심사 등 어떤 주제든
+              편하게 올릴 수 있는 공간입니다.
+            </p>
+            <p style={{ marginTop: "10px" }}>
+              외교, 사회, 문화에 대한 자유로운 생각이나 일상의 소소한 이야기들을
+              공유해보세요!
+            </p>
+          </div>
+        </div>
+
+        <div className={$.viewAllSection}>
+          <div className={$.header}>
+            <span className={$.viewAllText}>게시글 둘러보기</span>
+            <div className={$.dropdownWrapper}>
+              <DropDownButton
+                options={sortOptions}
+                value={currentSort}
+                onChange={handleSortChange}
+                size="small"
+              />
+            </div>
+          </div>
+          <div className={$.divider}></div>
         </div>
 
         <div className={$.diaryList}>

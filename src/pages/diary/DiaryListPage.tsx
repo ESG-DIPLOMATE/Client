@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import DropDownButton, {
   type Option,
 } from "@/components/common/Button/DropDownButton";
-import TextButton from "@/components/common/Button/TextButton";
+import { FiEdit3 } from "react-icons/fi";
 
 type SortOption = "latest" | "likes" | "views";
 
@@ -78,18 +78,60 @@ function DiaryListPage() {
       <div className={$.container}>
         <div className={$.header}>
           <h2>외교 실천일지</h2>
-          <div className={$.headerActions}></div>
-        </div>
-        <div className={$.buttonWrapper}>
-          <TextButton text="새 일지 작성하기" underline icon onClick={handleNewDiary} />
-          <div className={$.dropdownWrapper}>
-            <DropDownButton
-              options={sortOptions}
-              value={currentSort}
-              onChange={handleSortChange}
-              size="small"
-            />
+          <div className={$.headerActions}>
+            <button className={$.writeButton} onClick={handleNewDiary}>
+              <FiEdit3 size={20} color="#4c9eff" />
+            </button>
           </div>
+        </div>
+
+        <div className={$.description}>
+          <div className={$.descriptionContent}>
+            <h3>💡 외교 실천일지란?</h3>
+            <p>
+              외교 실천일지는 시민 여러분이 일상에서 실천할 수 있는 외교 활동을
+              기록하고 공유하는 공간입니다. 작은 실천이 모여 더 나은 세상을
+              만들어가는 여정을 함께 해보세요.
+            </p>
+          </div>
+
+          <div className={$.practiceItems}>
+            <div className={$.practiceColumn}>
+              <h4>📝 실천 항목과 예시</h4>
+              <ul>
+                <li>
+                  <strong>탄소감축</strong> - 텀블러 사용, 대중교통 이용
+                </li>
+                <li>
+                  <strong>무역외교</strong> - 공정무역 제품 구매
+                </li>
+                <li>
+                  <strong>디지털외교</strong> - 외교 콘텐츠 공유
+                </li>
+                <li>
+                  <strong>국제연대</strong> - 국제 NGO 기부, 봉사활동
+                </li>
+                <li>
+                  <strong>문화교류</strong> - 한국 문화 소개, 외국 문화 체험
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div className={$.viewAllSection}>
+          <div className={$.header}>
+            <span className={$.viewAllText}>실천일지 둘러보기</span>
+            <div className={$.dropdownWrapper}>
+              <DropDownButton
+                options={sortOptions}
+                value={currentSort}
+                onChange={handleSortChange}
+                size="small"
+              />
+            </div>
+          </div>
+          <div className={$.divider}></div>
         </div>
 
         <div className={$.diaryList}>

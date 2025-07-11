@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import $ from "./StampHistory.module.scss";
 import AppBar from "@/components/common/Appbar";
@@ -8,42 +9,49 @@ import {
   BiCalendar,
   BiMedal,
 } from "react-icons/bi";
+import { getStampHistory, getLevelGuide } from "@/apis/mypage/mypage";
+import type {
+  StampHistoryResponse,
+  LevelGuideResponse,
+} from "@/apis/mypage/mypage.type";
 
 export default function StampHistory() {
   const navigate = useNavigate();
+
+  const [stampData, setStampData] = useState<StampHistoryResponse | null>(null);
+  const [guideData, setGuideData] = useState<LevelGuideResponse | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const onBack = () => {
     navigate(-1);
   };
 
-  const data = {
-    totalStamps: 15,
-    currentLevelDisplay: "외교관 Lv.1",
-    stampsToNextLevel: 5,
-    stampStatistics: {
-      totalStamps: 15,
-      diaryWriteStamps: 5,
-      diaryLikeStamps: 3,
-      voteStamps: 7,
-    },
-    dailyStampHistory: [
-      {
-        date: "2025.06.22",
-        stamps: [
-          { stampType: "실천일지 작성", stampCount: 1 },
-          { stampType: "공감", stampCount: 1 },
-        ],
-      },
-      {
-        date: "2025.06.11",
-        stamps: [
-          { stampType: "실천일지 작성", stampCount: 1 },
-          { stampType: "공감", stampCount: 1 },
-          { stampType: "투표", stampCount: 1 },
-        ],
-      },
-    ],
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [stampRes, guideRes] = await Promise.all([
+          getStampHistory(),
+          getLevelGuide(),
+        ]);
+        setStampData(stampRes);
+        setGuideData(guideRes);
+      } catch (e) {
+        console.error("스탬프 데이터 불러오기 실패", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <div className={$.wrapper}>로딩중...</div>;
+  }
+
+  if (!stampData || !guideData) {
+    return <div className={$.wrapper}>데이터를 불러올 수 없습니다.</div>;
+  }
 
   return (
     <div className={$.wrapper}>
@@ -51,20 +59,27 @@ export default function StampHistory() {
         <AppBar leftRole="back" onClickLeftButton={onBack} />
       </div>
       <div className={$.Container}>
-        <p className={$.intro}>
-          스탬프는 다음 세 가지 활동을 통해 얻을 수 있어요.
-          <br />
-          스탬프를 모아 외교 ESG 레벨을 올려보세요!
-        </p>
+        <p className={$.intro}>{guideData.description}</p>
 
         <ul className={$.activityList}>
-          <li>실천일지 작성하기</li>
-          <li>일지에 대한 좋아요 획득하기</li>
-          <li>ESG 투표 참여</li>
+          {guideData.stampEarningMethods.map((method, index) => (
+            <li key={index}>{method.description}</li>
+          ))}
         </ul>
+        {guideData.levels.length > 0 && (
+          <div className={$.levelGuideScroll}>
+            {guideData.levels.map((level) => (
+              <div key={level.level} className={$.levelBox}>
+                <span className={$.levelName}>{level.name}</span>
+                <span className={$.levelRange}>{level.requiredStamps}</span>
+              </div>
+            ))}
+          </div>
+        )}
 
         <hr className={$.divider} />
 
+        {/* 나의 스탬프 현황 */}
         <section className={$.section}>
           <h2 className={$.sectionTitle}>
             <BiMedal className={$.icon} />
@@ -72,51 +87,56 @@ export default function StampHistory() {
           </h2>
           <div className={$.row}>
             <span className={$.label}>나의 ESG 스탬프</span>
-            <span>총 {data.totalStamps}개</span>
+            <span>총 {stampData.totalStamps}개</span>
           </div>
           <div className={$.row}>
             <span className={$.label}>
               <BiPencil className={$.inlineIcon} /> 실천일지 작성
             </span>
-            <span>{data.stampStatistics.diaryWriteStamps}개</span>
+            <span>{stampData.stampStatistics.diaryWriteStamps}개</span>
           </div>
           <div className={$.row}>
             <span className={$.label}>
               <BiLike className={$.inlineIcon} /> 좋아요
             </span>
-            <span>{data.stampStatistics.diaryLikeStamps}개</span>
+            <span>{stampData.stampStatistics.diaryLikeStamps}개</span>
           </div>
           <div className={$.row}>
             <span className={$.label}>
               <BiCheckShield className={$.inlineIcon} /> 투표
             </span>
-            <span>{data.stampStatistics.voteStamps}개</span>
+            <span>{stampData.stampStatistics.voteStamps}개</span>
           </div>
           <div className={$.row}>
             <span className={$.label}>Lv.2까지 남은 스탬프</span>
-            <span>{data.stampsToNextLevel}개</span>
+            <span>{stampData.stampsToNextLevel}개</span>
           </div>
         </section>
 
-        <hr className={$.divider} />
+        {/* 일자별 히스토리 (스탬프가 있을 때만 보여줌) */}
+        {stampData.totalStamps > 0 && (
+          <>
+            <hr className={$.divider} />
 
-        <section className={$.section}>
-          <h2 className={$.sectionTitle}>일자별 히스토리</h2>
-          {data.dailyStampHistory.map((day) => (
-            <div key={day.date} className={$.dayHistory}>
-              <p className={$.date}>
-                <BiCalendar className={$.inlineIcon} />
-                {day.date}
-              </p>
-              {day.stamps.map((s, i) => (
-                <div key={i} className={$.stampRow}>
-                  <span>{s.stampType}</span>
-                  <span>+ {s.stampCount}</span>
+            <section className={$.section}>
+              <h2 className={$.sectionTitle}>일자별 히스토리</h2>
+              {stampData.dailyStampHistory.map((day) => (
+                <div key={day.date} className={$.dayHistory}>
+                  <p className={$.date}>
+                    <BiCalendar className={$.inlineIcon} />
+                    {day.date}
+                  </p>
+                  {day.stamps.map((s) => (
+                    <div key={s.id} className={$.stampRow}>
+                      <span>{s.stampTypeDescription}</span>
+                      <span>+ {s.stampCount}</span>
+                    </div>
+                  ))}
                 </div>
               ))}
-            </div>
-          ))}
-        </section>
+            </section>
+          </>
+        )}
       </div>
     </div>
   );
