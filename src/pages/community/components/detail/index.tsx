@@ -164,6 +164,11 @@ export default function PostDetail({
       toast("잠시 후 다시 시도해주세요.");
     }
   };
+  const editPaths = {
+    free: "/free/new",
+    debate: "/debate/new",
+    diary: "/diary/new",
+  };
 
   return (
     <div className={$.wrapper}>
@@ -173,7 +178,11 @@ export default function PostDetail({
       <div className={$.container}>
         {owner && (
           <div className={$.actions}>
-            <button onClick={() => navigate("edit")}>수정</button>
+            <button
+              onClick={() => navigate(`${editPaths[type]}?id=${numericId}`)}
+            >
+              수정
+            </button>
             <span className={$.divider}>|</span>
             <button onClick={handleDelete}>삭제</button>
           </div>

@@ -163,6 +163,68 @@ export const deletePost = (
   return instance.delete(url);
 };
 
+//자유글 수정 api
+export const editFreeBoard = async (
+  id: number,
+  data: CreateFreeBoardParams
+) => {
+  const formData = new FormData();
+
+  data.images?.forEach((img) => {
+    formData.append("images", img);
+  });
+
+  const res = await instance.put(`/api/v1/free-board/${id}`, formData, {
+    params: {
+      title: data.title,
+      content: data.content,
+    },
+  });
+
+  return res.data;
+};
+
+//토론글 수정 api
+export const editDiscussBoard = async (
+  id: number,
+  data: CreateDiscussBoardParams
+) => {
+  const formData = new FormData();
+
+  data.images?.forEach((img) => {
+    formData.append("images", img);
+  });
+
+  const res = await instance.put(`/api/v1/discuss-board/${id}`, formData, {
+    params: {
+      title: data.title,
+      content: data.content,
+      discussType: data.discussType,
+    },
+  });
+
+  return res.data;
+};
+
+//실천일지 수정 api
+export const editDiaryBoard = async (id: number, data: CreateDiaryParams) => {
+  const formData = new FormData();
+
+  data.images?.forEach((img) => {
+    formData.append("images", img);
+  });
+
+  const res = await instance.put(`/api/v1/diary/${id}`, formData, {
+    params: {
+      title: data.title,
+      content: data.content,
+      action: data.practiceCategory,
+    },
+  });
+
+  return res.data;
+};
+
 // 게시글 좋아요 토글
 export const toggleLike = (targetType: string, targetId: number) => {
   return instance.post<ToggleLikeResponse>("/api/v1/like/toggle", {
@@ -244,9 +306,12 @@ export const createFreeComment = async (postId: number, comment: string) => {
 
 //자유게시글 댓글 수정
 export const editFreeComment = async (commentId: number, comment: string) => {
-  const { data } = await instance.put(`/api/v1/free-board/comment/${commentId}`, {
-    comment,
-  });
+  const { data } = await instance.put(
+    `/api/v1/free-board/comment/${commentId}`,
+    {
+      comment,
+    }
+  );
 
   return data;
 };

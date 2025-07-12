@@ -9,6 +9,7 @@ import Button from "@/components/common/Button";
 import { toast } from "react-toastify";
 
 export interface PostEditorProps<T extends string> {
+  mode?: "create" | "edit";
   type: "diary" | "free" | "debate";
   title: string;
   dropdownLabel?: string;
@@ -35,9 +36,11 @@ export default function PostEditor<T extends string>({
   dropdownOptions,
   onSubmit,
   defaultValues,
-  submitText = "작성 완료",
+  submitText,
+  mode,
 }: PostEditorProps<T>) {
   const navigate = useNavigate();
+  submitText = mode === "edit" ? "수정하기" : "작성 완료";
 
   const [postTitle, setPostTitle] = useState(defaultValues?.title || "");
   const [content, setContent] = useState(defaultValues?.content || "");
