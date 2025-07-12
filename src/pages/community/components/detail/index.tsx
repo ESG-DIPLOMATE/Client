@@ -6,7 +6,8 @@ import ImageSlider from "@/components/Slider";
 import CommentList from "@/components/common/comment/CommentList";
 import CommentInput from "@/components/common/comment/CommentInput";
 import AppBar from "@/components/common/Appbar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { deletePost, toggleLike } from "@/apis/community/community";
 
 export interface PostEditorFormData {
   title: string;
@@ -16,7 +17,7 @@ export interface PostEditorFormData {
 }
 
 export type PostDetailProps = {
-  isMine: boolean;
+  owner: boolean;
   type: "free" | "diary" | "debate";
   title: string;
   date: string;
@@ -25,12 +26,18 @@ export type PostDetailProps = {
   content: string;
   images: string[];
   likeCount: number;
+  liked: boolean;
   commentCount: number;
-  comments: { id: number; authorId: string; content: string; date: string }[];
+  comments: {
+    id: number;
+    authorId: string;
+    content: string;
+    date: string;
+  }[];
 };
 
 export default function PostDetail({
-  isMine,
+  owner,
   type,
   title,
   date,
@@ -39,14 +46,53 @@ export default function PostDetail({
   content,
   images,
   likeCount,
+  liked,
   commentCount,
   comments,
 }: PostDetailProps) {
   const navigate = useNavigate();
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(liked);
+  const [likeCountState, setLikeCountState] = useState(likeCount);
+  const { id } = useParams<{ id: string }>();
+  const numericId = id ? Number(id) : undefined;
 
-  const handleLike = () => {
-    setIsLiked((prev) => !prev);
+  if (!numericId) {
+    return <p>잘못된 요청입니다.</p>;
+  }
+  const handleLike = async () => {
+    try {
+      const targetTypeMap = {
+        free: "FreeBoard",
+        debate: "DiscussBoard",
+        diary: "Diary",
+      };
+
+      const res = await toggleLike(targetTypeMap[type], numericId);
+      setIsLiked(res.data.liked);
+      setLikeCountState(res.data.likeCount);
+    } catch (e) {
+      console.error(e);
+      alert("좋아요 처리 중 오류가 발생했습니다.");
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!numericId) {
+      alert("잘못된 요청입니다. 게시글 ID가 없습니다.");
+      return;
+    }
+
+    const confirm = window.confirm("정말 삭제하시겠습니까?");
+    if (!confirm) return;
+
+    try {
+      await deletePost(type, numericId);
+      alert("삭제되었습니다.");
+      navigate(-1);
+    } catch (e) {
+      console.error(e);
+      alert("삭제 중 오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -55,13 +101,13 @@ export default function PostDetail({
         <AppBar leftRole="back" onClickLeftButton={() => navigate(-1)} />
       </div>
       <div className={$.container}>
-        {isMine && (
+        {owner && (
           <div className={$.actions}>
-            수정
+            <button onClick={() => navigate("edit")}>수정</button>
             <span className={$.divider}>|</span>
-            삭제
+            <button onClick={handleDelete}>삭제</button>
           </div>
-        )}{" "}
+        )}
         <div className={$.topRow}>
           <span className={$.date}>작성일 | {date}</span>
           {type !== "free" && category && (
@@ -76,7 +122,7 @@ export default function PostDetail({
           <div className={$.imageWrapper}>
             <ImageSlider images={images} />
           </div>
-        )}{" "}
+        )}
         <div className={$.content}>{content}</div>
         <div className={$.meta}>
           <div className={$.left}>
@@ -86,7 +132,7 @@ export default function PostDetail({
               ) : (
                 <AiOutlineHeart size={20} color="#9CA3AF" />
               )}
-              <span>{likeCount}</span>
+              <span>{likeCountState}</span>
             </div>
             <div className={$.commentsIcon}>
               <AiOutlineComment size={20} />

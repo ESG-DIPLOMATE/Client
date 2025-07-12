@@ -1,46 +1,59 @@
-// import { useParams } from "react-router-dom";
-
+import { useParams } from "react-router-dom";
 import PostDetail from "../components/detail";
+import { getDiscussBoardDetail } from "@/apis/community/community";
+import type { DiscussBoardDetail } from "@/apis/community/community.type";
+import { useEffect, useState } from "react";
 
 export default function DebatePostDetail() {
-  //   const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
 
-  const dummy = {
-    title: "지구온난화 대책",
-    date: "2025.07.12",
-    authorId: "debater01",
-    category: "환경",
-    content: "기후 위기 대응 어떻게 생각하시나요?",
-    images: [],
-    likeCount: 5,
-    commentCount: 2,
-    isMine: true,
-    // isMine: false,
-    comments: [
-      {
-        id: 1,
-        authorId: "userA",
-        content:
-          "찬성합니다!찬성합니다!찬성합니다!찬성합니다!찬성합니다!찬성합니다!찬성합니다!찬성합니다!찬성합니다!",
-        date: "2025.07.12",
-        opinion: "찬성",
-      },
-    ],
-  };
+  const [data, setData] = useState<DiscussBoardDetail>();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const res = await getDiscussBoardDetail(id);
+        setData(res.data);
+      } catch (e) {
+        console.error(e);
+        alert("글을 불러오지 못했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  if (loading) return <p>Loading...</p>;
+  if (!data) return <p>데이터가 없습니다.</p>;
 
   return (
     <PostDetail
-      isMine={dummy.isMine}
+      id={data.id}
+      owner={data.owner}
       type="debate"
-      title={dummy.title}
-      date={dummy.date}
-      authorId={dummy.authorId}
-      category={dummy.category}
-      content={dummy.content}
-      images={dummy.images}
-      likeCount={dummy.likeCount}
-      commentCount={dummy.commentCount}
-      comments={dummy.comments}
+      title={data.title}
+      date={data.createdAt.slice(0, 10).replaceAll("-", ".")}
+      authorId={data.userId}
+      category={data.discussType}
+      content={data.content ?? ""}
+      images={data.discussBoardImages.map(
+        (img) => `https://hihigh.lion.it.kr${img.imageUrl}`
+      )}
+      likeCount={data.likes}
+      liked={data.liked}
+      commentCount={data.discussBoardComments.length}
+      comments={data.discussBoardComments.map((comment) => ({
+        id: comment.id,
+        authorId: comment.authorId,
+        content: comment.content,
+        date: comment.date,
+      }))}
     />
   );
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import $ from "./PreviewCard.module.scss";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import TextButton from "@/components/common/Button/TextButton";
 
 export interface Preview {
   id: number;
@@ -14,11 +15,18 @@ export interface Preview {
 interface PreviewCardProps {
   post: Preview;
   type: "free" | "diary" | "debate";
+  owner: boolean;
   onClick?: () => void;
+  onDelete?: () => void;
 }
 
-const PreviewCard = ({ post, type, onClick }: PreviewCardProps) => {
-  const isMine = !post.authorId;
+const PreviewCard = ({
+  post,
+  type,
+  owner,
+  onClick,
+  onDelete,
+}: PreviewCardProps) => {
   const [isLiked, setIsLiked] = useState(false);
 
   const handleLike = (e: React.MouseEvent) => {
@@ -36,7 +44,7 @@ const PreviewCard = ({ post, type, onClick }: PreviewCardProps) => {
           <span className={$.title}>{post.title}</span>
         </div>
 
-        {!isMine && (
+        {!owner && (
           <div className={$.heartIcon} onClick={handleLike}>
             {isLiked ? (
               <AiFillHeart size={20} color="#3B82F6" />
@@ -56,11 +64,18 @@ const PreviewCard = ({ post, type, onClick }: PreviewCardProps) => {
         </div>
 
         <div className={$.right}>
-          {isMine && (
+          {owner && (
             <div className={$.actions}>
               <button>수정</button>
               <span className={$.divider}>|</span>
-              <button>삭제</button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete?.();
+                }}
+              >
+                삭제
+              </button>
             </div>
           )}
         </div>
