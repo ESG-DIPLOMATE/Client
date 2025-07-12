@@ -232,3 +232,26 @@ export const editDiaryComment = async (commentId: number, comment: string) => {
 export const deleteDiaryComment = async (commentId: number) => {
   await instance.delete(`/api/v1/diary/comment/${commentId}`);
 };
+
+//자유게시글 댓글 생성
+export const createFreeComment = async (postId: number, comment: string) => {
+  const { data } = await instance.post(`/api/v1/free-board/${postId}/comment`, {
+    comment,
+  });
+
+  return data;
+};
+
+//자유게시글 댓글 수정
+export const editFreeComment = async (commentId: number, comment: string) => {
+  const { data } = await instance.put(`/api/v1/free-board/comment/${commentId}`, {
+    comment,
+  });
+
+  return data;
+};
+
+//자유게시글 댓글 삭제
+export const deleteFreeComment = async (commentId: number) => {
+  await instance.delete(`/api/v1/free-board/comment/${commentId}`);
+};

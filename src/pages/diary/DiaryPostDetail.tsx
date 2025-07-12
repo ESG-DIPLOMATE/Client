@@ -52,7 +52,6 @@ export default function DiaryPostDetail() {
         userId: comment.userId,
         authorId: comment.userId,
         content: comment.content,
-        commentType: undefined,
         createdAt: comment.createdAt,
         updatedAt: comment.updatedAt,
         owner: comment.owner,

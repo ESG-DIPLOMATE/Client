@@ -10,11 +10,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   createDiaryComment,
   createDiscussComment,
+  createFreeComment,
   deleteDiaryComment,
   deleteDiscussComment,
+  deleteFreeComment,
   deletePost,
   editDiaryComment,
   editDiscussComment,
+  editFreeComment,
   toggleLike,
 } from "@/apis/community/community";
 import { toast } from "react-toastify";
@@ -119,6 +122,8 @@ export default function PostDetail({
         await createDiscussComment(Number(id), text, stance!);
       } else if (type === "diary") {
         await createDiaryComment(Number(id), text);
+      } else if (type === "free") {
+        await createFreeComment(Number(id), text);
       }
       window.location.reload();
     } catch (e) {
@@ -133,6 +138,8 @@ export default function PostDetail({
         await editDiscussComment(commentId, content);
       } else if (type === "diary") {
         await editDiaryComment(commentId, content);
+      } else if (type === "free") {
+        await editFreeComment(commentId, content);
       }
       window.location.reload();
     } catch (e) {
@@ -147,9 +154,11 @@ export default function PostDetail({
         await deleteDiscussComment(commentId);
       } else if (type === "diary") {
         await deleteDiaryComment(commentId);
+      } else if (type === "free") {
+        await deleteFreeComment(commentId);
       }
       toast("댓글이 삭제되었습니다.");
-      window.location.reload(); // 또는 refetch() 사용
+      window.location.reload();
     } catch (e) {
       console.error(e);
       toast("잠시 후 다시 시도해주세요.");
