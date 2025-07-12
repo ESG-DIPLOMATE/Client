@@ -7,7 +7,7 @@ interface LineCardProps {
   title: string;
   content: string;
   createdAt: string;
-  type: "free" | "debate";
+  type: "free" | "debate" | "diary";
   likeCount: number;
   commentCount: number;
 }
