@@ -1,11 +1,17 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { getPersonalizedNews, getAllNews } from "@/apis/news/news";
+import {
+  getPersonalizedNews,
+  getAllNews,
+  toggleNewsScrap,
+} from "@/apis/news/news";
 import type { NewsItem } from "@/apis/news/news.type";
 import KeywordChip from "@/components/Chip/KeywordChip";
 import AppBar from "@/components/common/Appbar";
 import NewsCard from "./components/NewsCard";
+import TextButton from "@/components/common/Button/TextButton";
 import $ from "./News.module.scss";
+import { toast } from "react-toastify";
 
 const keywordMap: Record<string, string> = {
   전체: "ALL",
@@ -18,30 +24,33 @@ const keywordMap: Record<string, string> = {
 export default function News() {
   const navigate = useNavigate();
 
-  const typeName = "평화중재형";
   const keywords = ["전체", "ESG", "기후", "문화", "경제"];
 
   const [newsListforMe, setNewsListforMe] = useState<NewsItem[]>([]);
   const [newsList, setNewsList] = useState<NewsItem[]>([]);
   const [selectedKeyword, setSelectedKeyword] = useState("ALL");
 
-  // 페이지네이션 관리용 ref
+  const [myCitizenType, setMyCitizenType] = useState<string | null>(null);
+  const [myCitizenTypeDisplay, setMyCitizenTypeDisplay] = useState<string>("");
+
   const pageRef = useRef(0);
   const [hasNext, setHasNext] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const observerRef = useRef<HTMLDivElement>(null);
 
-  // 맞춤형 뉴스 fetch
   useEffect(() => {
     const fetchPersonalized = async () => {
       const data = await getPersonalizedNews();
+
+      setMyCitizenType(data.citizenType);
+      setMyCitizenTypeDisplay(data.citizenTypeDisplay);
+
       setNewsListforMe(data.news);
     };
     fetchPersonalized();
   }, []);
 
-  // 전체 뉴스 fetch (키워드 변경 시 초기화)
   useEffect(() => {
     pageRef.current = 0;
     fetchAllNews(0, true);
@@ -96,20 +105,31 @@ export default function News() {
     navigate(-1);
   };
 
-  const toggleBookmark = (id: number, type: "personal" | "all") => {
-    if (type === "personal") {
-      setNewsListforMe((prev) =>
-        prev.map((item) =>
-          item.id === id ? { ...item, scrapped: !item.scrapped } : item
-        )
-      );
-    } else if (type === "all") {
-      setNewsList((prev) =>
-        prev.map((item) =>
-          item.id === id ? { ...item, scrapped: !item.scrapped } : item
-        )
-      );
+  const toggleBookmark = async (id: number, type: "personal" | "all") => {
+    try {
+      await toggleNewsScrap(id);
+
+      if (type === "personal") {
+        setNewsListforMe((prev) =>
+          prev.map((item) =>
+            item.id === id ? { ...item, scrapped: !item.scrapped } : item
+          )
+        );
+      } else if (type === "all") {
+        setNewsList((prev) =>
+          prev.map((item) =>
+            item.id === id ? { ...item, scrapped: !item.scrapped } : item
+          )
+        );
+      }
+    } catch (e) {
+      console.error(e);
+      toast("잠시 후 다시 시도해주세요.");
     }
+  };
+
+  const goToTest = () => {
+    navigate("/startTest");
   };
 
   return (
@@ -121,20 +141,43 @@ export default function News() {
         <header className={$.header}>
           <h1 className={$.title}>외교뉴스</h1>
         </header>
-        <section className={$.section}>
-          <p className={$.subTitle}>
-            맞춤형 외교뉴스 - <span className={$.typeName}>{typeName}</span>
-          </p>
-          <div className={$.cardWrapper}>
-            {newsListforMe.map((news) => (
-              <NewsCard
-                key={news.id}
-                news={news}
-                onBookmarkToggle={() => toggleBookmark(news.id, "personal")}
-              />
-            ))}
-          </div>
+
+        <section className={$.sectionRow}>
+          <p className={$.subTitle}>맞춤형 외교뉴스</p>
+
+          {myCitizenType === null ? (
+            <TextButton
+              text="시민력 테스트 하러가기"
+              onClick={goToTest}
+              underline
+            />
+          ) : (
+            <span className={$.typeName}>{myCitizenTypeDisplay}</span>
+          )}
         </section>
+
+        {myCitizenType === null ? (
+          <p className={$.description}>
+            시민력 테스트를 완료하면 나에게 맞춤형 외교뉴스를 추천받을 수
+            있어요.
+          </p>
+        ) : (
+          <>
+            <p className={$.description}>
+              시민력 테스트 결과에 따라 외교뉴스를 추천해드려요.
+            </p>
+            <div className={$.cardWrapper}>
+              {newsListforMe.map((news) => (
+                <NewsCard
+                  key={news.id}
+                  news={news}
+                  onBookmarkToggle={() => toggleBookmark(news.id, "personal")}
+                />
+              ))}
+            </div>
+          </>
+        )}
+
         <section className={$.section}>
           <div className={$.newsHeader}>
             <h2>외교뉴스 전체보기</h2>

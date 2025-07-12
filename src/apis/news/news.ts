@@ -1,9 +1,9 @@
-import type { MyScrapResponse, NewsResponse } from "./news.type";
+import type { MyScrapResponse, NewsResponse, PersonalizedNewsResponse } from "./news.type";
 import instance from "../instance";
 
 //맞춤형 뉴스 조회
 export const getPersonalizedNews = async () => {
-  const { data } = await instance.get<NewsResponse>(
+  const { data } = await instance.get<PersonalizedNewsResponse>(
     "/api/v1/news/personalized",
     {
       params: {
@@ -35,5 +35,13 @@ export const getMyScraps = async (page = 0, size = 20) => {
       params: { page, size },
     }
   );
+  return data;
+};
+
+//뉴스 스크랩하기
+export const toggleNewsScrap = async (newsId: number) => {
+  const { data } = await instance.post("/api/v1/news/scrap/toggle", {
+    newsId,
+  });
   return data;
 };

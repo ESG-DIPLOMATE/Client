@@ -38,6 +38,14 @@ export interface NewsResponse {
   filter: Filter;
 }
 
+export interface PersonalizedNewsResponse {
+  news: NewsItem[];
+  pagination: Pagination;
+  filter: Filter;
+  citizenType: string | null;
+  citizenTypeDisplay: string;
+}
+
 //스크랩한 뉴스 조회 응답 타입
 export interface MyScrapResponse {
   scraps: NewsItem[];

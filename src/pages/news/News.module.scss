@@ -45,9 +45,9 @@
 }
 
 .subTitle {
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 700;
   color: $Gray400;
-  margin-bottom: 16px;
 }
 
 .cardWrapper {
@@ -62,6 +62,19 @@
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.sectionRow {
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.description {
+  font-size: 12px;
+  color: $Gray300;
+  margin-top: 8px;
+  margin-bottom: 16px;
 }
 
 .section {
