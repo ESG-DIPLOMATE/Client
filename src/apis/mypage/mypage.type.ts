@@ -15,7 +15,7 @@ export interface MyPost {
   id: number;
   title: string;
   content: string;
-  postType: "FREE_BOARD" | "DISCUSS_BOARD" | "DIARY_BOARD";
+  postType: "FREE_BOARD" | "DISCUSS_BOARD" | "DIARY";
   discussType?: "ENVIRONMENT" | "CULTURE" | "PEACE" | "ECONOMY";
   action?: string;
   likes: number;
@@ -23,6 +23,7 @@ export interface MyPost {
   commentCount: number;
   createdAt: string;
   updatedAt: string;
+  owner: true;
 }
 
 export interface MyPostsResponse {

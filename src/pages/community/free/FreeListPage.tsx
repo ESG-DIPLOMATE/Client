@@ -1,32 +1,17 @@
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import PreviewCard, { type Preview } from "@/components/Card/PreviewCard";
+import AppBar from "@/components/common/Appbar";
 import DropDownButton, {
   type Option,
 } from "@/components/common/Button/DropDownButton";
-import AppBar from "@/components/common/Appbar";
+import PreviewCard, { type Preview } from "@/components/Card/PreviewCard";
+import { getFreeBoardList, deletePost } from "@/apis/community/community";
 import $ from "../../diary/Diary.module.scss";
-import { useState } from "react";
 import { FiEdit3 } from "react-icons/fi";
 
 type SortOption = "latest" | "likes" | "views";
 
-const posts: Preview[] = [
-  {
-    id: 1,
-    title: "내가 쓴 글",
-    preview: "자유롭게 의견 나누어 봅시다.",
-    date: "2025-07-10",
-  },
-  {
-    id: 2,
-    title: "다른 사람이 쓴 글",
-    preview: "이곳은 자유게시판입니다.",
-    authorId: "otherUser",
-    date: "2025-07-09",
-  },
-];
-
-const sortOptions: readonly Option<"latest" | "likes" | "views">[] = [
+const sortOptions: readonly Option<SortOption>[] = [
   { value: "latest", label: "최신순" },
   { value: "likes", label: "좋아요순" },
   { value: "views", label: "조회순" },
@@ -35,27 +20,101 @@ const sortOptions: readonly Option<"latest" | "likes" | "views">[] = [
 function FreeListPage() {
   const navigate = useNavigate();
   const [currentSort, setCurrentSort] = useState<SortOption>("latest");
-  const [entries, setEntries] = useState<Preview[]>([...posts]);
+  const [entries, setEntries] = useState<Preview[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const pageRef = useRef(0);
+
+  const observerRef = useRef<HTMLDivElement>(null);
+
+  const fetchList = async (page: number, reset = false) => {
+    try {
+      setLoading(true);
+
+      const res = await getFreeBoardList({
+        page,
+        size: 10,
+        sortBy: currentSort,
+      });
+
+      const previews: Preview[] = res.data.data.content.map((item) => ({
+        id: item.id,
+        title: item.title,
+        preview: item.content || "",
+        authorId: item.userId,
+        date: item.createdAt.slice(0, 10),
+        likes: item.likes,
+        liked: item.liked,
+        owner: item.owner,
+      }));
+
+      if (reset) {
+        setEntries(previews);
+      } else {
+        setEntries((prev) => [...prev, ...previews]);
+      }
+
+      setHasMore(!res.data.data.pagination.last);
+      pageRef.current = page;
+    } catch (e) {
+      console.error(e);
+      alert("게시글 목록을 불러오지 못했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    pageRef.current = 0;
+    fetchList(0, true);
+  }, [currentSort]);
+
+  const observerCallback = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const [entry] = entries;
+
+      if (entry.isIntersecting && hasMore && !loading) {
+        const nextPage = pageRef.current + 1;
+        fetchList(nextPage);
+      }
+    },
+    [hasMore, loading, currentSort]
+  );
+
+  useEffect(() => {
+    if (!observerRef.current) return;
+
+    const observer = new IntersectionObserver(observerCallback, {
+      threshold: 1.0,
+    });
+
+    observer.observe(observerRef.current);
+
+    return () => observer.disconnect();
+  }, [observerRef, observerCallback]);
+
+  const handleSortChange = (sort: SortOption) => {
+    setCurrentSort(sort);
+  };
 
   const handleNewPost = () => {
     navigate("/free/new");
   };
 
-  const handleSortChange = (sort: SortOption) => {
-    setCurrentSort(sort);
+  const handleDelete = async (id: number) => {
+    if (!window.confirm("정말 삭제하시겠습니까?")) return;
 
-    const sorted = [...entries];
-    //api 연동하고 수정해야 함
-    if (sort === "latest") {
-      sorted.sort((a, b) => b.date.localeCompare(a.date));
-    } else if (sort === "views") {
-      sorted.sort((a, b) => a.date.localeCompare(b.date));
-    } else if (sort === "likes") {
-      sorted.sort((a, b) => a.title.localeCompare(b.title, "ko"));
+    try {
+      await deletePost("free", id);
+      alert("삭제가 완료되었습니다.");
+      pageRef.current = 0;
+      fetchList(0, true);
+    } catch (e) {
+      console.error(e);
+      alert("삭제 중 오류가 발생했습니다.");
     }
-
-    setEntries(sorted);
   };
+
   return (
     <div className={$.wrapper}>
       <div className={$.PaddingContainer}>
@@ -97,18 +156,27 @@ function FreeListPage() {
               />
             </div>
           </div>
-          <div className={$.divider}></div>
         </div>
 
         <div className={$.diaryList}>
-          {posts.map((entry) => (
-            <PreviewCard
-              key={entry.id}
-              post={entry}
-              type="free"
-              onClick={() => navigate(`/free/${entry.id}`)}
-            />
-          ))}
+          {loading && entries.length === 0 ? (
+            <p>로딩 중...</p>
+          ) : entries.length === 0 ? (
+            <p>게시글이 없습니다.</p>
+          ) : (
+            entries.map((entry) => (
+              <PreviewCard
+                key={entry.id}
+                post={entry}
+                type="free"
+                owner={entry.owner}
+                onClick={() => navigate(`/free/${entry.id}`)}
+                onDelete={() => handleDelete(entry.id)}
+              />
+            ))
+          )}
+          {loading && entries.length > 0 && <p>더 불러오는 중...</p>}
+          <div ref={observerRef} style={{ height: "1px" }}></div>
         </div>
       </div>
     </div>

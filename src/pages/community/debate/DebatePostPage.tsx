@@ -1,8 +1,9 @@
 import PostEditor from "../components/PostEditor";
 import { compressImages } from "@/utils/imageCompressor";
-// import { useNavigate } from "react-router-dom";
 import type { PostEditorFormData } from "../components/detail";
 import { createDiscussBoard } from "@/apis/community/community";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const DISCUSS_OPTIONS = [
   { label: "환경", value: "ENVIRONMENT" },
@@ -12,7 +13,7 @@ const DISCUSS_OPTIONS = [
 ] as const;
 
 export default function DebatePostPage() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = async (data: PostEditorFormData) => {
     try {
@@ -20,14 +21,16 @@ export default function DebatePostPage() {
         ? await compressImages(data.images)
         : undefined;
 
-      await createDiscussBoard({
+      const res = await createDiscussBoard({
         title: data.title,
         content: data.content,
         discussType: data.dropdownValue!,
         images: compressedImages,
       });
 
-      // navigate(`/discuss-board/new/${response.data.postId}`);
+      const postId = res.data.postId;
+      toast("업로드되었습니다!");
+      navigate(`/debate/${postId}`);
     } catch (e) {
       console.error(e);
       alert("작성 실패");

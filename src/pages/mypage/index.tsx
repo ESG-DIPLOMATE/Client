@@ -5,6 +5,7 @@ import AppBar from "@/components/common/Appbar";
 import { getMyPage } from "@/apis/mypage/mypage";
 import type { MyPageResponse } from "@/apis/mypage/mypage.type";
 import TextButton from "@/components/common/Button/TextButton";
+import { toast } from "react-toastify";
 
 export default function Mypage() {
   const navigate = useNavigate();
@@ -39,6 +40,13 @@ export default function Mypage() {
     return <div className={$.wrapper}>데이터를 불러올 수 없습니다.</div>;
   }
 
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    toast("로그아웃 되었습니다.");
+    navigate("/login");
+  };
+
   return (
     <div className={$.wrapper}>
       <div className={$.PaddingContainer}>
@@ -49,12 +57,7 @@ export default function Mypage() {
           <div className={$.content}>
             <div className={$.header}>
               <h1 className={$.pageTitle}>내 정보</h1>
-              <button
-                className={$.logoutButton}
-                onClick={() => console.log("로그아웃")}
-              >
-                로그아웃
-              </button>
+              <TextButton text="로그아웃" onClick={handleLogout} underline />
             </div>
             <section className={$.section}>
               <div className={$.row}>

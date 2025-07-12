@@ -1,8 +1,9 @@
 import PostEditor from "../community/components/PostEditor";
 import { compressImages } from "@/utils/imageCompressor";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import type { PostEditorFormData } from "../community/components/detail";
 import { createDiary } from "@/apis/community/community";
+import { toast } from "react-toastify";
 
 const PRACTICE_OPTIONS = [
   { label: "탄소감축", value: "탄소감축" },
@@ -13,7 +14,7 @@ const PRACTICE_OPTIONS = [
 ] as const;
 
 export default function DiaryPostPage() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = async (data: PostEditorFormData) => {
     try {
@@ -21,14 +22,16 @@ export default function DiaryPostPage() {
         ? await compressImages(data.images)
         : undefined;
 
-      await createDiary({
+      const res = await createDiary({
         title: data.title,
         content: data.content,
         practiceCategory: data.dropdownValue!,
         images: compressedImages,
       });
 
-      // navigate(`/diary/${response.data.id}`);
+      const postId = res.data.postId;
+      toast("업로드되었습니다!");
+      navigate(`/diary/${postId}`);
     } catch (e) {
       console.error(e);
       alert("작성 실패");

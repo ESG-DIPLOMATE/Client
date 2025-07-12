@@ -6,7 +6,21 @@ import ImageSlider from "@/components/Slider";
 import CommentList from "@/components/common/comment/CommentList";
 import CommentInput from "@/components/common/comment/CommentInput";
 import AppBar from "@/components/common/Appbar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  createDiaryComment,
+  createDiscussComment,
+  createFreeComment,
+  deleteDiaryComment,
+  deleteDiscussComment,
+  deleteFreeComment,
+  deletePost,
+  editDiaryComment,
+  editDiscussComment,
+  editFreeComment,
+  toggleLike,
+} from "@/apis/community/community";
+import { toast } from "react-toastify";
 
 export interface PostEditorFormData {
   title: string;
@@ -15,8 +29,19 @@ export interface PostEditorFormData {
   images?: File[];
 }
 
+export type Comment = {
+  id: number;
+  userId: string;
+  authorId?: string;
+  content: string;
+  commentType?: "PROS" | "CONS";
+  createdAt: string;
+  updatedAt: string;
+  owner: boolean;
+};
+
 export type PostDetailProps = {
-  isMine: boolean;
+  owner: boolean;
   type: "free" | "diary" | "debate";
   title: string;
   date: string;
@@ -25,12 +50,13 @@ export type PostDetailProps = {
   content: string;
   images: string[];
   likeCount: number;
+  liked: boolean;
   commentCount: number;
-  comments: { id: number; authorId: string; content: string; date: string }[];
+  comments: Comment[];
 };
 
 export default function PostDetail({
-  isMine,
+  owner,
   type,
   title,
   date,
@@ -39,14 +65,104 @@ export default function PostDetail({
   content,
   images,
   likeCount,
+  liked,
   commentCount,
   comments,
 }: PostDetailProps) {
   const navigate = useNavigate();
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(liked);
+  const [likeCountState, setLikeCountState] = useState(likeCount);
+  const { id } = useParams<{ id: string }>();
+  const numericId = id ? Number(id) : undefined;
 
-  const handleLike = () => {
-    setIsLiked((prev) => !prev);
+  if (!numericId) {
+    return <p>잘못된 요청입니다.</p>;
+  }
+  const handleLike = async () => {
+    try {
+      const targetTypeMap = {
+        free: "FreeBoard",
+        debate: "DiscussBoard",
+        diary: "Diary",
+      };
+
+      const res = await toggleLike(targetTypeMap[type], numericId);
+      setIsLiked(res.data.liked);
+      setLikeCountState(res.data.likeCount);
+    } catch (e) {
+      console.error(e);
+      toast("잠시 후 다시 시도해주세요.");
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!numericId) {
+      toast("잠시 후 다시 시도해주세요.");
+      return;
+    }
+
+    const confirm = window.confirm("정말 삭제하시겠습니까?");
+    if (!confirm) return;
+
+    try {
+      await deletePost(type, numericId);
+      window.location.reload();
+    } catch (e) {
+      console.error(e);
+      toast("잠시 후 다시 시도해주세요.");
+    }
+  };
+
+  const handleCommentSubmit = async (
+    text: string,
+    stance?: "찬성" | "반대"
+  ) => {
+    try {
+      if (type === "debate") {
+        await createDiscussComment(Number(id), text, stance!);
+      } else if (type === "diary") {
+        await createDiaryComment(Number(id), text);
+      } else if (type === "free") {
+        await createFreeComment(Number(id), text);
+      }
+      window.location.reload();
+    } catch (e) {
+      console.error(e);
+      toast("잠시 후 다시 시도해주세요.");
+    }
+  };
+
+  const handleCommentEdit = async (commentId: number, content: string) => {
+    try {
+      if (type === "debate") {
+        await editDiscussComment(commentId, content);
+      } else if (type === "diary") {
+        await editDiaryComment(commentId, content);
+      } else if (type === "free") {
+        await editFreeComment(commentId, content);
+      }
+      window.location.reload();
+    } catch (e) {
+      console.error(e);
+      toast("잠시 후 다시 시도해주세요.");
+    }
+  };
+
+  const handleCommentDelete = async (commentId: number) => {
+    try {
+      if (type === "debate") {
+        await deleteDiscussComment(commentId);
+      } else if (type === "diary") {
+        await deleteDiaryComment(commentId);
+      } else if (type === "free") {
+        await deleteFreeComment(commentId);
+      }
+      toast("댓글이 삭제되었습니다.");
+      window.location.reload();
+    } catch (e) {
+      console.error(e);
+      toast("잠시 후 다시 시도해주세요.");
+    }
   };
 
   return (
@@ -55,13 +171,13 @@ export default function PostDetail({
         <AppBar leftRole="back" onClickLeftButton={() => navigate(-1)} />
       </div>
       <div className={$.container}>
-        {isMine && (
+        {owner && (
           <div className={$.actions}>
-            수정
+            <button onClick={() => navigate("edit")}>수정</button>
             <span className={$.divider}>|</span>
-            삭제
+            <button onClick={handleDelete}>삭제</button>
           </div>
-        )}{" "}
+        )}
         <div className={$.topRow}>
           <span className={$.date}>작성일 | {date}</span>
           {type !== "free" && category && (
@@ -76,7 +192,7 @@ export default function PostDetail({
           <div className={$.imageWrapper}>
             <ImageSlider images={images} />
           </div>
-        )}{" "}
+        )}
         <div className={$.content}>{content}</div>
         <div className={$.meta}>
           <div className={$.left}>
@@ -86,7 +202,7 @@ export default function PostDetail({
               ) : (
                 <AiOutlineHeart size={20} color="#9CA3AF" />
               )}
-              <span>{likeCount}</span>
+              <span>{likeCountState}</span>
             </div>
             <div className={$.commentsIcon}>
               <AiOutlineComment size={20} />
@@ -94,13 +210,13 @@ export default function PostDetail({
             </div>
           </div>
         </div>
-        <CommentInput
+        <CommentInput type={type} onSubmit={handleCommentSubmit} />
+        <CommentList
+          comments={comments}
           type={type}
-          onSubmit={(text, stance) => {
-            console.log("댓글 제출", text, stance);
-          }}
+          onEdit={handleCommentEdit}
+          onDelete={handleCommentDelete}
         />
-        <CommentList comments={comments} type={type} />
       </div>
     </div>
   );

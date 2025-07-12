@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppBar from "@/components/common/Appbar";
 import KeywordChip from "@/components/Chip/KeywordChip";
-import $ from "./MyNews.module.scss";
 import NewsCard from "@/pages/news/components/NewsCard";
+
+import { getMyScraps } from "@/apis/news/news";
+import type { NewsItem } from "@/apis/news/news.type";
+
+import $ from "./MyNews.module.scss";
 
 export default function MyNews() {
   const navigate = useNavigate();
@@ -11,31 +15,22 @@ export default function MyNews() {
   const keywords = ["전체", "ESG", "기후", "문화", "경제", "인권"];
   const [selectedKeyword, setSelectedKeyword] = useState("전체");
 
-  const initialNewsList = [
-    {
-      id: 1,
-      title: "ESG 외교 새 지평을 열다",
-      description: "환경, 사회, 지배구조를 다룬 외교 이슈를 소개합니다.",
-      category: "ESG",
-    },
-    {
-      id: 2,
-      title: "문화 외교의 새로운 흐름",
-      description: "K-컬쳐가 외교의 도구로 떠오르고 있습니다.",
-      category: "문화",
-    },
-    {
-      id: 3,
-      title: "기후변화 협약 주요 쟁점",
-      description: "국제사회가 직면한 기후 이슈를 정리했습니다.",
-      category: "기후",
-    },
-  ];
+  const [newsList, setNewsList] = useState<NewsItem[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const [newsList, setNewsList] = useState(initialNewsList);
+  useEffect(() => {
+    fetchMyScraps();
+  }, []);
+
+  const fetchMyScraps = async () => {
+    setLoading(true);
+    const data = await getMyScraps(0, 20);
+    setNewsList(data.scraps);
+    setLoading(false);
+  };
 
   const handleBookmarkToggle = (id: number) => {
-    setNewsList((prev) => prev.filter((item) => item.id !== id));
+    setNewsList((prev) => prev.filter((item) => item.newsId !== id));
   };
 
   const handleKeywordClick = (keyword: string) => {
@@ -45,7 +40,7 @@ export default function MyNews() {
   const filteredList =
     selectedKeyword === "전체"
       ? newsList
-      : newsList.filter((item) => item.category === selectedKeyword);
+      : newsList.filter((item) => item.categoryDisplay === selectedKeyword);
 
   return (
     <div className={$.wrapper}>
@@ -70,16 +65,16 @@ export default function MyNews() {
             ))}
           </div>
 
-          {filteredList.length === 0 ? (
+          {loading ? (
+            <p>Loading...</p>
+          ) : filteredList.length === 0 ? (
             <p className={$.emptyText}>스크랩한 뉴스가 없습니다.</p>
           ) : (
             filteredList.map((news) => (
               <NewsCard
-                key={news.id}
-                title={news.title}
-                description={news.description}
-                isBookmarked={true}
-                onBookmarkToggle={() => handleBookmarkToggle(news.id)}
+                key={news.newsId}
+                news={news}
+                onBookmarkToggle={() => handleBookmarkToggle(news.newsId)}
               />
             ))
           )}

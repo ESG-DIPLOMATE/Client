@@ -1,43 +1,61 @@
-// import { useParams } from "react-router-dom";
-
+import { useParams } from "react-router-dom";
 import PostDetail from "../community/components/detail";
+import type { DiaryBoardDetail } from "@/apis/community/community.type";
+import { useEffect, useState } from "react";
+import { getDiaryBoardDetail } from "@/apis/community/community";
 
 export default function DiaryPostDetail() {
-  // const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
 
-  const dummy = {
-    title: "내 실천일지",
-    date: "2025.07.10",
-    authorId: "myUserId",
-    category: "탄소감축",
-    content: "오늘 외교 관련 행사에 다녀왔습니다...",
-    images: ["/sample1.png", "/sample2.png"],
-    likeCount: 12,
-    commentCount: 3,
-    isMine: true,
-    comments: [
-      {
-        id: 1,
-        authorId: "user01",
-        content: "멋진 실천이네요!",
-        date: "2025.07.10",
-      },
-    ],
-  };
+  const [data, setData] = useState<DiaryBoardDetail>();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const res = await getDiaryBoardDetail(id);
+        setData(res.data);
+      } catch (e) {
+        console.error(e);
+        alert("글을 불러오지 못했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  if (loading) return <p>Loading...</p>;
+  if (!data) return <p>데이터가 없습니다.</p>;
 
   return (
     <PostDetail
-      isMine={dummy.isMine}
+      owner={data.owner ?? false}
       type="diary"
-      title={dummy.title}
-      date={dummy.date}
-      authorId={dummy.authorId}
-      category={dummy.category}
-      content={dummy.content}
-      images={dummy.images}
-      likeCount={dummy.likeCount}
-      commentCount={dummy.commentCount}
-      comments={dummy.comments}
+      title={data.title}
+      date={data.createdAt.slice(0, 10).replaceAll("-", ".")}
+      authorId={data.userId}
+      category={data.action}
+      content={data.description ?? ""}
+      images={data.diaryImages.map(
+        (img) => `https://hihigh.lion.it.kr${img.imageUrl}`
+      )}
+      likeCount={data.likes}
+      liked={data.liked}
+      commentCount={data.diaryComments.length}
+      comments={data.diaryComments.map((comment) => ({
+        id: comment.id,
+        userId: comment.userId,
+        authorId: comment.userId,
+        content: comment.content,
+        createdAt: comment.createdAt,
+        updatedAt: comment.updatedAt,
+        owner: comment.owner,
+      }))}
     />
   );
 }

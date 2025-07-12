@@ -6,6 +6,7 @@ import PreviewCard from "@/components/Card/PreviewCard";
 import $ from "./MyWritings.module.scss";
 import { getMyPosts } from "@/apis/mypage/mypage";
 import type { MyPost, PostFilter } from "@/apis/mypage/mypage.type";
+import { deletePost } from "@/apis/community/community";
 
 const filterLabelToQuery: Record<string, PostFilter> = {
   전체: "ALL",
@@ -71,40 +72,59 @@ export default function MyWritings() {
           ) : posts.length === 0 ? (
             <p className={$.emptyText}>작성한 글이 없습니다.</p>
           ) : (
-            posts.map((post) => (
-              <PreviewCard
-                key={post.id}
-                post={{
-                  id: post.id,
-                  title: post.title,
-                  preview: post.content,
-                  date: new Date(post.createdAt).toLocaleDateString(),
-                  authorId: "나",
-                  category:
-                    post.postType === "DISCUSS_BOARD"
-                      ? post.discussType || undefined
-                      : post.postType === "DIARY_BOARD"
-                      ? post.action || undefined
-                      : undefined,
-                }}
-                type={
-                  post.postType === "FREE_BOARD"
-                    ? "free"
-                    : post.postType === "DISCUSS_BOARD"
-                    ? "debate"
-                    : "diary"
+            posts.map((post) => {
+              const postType =
+                post.postType === "FREE_BOARD"
+                  ? "free"
+                  : post.postType === "DISCUSS_BOARD"
+                  ? "debate"
+                  : "diary";
+
+              const handleDelete = async () => {
+                if (!window.confirm("정말 삭제하시겠습니까?")) return;
+
+                try {
+                  await deletePost(postType, post.id);
+                  alert("삭제되었습니다.");
+                  fetchPosts(selectedFilter);
+                } catch (error) {
+                  console.error("삭제 실패", error);
+                  alert("삭제에 실패했습니다.");
                 }
-                onClick={() => {
-                  if (post.postType === "FREE_BOARD") {
-                    navigate(`/free/${post.id}`);
-                  } else if (post.postType === "DISCUSS_BOARD") {
-                    navigate(`/debate/${post.id}`);
-                  } else if (post.postType === "DIARY_BOARD") {
-                    navigate(`/diary/${post.id}`);
-                  }
-                }}
-              />
-            ))
+              };
+
+              return (
+                <PreviewCard
+                  key={post.id}
+                  owner={true}
+                  post={{
+                    id: post.id,
+                    title: post.title,
+                    preview: post.content,
+                    owner: post.owner,
+                    date: new Date(post.createdAt).toLocaleDateString(),
+                    authorId: "나",
+                    category:
+                      post.postType === "DISCUSS_BOARD"
+                        ? post.discussType || undefined
+                        : post.postType === "DIARY"
+                        ? post.action || undefined
+                        : undefined,
+                  }}
+                  type={postType}
+                  onClick={() => {
+                    if (post.postType === "FREE_BOARD") {
+                      navigate(`/free/${post.id}`);
+                    } else if (post.postType === "DISCUSS_BOARD") {
+                      navigate(`/debate/${post.id}`);
+                    } else if (post.postType === "DIARY") {
+                      navigate(`/diary/${post.id}`);
+                    }
+                  }}
+                  onDelete={handleDelete}
+                />
+              );
+            })
           )}
         </section>
       </div>

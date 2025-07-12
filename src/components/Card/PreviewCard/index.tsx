@@ -1,6 +1,8 @@
 import { useState } from "react";
 import $ from "./PreviewCard.module.scss";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { toggleLike } from "@/apis/community/community";
+import { toast } from "react-toastify";
 
 export interface Preview {
   id: number;
@@ -9,39 +11,73 @@ export interface Preview {
   preview: string;
   authorId?: string;
   date: string;
+  likes?: number;
+  liked?: boolean;
+  owner: boolean;
 }
 
 interface PreviewCardProps {
   post: Preview;
   type: "free" | "diary" | "debate";
+  owner: boolean;
   onClick?: () => void;
+  onDelete?: () => void;
 }
 
-const PreviewCard = ({ post, type, onClick }: PreviewCardProps) => {
-  const isMine = !post.authorId;
-  const [isLiked, setIsLiked] = useState(false);
+const discussTypeMap: Record<string, string> = {
+  ENVIRONMENT: "환경",
+  CULTURE: "문화",
+  ECONOMY: "경제",
+  PEACE: "평화",
+};
 
-  const handleLike = (e: React.MouseEvent) => {
+const PreviewCard = ({
+  post,
+  type,
+  owner,
+  onClick,
+  onDelete,
+}: PreviewCardProps) => {
+  const [isLiked, setIsLiked] = useState(post.liked || false);
+
+  const handleLike = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsLiked((prev) => !prev);
+
+    try {
+      const targetTypeMap = {
+        free: "FreeBoard",
+        debate: "DiscussBoard",
+        diary: "Diary",
+      };
+      const res = await toggleLike(targetTypeMap[type], post.id);
+      setIsLiked(res.data.liked);
+    } catch (e) {
+      console.error(e);
+      toast("잠시 후 다시 시도해주세요.");
+    }
   };
+
+  const displayCategory =
+    type === "debate" && post.category
+      ? discussTypeMap[post.category] || post.category
+      : post.category;
 
   return (
     <div className={$.postCard} onClick={onClick}>
       <div className={$.header}>
         <div className={$.headerLeft}>
-          {type === "debate" && post.category && (
-            <span className={$.category}>{post.category}</span>
+          {type === "debate" && displayCategory && (
+            <span className={$.category}>{displayCategory}</span>
           )}
           <span className={$.title}>{post.title}</span>
         </div>
 
-        {!isMine && (
+        {!owner && (
           <div className={$.heartIcon} onClick={handleLike}>
             {isLiked ? (
-              <AiFillHeart size={20} color="#3B82F6" />
+              <AiFillHeart size={16} color="#3B82F6" />
             ) : (
-              <AiOutlineHeart size={20} color="#9CA3AF" />
+              <AiOutlineHeart size={16} color="#9CA3AF" />
             )}
           </div>
         )}
@@ -56,11 +92,18 @@ const PreviewCard = ({ post, type, onClick }: PreviewCardProps) => {
         </div>
 
         <div className={$.right}>
-          {isMine && (
+          {owner && (
             <div className={$.actions}>
               <button>수정</button>
               <span className={$.divider}>|</span>
-              <button>삭제</button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete?.();
+                }}
+              >
+                삭제
+              </button>
             </div>
           )}
         </div>

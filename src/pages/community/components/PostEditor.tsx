@@ -6,6 +6,7 @@ import DropDownButton, {
 } from "@/components/common/Button/DropDownButton";
 import AppBar from "@/components/common/Appbar";
 import Button from "@/components/common/Button";
+import { toast } from "react-toastify";
 
 export interface PostEditorProps<T extends string> {
   type: "diary" | "free" | "debate";
@@ -58,7 +59,7 @@ export default function PostEditor<T extends string>({
     const selected = Array.from(e.target.files);
 
     if (images.length + selected.length > maxImages) {
-      alert("이미지는 최대 3장까지만 업로드할 수 있습니다.");
+      toast("이미지는 3장까지 업로드할 수 있어요.");
       return;
     }
 

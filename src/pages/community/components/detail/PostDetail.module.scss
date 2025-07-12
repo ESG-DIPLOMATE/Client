@@ -55,6 +55,15 @@
   justify-content: flex-end;
   margin-bottom: 10px;
 
+  button {
+    background: none;
+    border: none;
+    color: $Gray400;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0;
+  }
+
   .icon {
     margin-right: 4px;
   }
