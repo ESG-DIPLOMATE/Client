@@ -3,6 +3,7 @@ import $ from "./PreviewCard.module.scss";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { toggleLike } from "@/apis/community/community";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export interface Preview {
   id: number;
@@ -38,6 +39,7 @@ const PreviewCard = ({
   onClick,
   onDelete,
 }: PreviewCardProps) => {
+  const navigate = useNavigate();
   const [isLiked, setIsLiked] = useState(post.liked || false);
 
   const handleLike = async (e: React.MouseEvent) => {
@@ -57,10 +59,21 @@ const PreviewCard = ({
     }
   };
 
+  const handleEdit = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigate(`${editPaths[type]}?id=${post.id}`);
+  };
+
   const displayCategory =
     type === "debate" && post.category
       ? discussTypeMap[post.category] || post.category
       : post.category;
+
+  const editPaths = {
+    free: "/free/new",
+    debate: "/debate/new",
+    diary: "/diary/new",
+  };
 
   return (
     <div className={$.postCard} onClick={onClick}>
@@ -94,7 +107,7 @@ const PreviewCard = ({
         <div className={$.right}>
           {owner && (
             <div className={$.actions}>
-              <button>수정</button>
+              <button onClick={handleEdit}>수정</button>
               <span className={$.divider}>|</span>
               <button
                 onClick={(e) => {
