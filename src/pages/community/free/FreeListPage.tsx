@@ -156,7 +156,6 @@ function FreeListPage() {
               />
             </div>
           </div>
-          <div className={$.divider}></div>
         </div>
 
         <div className={$.diaryList}>

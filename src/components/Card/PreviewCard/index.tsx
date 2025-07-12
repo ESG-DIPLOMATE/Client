@@ -75,9 +75,9 @@ const PreviewCard = ({
         {!owner && (
           <div className={$.heartIcon} onClick={handleLike}>
             {isLiked ? (
-              <AiFillHeart size={20} color="#3B82F6" />
+              <AiFillHeart size={16} color="#3B82F6" />
             ) : (
-              <AiOutlineHeart size={20} color="#9CA3AF" />
+              <AiOutlineHeart size={16} color="#9CA3AF" />
             )}
           </div>
         )}

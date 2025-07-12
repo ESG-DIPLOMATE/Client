@@ -7,7 +7,11 @@ import type {
   PopularFreeBoard,
 } from "@/apis/community/community.type";
 import { getPopularPosts } from "@/apis/community/community";
-import TitleCard from "@/components/Card/TitleCard";
+import LineCard from "@/components/Card/LineCard";
+import {
+  HiOutlineNewspaper,
+  HiOutlineChatBubbleLeftRight,
+} from "react-icons/hi2";
 
 export default function Community() {
   const navigate = useNavigate();
@@ -45,21 +49,41 @@ export default function Community() {
 
         <section className={$.section}>
           <div className={$.sectionTitle} onClick={() => navigate("/free")}>
+            <HiOutlineNewspaper size={18} />
             자유 게시판 바로가기
           </div>
 
           {freePosts.map((post) => (
-            <TitleCard key={post.id} title={post.title} />
+            <LineCard
+              key={post.id}
+              id={post.id}
+              title={post.title}
+              content={post.content}
+              createdAt={post.createdAt}
+              type="free"
+              likeCount={post.likes}
+              commentCount={post.commentCount}
+            />
           ))}
         </section>
 
         <section className={$.section}>
           <div className={$.sectionTitle} onClick={() => navigate("/debate")}>
+            <HiOutlineChatBubbleLeftRight size={18} />
             토론 게시판 바로가기
           </div>
 
           {discussPosts.map((post) => (
-            <TitleCard key={post.id} title={post.title} />
+            <LineCard
+              key={post.id}
+              id={post.id}
+              title={post.title}
+              content={post.content}
+              createdAt={post.createdAt}
+              type="debate"
+              likeCount={post.likes}
+              commentCount={post.commentCount}
+            />
           ))}
         </section>
       </div>

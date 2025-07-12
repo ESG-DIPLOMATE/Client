@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { HiOutlineBell, HiOutlineUser } from "react-icons/hi2";
+import { HiOutlineUser } from "react-icons/hi2";
 import BackgroundImg from "@/assets/img/BackgroundIllust.png";
 import { HiOutlineGlobeAlt, HiOutlineMegaphone } from "react-icons/hi2";
 

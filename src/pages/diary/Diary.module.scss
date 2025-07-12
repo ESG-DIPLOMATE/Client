@@ -30,7 +30,7 @@
   h2 {
     font-size: 24px;
     font-weight: 700;
-    color: $Gray400;
+    color: $Blue400;
     margin: 0;
   }
 
@@ -46,20 +46,13 @@
     transition: background-color 0.2s ease;
 
     &:hover {
-      background-color: rgba(76, 158, 255, 0.1);
+      background-color: $Blue50;
     }
 
     &:active {
       transform: scale(0.95);
     }
   }
-}
-
-.buttonWrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: end;
-  margin-bottom: 10px;
 }
 
 .headerActions {
@@ -69,44 +62,18 @@
   gap: 8px;
 }
 
-.diaryList {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.dropdownWrapper {
-  position: relative;
-  z-index: 2000;
-}
-
-.viewAllSection {
+.description {
+  background-color: $Gray50;
+  border: 1px solid $Gray100;
+  border-radius: 8px;
+  padding: 16px;
   margin: 16px 0;
 
-  .viewAllText {
-    font-size: 16px;
-    font-weight: 600;
-    color: $Gray400;
-  }
-
-  .divider {
-    width: 100%;
-    height: 0.5px;
-    background-color: $Gray100;
-  }
-}
-
-.description {
-  padding: 10px;
-  margin: 10px 0;
-
   .descriptionContent {
-    margin-bottom: 20px;
-
     h3 {
       font-size: 18px;
-      font-weight: 600;
-      color: $Gray400;
+      font-weight: 700;
+      color: $Blue400;
       margin-bottom: 12px;
     }
 
@@ -117,41 +84,72 @@
       margin: 0;
     }
   }
+}
+.practiceItems {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 
-  .practiceItems {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
 
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
+.practiceColumn {
+  h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: $Gray400;
+    margin: 10px 0;
   }
 
-  .practiceColumn {
-    h4 {
-      font-size: 16px;
-      font-weight: 600;
-      color: $Gray400;
-      margin-bottom: 8px;
-    }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+    li {
+      font-size: 13px;
+      color: $Gray300;
+      margin-bottom: 4px;
+      line-height: 1.4;
 
-      li {
-        font-size: 13px;
-        color: $Gray300;
-        margin-bottom: 4px;
-        line-height: 1.4;
-
-        strong {
-          color: $Gray400;
-        }
+      strong {
+        color: $Gray400;
       }
     }
+  }
+}
+
+.viewAllSection {
+  margin-top: 24px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .viewAllText {
+      font-size: 18px;
+      font-weight: 500;
+      color: $Gray400;
+    }
+  }
+}
+
+.dropdownWrapper {
+  position: relative;
+  z-index: 2000;
+}
+
+.diaryList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .loading {
+    font-size: 14px;
+    color: $Gray400;
   }
 }
