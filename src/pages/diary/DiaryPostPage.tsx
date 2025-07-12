@@ -3,6 +3,7 @@ import { compressImages } from "@/utils/imageCompressor";
 import { useNavigate } from "react-router-dom";
 import type { PostEditorFormData } from "../community/components/detail";
 import { createDiary } from "@/apis/community/community";
+import { toast } from "react-toastify";
 
 const PRACTICE_OPTIONS = [
   { label: "탄소감축", value: "탄소감축" },
@@ -29,6 +30,7 @@ export default function DiaryPostPage() {
       });
 
       const postId = res.data.postId;
+      toast("업로드되었습니다!");
       navigate(`/diary/${postId}`);
     } catch (e) {
       console.error(e);

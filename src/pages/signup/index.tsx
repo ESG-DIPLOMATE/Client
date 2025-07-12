@@ -5,6 +5,7 @@ import Button from "@/components/common/Button";
 import BackgroundImg from "@/assets/img/BackgroundImg1.png";
 import { checkUserId, signup } from "@/apis/auth/auth";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 type IdCheckStatus = "idle" | "checking" | "available" | "unavailable";
 
@@ -20,17 +21,17 @@ export default function Signup() {
   const isFormValid =
     id && pw && pwConfirm && passwordsMatch && idCheckStatus === "available";
 
-    const handleIdCheck = async () => {
-      try {
-        setIdCheckStatus("checking");
-        const res = await checkUserId(id);
-        const isAvailable = res.data.available;
-        setIdCheckStatus(isAvailable ? "available" : "unavailable");
-      } catch (e) {
-        console.error(e);
-        setIdCheckStatus("unavailable");
-      }
-    };
+  const handleIdCheck = async () => {
+    try {
+      setIdCheckStatus("checking");
+      const res = await checkUserId(id);
+      const isAvailable = res.data.available;
+      setIdCheckStatus(isAvailable ? "available" : "unavailable");
+    } catch (e) {
+      console.error(e);
+      setIdCheckStatus("unavailable");
+    }
+  };
 
   const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newId = e.target.value;
@@ -46,10 +47,11 @@ export default function Signup() {
         userId: id,
         password: pw,
       });
+      toast("회원가입 성공!");
       navigate("/login");
     } catch (e) {
       console.error(e);
-      alert("회원가입에 실패했습니다.");
+      toast("다시 시도해주세요.");
     }
   };
 

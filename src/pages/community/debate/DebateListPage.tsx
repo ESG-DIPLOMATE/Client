@@ -8,6 +8,7 @@ import DropDownButton, {
 import { deletePost, getDiscussBoardList } from "@/apis/community/community";
 import $ from "../../diary/Diary.module.scss";
 import { FiEdit3 } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 type SortOption = "latest" | "likes" | "views";
 
@@ -59,7 +60,7 @@ function DebateListPage() {
       pageRef.current = page;
     } catch (e) {
       console.error(e);
-      alert("토론글 목록을 불러오지 못했습니다.");
+      toast("잠시 후 다시 시도해주세요.");
     } finally {
       setLoading(false);
     }
@@ -104,12 +105,12 @@ function DebateListPage() {
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
     try {
       await deletePost("debate", id);
-      alert("삭제가 완료되었습니다.");
+      toast("삭제가 완료되었습니다.");
       pageRef.current = 0;
       fetchList(0, true);
     } catch (e) {
       console.error(e);
-      alert("삭제 중 오류가 발생했습니다.");
+      toast("잠시 후 다시 시도해주세요.");
     }
   };
 
@@ -130,7 +131,7 @@ function DebateListPage() {
 
         <div className={$.description}>
           <div className={$.descriptionContent}>
-            <h3>💡 외교 자유 게시판은</h3>
+            <h3>💡 외교 토론 게시판은</h3>
             <p>
               <strong>환경·문화·평화·경제</strong> 4개 분야의 국제 이슈에 대해
               누구나 자유롭게 의견을 나누고, 서로의 시각을 넓힐 수 있는

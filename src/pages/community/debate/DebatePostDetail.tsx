@@ -49,9 +49,13 @@ export default function DebatePostDetail() {
       commentCount={data.discussBoardComments.length}
       comments={data.discussBoardComments.map((comment) => ({
         id: comment.id,
-        authorId: comment.authorId,
+        userId: comment.userId,
+        authorId: comment.userId,
         content: comment.content,
-        date: comment.date,
+        commentType: comment.commentType,
+        createdAt: comment.createdAt,
+        updatedAt: comment.updatedAt,
+        owner: comment.owner,
       }))}
     />
   );

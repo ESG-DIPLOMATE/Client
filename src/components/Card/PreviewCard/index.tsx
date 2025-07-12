@@ -2,6 +2,7 @@ import { useState } from "react";
 import $ from "./PreviewCard.module.scss";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { toggleLike } from "@/apis/community/community";
+import { toast } from "react-toastify";
 
 export interface Preview {
   id: number;
@@ -52,7 +53,7 @@ const PreviewCard = ({
       setIsLiked(res.data.liked);
     } catch (e) {
       console.error(e);
-      alert("좋아요 처리 중 오류가 발생했습니다.");
+      toast("잠시 후 다시 시도해주세요.");
     }
   };
 

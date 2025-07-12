@@ -20,13 +20,20 @@ export const getPopularPosts = () => {
 // 자유게시글 생성
 export const createFreeBoard = async (data: CreateFreeBoardParams) => {
   const formData = new FormData();
-  formData.append("title", data.title);
-  formData.append("content", data.content);
-  data.images?.forEach((img) => formData.append("images", img));
+
+  data.images?.forEach((img) => {
+    formData.append("images", img);
+  });
 
   const { data: responseData } = await instance.post<CreateBoardResponse>(
     "/api/v1/free-board/",
-    formData
+    formData,
+    {
+      params: {
+        title: data.title,
+        content: data.content,
+      },
+    }
   );
 
   return responseData;
@@ -35,30 +42,47 @@ export const createFreeBoard = async (data: CreateFreeBoardParams) => {
 // 실천일지 생성
 export const createDiary = async (data: CreateDiaryParams) => {
   const formData = new FormData();
-  formData.append("title", data.title);
-  formData.append("content", data.content);
-  formData.append("실천항목", data.practiceCategory);
-  data.images?.forEach((img) => formData.append("images", img));
 
-  const { data: responseData } = await instance.post<CreateBoardResponse>(
+  data.images?.forEach((img) => {
+    formData.append("images", img);
+  });
+
+  const response = await instance.post<CreateBoardResponse>(
     "/api/v1/diary/",
-    formData
+    formData,
+    {
+      params: {
+        title: data.title,
+        content: data.content,
+        실천항목: data.practiceCategory,
+      },
+    }
   );
 
-  return responseData;
+  return response.data;
 };
 
 // 토론글 생성
 export const createDiscussBoard = async (data: CreateDiscussBoardParams) => {
   const formData = new FormData();
-  formData.append("title", data.title);
-  formData.append("content", data.content);
-  formData.append("discussType", data.discussType);
-  data.images?.forEach((img) => formData.append("images", img));
+
+  data.images?.forEach((img) => {
+    formData.append("images", img);
+  });
 
   const { data: responseData } = await instance.post<CreateBoardResponse>(
     "/api/v1/discuss-board/",
-    formData
+    formData,
+    {
+      params: {
+        title: data.title,
+        content: data.content,
+        discussType: data.discussType,
+      },
+      headers: {
+        "Content-Type": undefined,
+      },
+    }
   );
 
   return responseData;
@@ -145,4 +169,66 @@ export const toggleLike = (targetType: string, targetId: number) => {
     targetType,
     targetId,
   });
+};
+
+// 토론 댓글 작성
+export const createDiscussComment = async (
+  postId: number,
+  comment: string,
+  opinion: "찬성" | "반대"
+) => {
+  const commentType = opinion === "찬성" ? "PROS" : "CONS";
+
+  const { data } = await instance.post(
+    `/api/v1/discuss-board/${postId}/comment`,
+    {
+      comment,
+      commentType,
+    }
+  );
+
+  return data;
+};
+
+// 토론 댓글 삭제
+export const deleteDiscussComment = async (commentId: number) => {
+  await instance.delete(`/api/v1/discuss-board/comment/${commentId}`);
+};
+
+//토론 댓글 수정
+export const editDiscussComment = async (
+  commentId: number,
+  comment: string
+) => {
+  const { data } = await instance.put(
+    `/api/v1/discuss-board/comment/${commentId}`,
+    {
+      comment,
+    }
+  );
+
+  return data;
+};
+
+//일지 댓글 생성
+export const createDiaryComment = async (postId: number, comment: string) => {
+  const { data } = await instance.post(`/api/v1/diary/${postId}/comment`, {
+    comment,
+  });
+
+  return data;
+};
+
+//일지 댓글 수정
+export const editDiaryComment = async (commentId: number, comment: string) => {
+  const { data } = await instance.put(`/api/v1/diary/comment/${commentId}`, {
+    comment,
+  });
+
+  return data;
+};
+
+//일지 댓글 삭제
+export const deleteDiaryComment = async (commentId: number) => {
+  await instance.delete(`/api/v1/diary/comment/${commentId}`);
 };

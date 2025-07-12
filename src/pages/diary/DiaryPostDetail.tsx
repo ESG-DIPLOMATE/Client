@@ -49,9 +49,13 @@ export default function DiaryPostDetail() {
       commentCount={data.diaryComments.length}
       comments={data.diaryComments.map((comment) => ({
         id: comment.id,
-        authorId: comment.authorId,
+        userId: comment.userId,
+        authorId: comment.userId,
         content: comment.content,
-        date: comment.date,
+        commentType: undefined,
+        createdAt: comment.createdAt,
+        updatedAt: comment.updatedAt,
+        owner: comment.owner,
       }))}
     />
   );

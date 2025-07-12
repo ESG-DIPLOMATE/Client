@@ -3,6 +3,7 @@ import { compressImages } from "@/utils/imageCompressor";
 import type { PostEditorFormData } from "../components/detail";
 import { createDiscussBoard } from "@/apis/community/community";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const DISCUSS_OPTIONS = [
   { label: "환경", value: "ENVIRONMENT" },
@@ -28,6 +29,7 @@ export default function DebatePostPage() {
       });
 
       const postId = res.data.postId;
+      toast("업로드되었습니다!");
       navigate(`/debate/${postId}`);
     } catch (e) {
       console.error(e);

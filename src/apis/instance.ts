@@ -3,9 +3,6 @@ import { refreshToken as refreshTokenAPI } from "@/apis/auth/auth";
 
 const instance = axios.create({
   baseURL: "https://hihigh.lion.it.kr",
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 // 토큰 재발급 요청 여부 관리

@@ -115,12 +115,13 @@ export interface FreeBoardDetail {
   viewCount: number;
   owner: boolean;
 }
-
 export interface FreeBoardComment {
   id: number;
-  authorId: string;
+  userId: string;
   content: string;
-  date: string;
+  createdAt: string;
+  updatedAt: string;
+  owner: boolean;
 }
 
 export interface DiscussBoardDetailResponse {
@@ -148,10 +149,14 @@ export interface DiscussBoardDetail {
 
 export interface DiscussBoardComment {
   id: number;
-  authorId: string;
+  userId: string;
   content: string;
-  date: string;
+  commentType: "PROS" | "CONS";
+  createdAt: string;
+  updatedAt: string;
+  owner: boolean;
 }
+
 export interface DiaryBoardDetailResponse {
   success: boolean;
   message: string;
@@ -176,10 +181,13 @@ export interface DiaryBoardDetail {
 
 export interface DiaryBoardComment {
   id: number;
-  authorId: string;
+  userId: string;
   content: string;
-  date: string;
+  createdAt: string;
+  updatedAt: string;
+  owner: boolean;
 }
+
 export interface CreateBoardResponse {
   success: boolean;
   message: string;
@@ -195,3 +203,13 @@ export interface ToggleLikeResponse {
   message: string;
   liked: boolean;
 }
+
+export type Comment = {
+  id: number;
+  userId: string;
+  content: string;
+  commentType?: "PROS" | "CONS";
+  createdAt: string;
+  updatedAt: string;
+  owner: boolean;
+};

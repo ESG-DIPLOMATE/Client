@@ -7,7 +7,17 @@ import CommentList from "@/components/common/comment/CommentList";
 import CommentInput from "@/components/common/comment/CommentInput";
 import AppBar from "@/components/common/Appbar";
 import { useNavigate, useParams } from "react-router-dom";
-import { deletePost, toggleLike } from "@/apis/community/community";
+import {
+  createDiaryComment,
+  createDiscussComment,
+  deleteDiaryComment,
+  deleteDiscussComment,
+  deletePost,
+  editDiaryComment,
+  editDiscussComment,
+  toggleLike,
+} from "@/apis/community/community";
+import { toast } from "react-toastify";
 
 export interface PostEditorFormData {
   title: string;
@@ -15,6 +25,17 @@ export interface PostEditorFormData {
   dropdownValue?: string;
   images?: File[];
 }
+
+export type Comment = {
+  id: number;
+  userId: string;
+  authorId?: string;
+  content: string;
+  commentType?: "PROS" | "CONS";
+  createdAt: string;
+  updatedAt: string;
+  owner: boolean;
+};
 
 export type PostDetailProps = {
   owner: boolean;
@@ -28,12 +49,7 @@ export type PostDetailProps = {
   likeCount: number;
   liked: boolean;
   commentCount: number;
-  comments: {
-    id: number;
-    authorId: string;
-    content: string;
-    date: string;
-  }[];
+  comments: Comment[];
 };
 
 export default function PostDetail({
@@ -72,13 +88,13 @@ export default function PostDetail({
       setLikeCountState(res.data.likeCount);
     } catch (e) {
       console.error(e);
-      alert("좋아요 처리 중 오류가 발생했습니다.");
+      toast("잠시 후 다시 시도해주세요.");
     }
   };
 
   const handleDelete = async () => {
     if (!numericId) {
-      alert("잘못된 요청입니다. 게시글 ID가 없습니다.");
+      toast("잠시 후 다시 시도해주세요.");
       return;
     }
 
@@ -87,11 +103,56 @@ export default function PostDetail({
 
     try {
       await deletePost(type, numericId);
-      alert("삭제되었습니다.");
-      navigate(-1);
+      window.location.reload();
     } catch (e) {
       console.error(e);
-      alert("삭제 중 오류가 발생했습니다.");
+      toast("잠시 후 다시 시도해주세요.");
+    }
+  };
+
+  const handleCommentSubmit = async (
+    text: string,
+    stance?: "찬성" | "반대"
+  ) => {
+    try {
+      if (type === "debate") {
+        await createDiscussComment(Number(id), text, stance!);
+      } else if (type === "diary") {
+        await createDiaryComment(Number(id), text);
+      }
+      window.location.reload();
+    } catch (e) {
+      console.error(e);
+      toast("잠시 후 다시 시도해주세요.");
+    }
+  };
+
+  const handleCommentEdit = async (commentId: number, content: string) => {
+    try {
+      if (type === "debate") {
+        await editDiscussComment(commentId, content);
+      } else if (type === "diary") {
+        await editDiaryComment(commentId, content);
+      }
+      window.location.reload();
+    } catch (e) {
+      console.error(e);
+      toast("잠시 후 다시 시도해주세요.");
+    }
+  };
+
+  const handleCommentDelete = async (commentId: number) => {
+    try {
+      if (type === "debate") {
+        await deleteDiscussComment(commentId);
+      } else if (type === "diary") {
+        await deleteDiaryComment(commentId);
+      }
+      toast("댓글이 삭제되었습니다.");
+      window.location.reload(); // 또는 refetch() 사용
+    } catch (e) {
+      console.error(e);
+      toast("잠시 후 다시 시도해주세요.");
     }
   };
 
@@ -140,13 +201,13 @@ export default function PostDetail({
             </div>
           </div>
         </div>
-        <CommentInput
+        <CommentInput type={type} onSubmit={handleCommentSubmit} />
+        <CommentList
+          comments={comments}
           type={type}
-          onSubmit={(text, stance) => {
-            console.log("댓글 제출", text, stance);
-          }}
+          onEdit={handleCommentEdit}
+          onDelete={handleCommentDelete}
         />
-        <CommentList comments={comments} type={type} />
       </div>
     </div>
   );
