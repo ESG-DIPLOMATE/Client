@@ -22,67 +22,74 @@ import DiaryPostDetail from "./pages/diary/DiaryPostDetail";
 import DebateListPage from "./pages/community/debate/DebateListPage";
 import DiaryListPage from "./pages/diary/DiaryListPage";
 import FreeListPage from "./pages/community/free/FreeListPage";
+import ProtectedRoute from "./ProtectedRoute";
 
 export const routes = [
   {
     path: "/",
     element: <Layout />,
     children: [
-      { index: true, element: <Main /> },
       { path: "login", element: <Login /> },
       { path: "signup", element: <Signup /> },
-      { path: "news", element: <News /> },
-      { path: "startTest", element: <StartTest /> },
-      { path: "test", element: <Test /> },
-      { path: "testResult", element: <Result /> },
-      { path: "vote", element: <Vote /> },
-      { path: "voteResults", element: <VoteResults /> },
-
       {
-        path: "mypage",
-        element: <Layout />,
+        element: <ProtectedRoute />,
         children: [
-          { index: true, element: <Mypage /> },
-          { path: "mywritings", element: <MyWritings /> },
-          { path: "mynews", element: <MyNews /> },
-          { path: "stampHistory", element: <StampHistory /> },
-        ],
-      },
+          { index: true, element: <Main /> },
+          { path: "news", element: <News /> },
+          { path: "startTest", element: <StartTest /> },
+          { path: "test", element: <Test /> },
+          { path: "testResult", element: <Result /> },
+          { path: "vote", element: <Vote /> },
+          { path: "voteResults", element: <VoteResults /> },
 
-      {
-        path: "diary",
-        element: <Layout />,
-        children: [
-          { index: true, element: <DiaryListPage /> },
-          { path: "new", element: <DiaryPostPage /> },
-          { path: ":id", element: <DiaryPostDetail /> },
-        ],
-      },
+          {
+            path: "mypage",
+            element: <Layout />,
+            children: [
+              { index: true, element: <Mypage /> },
+              { path: "mywritings", element: <MyWritings /> },
+              { path: "mynews", element: <MyNews /> },
+              { path: "stampHistory", element: <StampHistory /> },
+            ],
+          },
 
-      {
-        path: "community",
-        element: <Community />,
-      },
+          {
+            path: "diary",
+            element: <Layout />,
+            children: [
+              { index: true, element: <DiaryListPage /> },
+              { path: "new", element: <DiaryPostPage /> },
+              { path: ":id", element: <DiaryPostDetail /> },
+            ],
+          },
 
-      {
-        path: "free",
-        element: <Layout />,
-        children: [
-          { index: true, element: <FreeListPage /> },
-          { path: "new", element: <FreePostPage /> },
-          { path: ":id", element: <FreePostDetail /> },
-        ],
-      },
+          {
+            path: "community",
+            element: <Community />,
+          },
 
-      {
-        path: "debate",
-        element: <Layout />,
-        children: [
-          { index: true, element: <DebateListPage /> },
-          { path: "new", element: <DebatePostPage /> },
-          { path: ":id", element: <DebatePostDetail /> },
+          {
+            path: "free",
+            element: <Layout />,
+            children: [
+              { index: true, element: <FreeListPage /> },
+              { path: "new", element: <FreePostPage /> },
+              { path: ":id", element: <FreePostDetail /> },
+            ],
+          },
+
+          {
+            path: "debate",
+            element: <Layout />,
+            children: [
+              { index: true, element: <DebateListPage /> },
+              { path: "new", element: <DebatePostPage /> },
+              { path: ":id", element: <DebatePostDetail /> },
+            ],
+          },
         ],
       },
     ],
   },
 ];
+

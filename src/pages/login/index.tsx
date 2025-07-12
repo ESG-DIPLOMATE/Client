@@ -19,13 +19,15 @@ export default function Login() {
         userId: id,
         password: pw,
       });
-
-      const token = res.data.accessToken;
-      if (token) {
-        localStorage.setItem("accessToken", token);
+  
+      const { accessToken, refreshToken } = res.data;
+  
+      if (accessToken && refreshToken) {
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
         navigate("/");
       } else {
-        alert("로그인 실패: accessToken이 없습니다.");
+        alert("로그인 실패: 토큰이 없습니다.");
       }
     } catch (error) {
       console.error(error);
@@ -34,6 +36,7 @@ export default function Login() {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className={$.Wrapper}>

@@ -15,6 +15,13 @@ export const signup = (data: AuthRequest) => {
   return instance.post<AuthResponse>("/api/v1/auth/join", data);
 };
 
+// 리프레시 api
+export const refreshToken = (refreshToken: string) => {
+  return instance
+    .post<AuthResponse>("/api/v1/auth/refresh", { refreshToken })
+    .then((res) => res.data);
+};
+
 // 회원가입 시 아이디 중복체크 api
 export const checkUserId = (userId: string) => {
   return instance.post<CheckUserIdResponse>("/api/v1/auth/check-userid", {
