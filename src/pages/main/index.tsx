@@ -1,27 +1,56 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { HiOutlineUser } from "react-icons/hi2";
+import {
+  HiOutlineUser,
+  HiOutlineGlobeAlt,
+  HiOutlineMegaphone,
+} from "react-icons/hi2";
 import BackgroundImg from "@/assets/img/BackgroundIllust.png";
-import { HiOutlineGlobeAlt, HiOutlineMegaphone } from "react-icons/hi2";
-
 import $ from "./Main.module.scss";
 import TextButton from "@/components/common/Button/TextButton";
-import TitleCard from "@/components/Card/TitleCard";
+import LineCard from "@/components/Card/LineCard";
+import { getMainPage } from "@/apis/main/main";
+import type { MainPageResponse } from "@/apis/main/main";
+import NewsCard from "../news/components/NewsCard";
 
 function Main() {
   const navigate = useNavigate();
+
+  const [mainData, setMainData] = useState<MainPageResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getMainPage();
+        setMainData(res);
+      } catch (e) {
+        console.error(e);
+        alert("메인 데이터를 불러오지 못했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleTestStart = () => {
     navigate("/startTest");
   };
 
+  if (loading) return <p style={{ textAlign: "center" }}>로딩 중...</p>;
+
   return (
     <div className={$.container}>
+      {/* 헤더 */}
       <div className={$.header}>
         <div className={$.logo}>한터내셔널:나도 외교관</div>
         <div className={$.headerIcons}>
           <HiOutlineUser size={24} onClick={() => navigate("/mypage")} />
         </div>
       </div>
+
       <img
         src={BackgroundImg}
         className={$.BackgroundImg}
@@ -39,6 +68,8 @@ function Main() {
       <button className={$.testButton} onClick={handleTestStart}>
         글로벌 시민력 테스트 하러가기
       </button>
+
+      {/* 투표링크 */}
       <div className={$.voteLinks}>
         <div className={$.voteCard} onClick={() => navigate("/vote")}>
           <HiOutlineGlobeAlt size={28} className={$.voteIcon} />
@@ -53,40 +84,73 @@ function Main() {
 
       <div className={$.divider} />
 
+      {/* 외교 실천일지 */}
       <section className={$.section}>
         <div className={$.sectionHeader}>
           <h2>외교실천일지</h2>
           <TextButton text="전체보기" onClick={() => navigate("/diary")} />
         </div>
         <div className={$.cardList}>
-          <TitleCard title="일지 제목 1" />
-          <TitleCard title="일지 제목 2" />
+          {mainData?.recentDiaries.length === 0 && <p>데이터가 없습니다.</p>}
+          {mainData?.recentDiaries.map((diary) => (
+            <LineCard
+              key={diary.id}
+              id={diary.id}
+              title={diary.title}
+              content={diary.description}
+              createdAt={diary.createdAt}
+              type="diary"
+              likeCount={diary.likes}
+              commentCount={diary.diaryComments?.length ?? 0}
+            />
+          ))}
         </div>
       </section>
 
-      <div className={$.divider} />
+      {/* <div className={$.divider} /> */}
 
+      {/* 외교 뉴스 */}
       <section className={$.section}>
         <div className={$.sectionHeader}>
           <h2>외교뉴스</h2>
           <TextButton text="전체보기" onClick={() => navigate("/news")} />
         </div>
         <div className={$.cardList}>
-          <TitleCard title="뉴스 헤더1" />
-          <TitleCard title="뉴스 헤더2" />
+          {mainData?.recentNews.length === 0 && <p>데이터가 없습니다.</p>}
+          {mainData?.recentNews.map((news) => (
+            <NewsCard key={news.id} news={news} onBookmarkToggle={() => {}} />
+          ))}
         </div>
       </section>
 
-      <div className={$.divider} />
+      {/* <div className={$.divider} /> */}
 
+      {/* 커뮤니티 */}
       <section className={$.section}>
         <div className={$.sectionHeader}>
           <h2>커뮤니티</h2>
           <TextButton text="전체보기" onClick={() => navigate("/community")} />
         </div>
         <div className={$.cardList}>
-          <TitleCard title="자유게시판 인기글 제목 1" />
-          <TitleCard title="자유게시판 인기글 제목 2" />
+          {mainData?.popularCommunityPosts.length === 0 && (
+            <p>데이터가 없습니다.</p>
+          )}
+          {mainData?.popularCommunityPosts.map((post) => {
+            const type = post.boardType === "FREE" ? "free" : "debate";
+
+            return (
+              <LineCard
+                key={post.id}
+                id={post.id}
+                title={post.title}
+                content={post.content}
+                createdAt={post.createdAt}
+                type={type}
+                likeCount={post.likes}
+                commentCount={post.commentCount ?? 0}
+              />
+            );
+          })}
         </div>
       </section>
     </div>
