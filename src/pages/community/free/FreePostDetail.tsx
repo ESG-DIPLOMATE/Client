@@ -35,7 +35,7 @@ export default function FreePostDetail() {
 
   return (
     <PostDetail
-      owner={data.owner ?? false}
+      owner={data.owner}
       type="free"
       title={data.title}
       date={data.createdAt.slice(0, 10).replaceAll("-", ".")}

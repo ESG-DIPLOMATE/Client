@@ -1,43 +1,15 @@
-import { useState } from "react";
-import AppBar from "@/components/common/Appbar";
-import $ from "./Diary.module.scss";
-import PreviewCard, { type Preview } from "@/components/Card/PreviewCard";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import AppBar from "@/components/common/Appbar";
 import DropDownButton, {
   type Option,
 } from "@/components/common/Button/DropDownButton";
+import PreviewCard, { type Preview } from "@/components/Card/PreviewCard";
+import { deletePost, getDiaryList } from "@/apis/community/community";
+import $ from "./Diary.module.scss";
 import { FiEdit3 } from "react-icons/fi";
 
 type SortOption = "latest" | "likes" | "views";
-
-const diaryEntries: Preview[] = [
-  {
-    id: 1,
-    title: "내 실천일지",
-    preview: "오늘 외교 관련 행사에 다녀왔습니다...",
-    date: "2025-07-10",
-  },
-  {
-    id: 2,
-    title: "또 다른 일지",
-    preview: "외교 활동 보고서를 작성 중입니다...",
-    date: "2025-07-09",
-  },
-  {
-    id: 3,
-    title: "동현이의 실천일지",
-    preview: "오늘 유엔 관련 뉴스 스크랩을 했습니다.",
-    authorId: "donghyun",
-    date: "2025-07-08",
-  },
-  {
-    id: 4,
-    title: "지윤이의 외교 기록",
-    preview: "외교 행사에서 만난 사람들과 교류했어요.",
-    authorId: "jiyoon",
-    date: "2025-07-07",
-  },
-];
 
 const sortOptions: readonly Option<SortOption>[] = [
   { value: "latest", label: "최신순" },
@@ -47,27 +19,99 @@ const sortOptions: readonly Option<SortOption>[] = [
 
 function DiaryListPage() {
   const navigate = useNavigate();
+
   const [currentSort, setCurrentSort] = useState<SortOption>("latest");
-  const [entries, setEntries] = useState<Preview[]>([...diaryEntries]);
+  const [entries, setEntries] = useState<Preview[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [hasNext, setHasNext] = useState(true);
+
+  const pageRef = useRef(0);
+  const observerRef = useRef<HTMLDivElement>(null);
+
+  const fetchList = async (page = 0, reset = false) => {
+    try {
+      setLoading(true);
+
+      const res = await getDiaryList({
+        page,
+        size: 10,
+        sortBy: currentSort,
+      });
+
+      const previews: Preview[] = res.data.data.content.map((item) => ({
+        id: item.id,
+        title: item.title,
+        preview: item.description ?? "",
+        authorId: item.userId,
+        category: item.action,
+        date: item.createdAt.slice(0, 10),
+        likes: item.likes,
+        liked: item.liked,
+        owner: item.owner,
+      }));
+
+      if (reset) {
+        setEntries(previews);
+      } else {
+        setEntries((prev) => [...prev, ...previews]);
+      }
+
+      setHasNext(!res.data.data.pagination.last);
+      pageRef.current = page;
+    } catch (e) {
+      console.error(e);
+      alert("실천일지 목록을 불러오지 못했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    pageRef.current = 0;
+    fetchList(0, true);
+  }, [currentSort]);
+
+  const observerCallback = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const [entry] = entries;
+      if (entry.isIntersecting && hasNext && !loading) {
+        fetchList(pageRef.current + 1);
+      }
+    },
+    [hasNext, loading, currentSort]
+  );
+
+  useEffect(() => {
+    if (!observerRef.current) return;
+
+    const observer = new IntersectionObserver(observerCallback, {
+      threshold: 1.0,
+    });
+
+    observer.observe(observerRef.current);
+
+    return () => observer.disconnect();
+  }, [observerCallback]);
+
+  const handleSortChange = (sort: SortOption) => {
+    setCurrentSort(sort);
+  };
 
   const handleNewDiary = () => {
     navigate("/diary/new");
   };
 
-  const handleSortChange = (sort: SortOption) => {
-    setCurrentSort(sort);
-
-    const sorted = [...entries];
-    //api 연동하고 수정해야 함
-    if (sort === "latest") {
-      sorted.sort((a, b) => b.date.localeCompare(a.date));
-    } else if (sort === "views") {
-      sorted.sort((a, b) => a.date.localeCompare(b.date));
-    } else if (sort === "likes") {
-      sorted.sort((a, b) => a.title.localeCompare(b.title, "ko"));
+  const handleDelete = async (id: number) => {
+    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+    try {
+      await deletePost("diary", id);
+      alert("삭제가 완료되었습니다.");
+      pageRef.current = 0;
+      fetchList(0, true);
+    } catch (e) {
+      console.error(e);
+      alert("삭제 중 오류가 발생했습니다.");
     }
-
-    setEntries(sorted);
   };
 
   return (
@@ -135,14 +179,24 @@ function DiaryListPage() {
         </div>
 
         <div className={$.diaryList}>
-          {entries.map((entry) => (
-            <PreviewCard
-              key={entry.id}
-              post={entry}
-              type="diary"
-              onClick={() => navigate(`/diary/${entry.id}`)}
-            />
-          ))}
+          {loading && entries.length === 0 ? (
+            <p>로딩 중...</p>
+          ) : entries.length === 0 ? (
+            <p>게시글이 없습니다.</p>
+          ) : (
+            entries.map((entry) => (
+              <PreviewCard
+                key={entry.id}
+                post={entry}
+                type="diary"
+                owner={entry.owner}
+                onClick={() => navigate(`/diary/${entry.id}`)}
+                onDelete={() => handleDelete(entry.id)}
+              />
+            ))
+          )}
+          {loading && entries.length > 0 && <p>더 불러오는 중...</p>}
+          <div ref={observerRef} style={{ height: "1px" }} />
         </div>
       </div>
     </div>

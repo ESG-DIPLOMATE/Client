@@ -64,6 +64,7 @@ export interface CommunityPostBase {
   updatedAt: string;
   userId: string;
   images?: File[];
+  owner: boolean;
 }
 export interface BoardImage {
   id: number;
@@ -72,6 +73,25 @@ export interface BoardImage {
   mimeType: string;
   imageOrder: number;
   fileSize: number;
+}
+
+export interface BoardListResponse {
+  success: boolean;
+  message: string;
+  data: {
+    content: CommunityPostBase[];
+    pagination: {
+      currentPage: number;
+      totalPages: number;
+      pageSize: number;
+      totalCount: number;
+      hasMore: boolean;
+      hasPrevious: boolean;
+      first: boolean;
+      last: boolean;
+    };
+  };
+  timestamp: string;
 }
 
 export interface FreeBoardDetailResponse {

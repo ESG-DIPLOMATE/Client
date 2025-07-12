@@ -1,7 +1,7 @@
 import { useState } from "react";
 import $ from "./PreviewCard.module.scss";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import TextButton from "@/components/common/Button/TextButton";
+import { toggleLike } from "@/apis/community/community";
 
 export interface Preview {
   id: number;
@@ -10,6 +10,9 @@ export interface Preview {
   preview: string;
   authorId?: string;
   date: string;
+  likes?: number;
+  liked?: boolean;
+  owner: boolean;
 }
 
 interface PreviewCardProps {
@@ -20,6 +23,13 @@ interface PreviewCardProps {
   onDelete?: () => void;
 }
 
+const discussTypeMap: Record<string, string> = {
+  ENVIRONMENT: "환경",
+  CULTURE: "문화",
+  ECONOMY: "경제",
+  PEACE: "평화",
+};
+
 const PreviewCard = ({
   post,
   type,
@@ -27,19 +37,36 @@ const PreviewCard = ({
   onClick,
   onDelete,
 }: PreviewCardProps) => {
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(post.liked || false);
 
-  const handleLike = (e: React.MouseEvent) => {
+  const handleLike = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsLiked((prev) => !prev);
+
+    try {
+      const targetTypeMap = {
+        free: "FreeBoard",
+        debate: "DiscussBoard",
+        diary: "Diary",
+      };
+      const res = await toggleLike(targetTypeMap[type], post.id);
+      setIsLiked(res.data.liked);
+    } catch (e) {
+      console.error(e);
+      alert("좋아요 처리 중 오류가 발생했습니다.");
+    }
   };
+
+  const displayCategory =
+    type === "debate" && post.category
+      ? discussTypeMap[post.category] || post.category
+      : post.category;
 
   return (
     <div className={$.postCard} onClick={onClick}>
       <div className={$.header}>
         <div className={$.headerLeft}>
-          {type === "debate" && post.category && (
-            <span className={$.category}>{post.category}</span>
+          {type === "debate" && displayCategory && (
+            <span className={$.category}>{displayCategory}</span>
           )}
           <span className={$.title}>{post.title}</span>
         </div>

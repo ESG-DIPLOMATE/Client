@@ -34,7 +34,6 @@ export default function DebatePostDetail() {
 
   return (
     <PostDetail
-      id={data.id}
       owner={data.owner}
       type="debate"
       title={data.title}

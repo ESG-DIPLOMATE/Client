@@ -1,7 +1,7 @@
 import instance from "../instance";
 import type {
+  BoardListResponse,
   CommunityPopularResponse,
-  CommunityPostBase,
   CreateBoardResponse,
   CreateDiaryParams,
   CreateDiscussBoardParams,
@@ -70,7 +70,7 @@ export const getFreeBoardList = (params: {
   size?: number;
   sortBy?: string;
 }) => {
-  return instance.get<CommunityPostBase[]>("/api/v1/free-board/", {
+  return instance.get<BoardListResponse>("/api/v1/free-board/", {
     params,
   });
 };
@@ -89,7 +89,7 @@ export const getDiscussBoardList = (params: {
   size?: number;
   sortBy?: string;
 }) => {
-  return instance.get<CommunityPostBase[]>("/api/v1/discuss-board/", {
+  return instance.get<BoardListResponse>("/api/v1/discuss-board/", {
     params,
   });
 };
@@ -102,20 +102,13 @@ export const getDiscussBoardDetail = async (id: string | number) => {
   return data;
 };
 
-export interface DiaryListResponse {
-  success: boolean;
-  message: string;
-  data: CommunityPostBase[];
-  timestamp: string;
-}
-
 // 일지 목록 조회
 export const getDiaryList = (params: {
   page?: number;
   size?: number;
   sortBy?: string;
 }) => {
-  return instance.get<DiaryListResponse>("/api/v1/diary/", {
+  return instance.get<BoardListResponse>("/api/v1/diary/", {
     params,
   });
 };
@@ -123,12 +116,12 @@ export const getDiaryList = (params: {
 // 일지 상세 조회
 export const getDiaryBoardDetail = async (id: string | number) => {
   const { data } = await instance.get<DiaryBoardDetailResponse>(
-    `/api/v1/diary-board/${id}`
+    `/api/v1/diary/${id}`
   );
   return data;
 };
 
-// 게시글 삭제 api 
+// 게시글 삭제 api
 export const deletePost = (
   type: "free" | "debate" | "diary",
   id: number | string
@@ -140,7 +133,7 @@ export const deletePost = (
   } else if (type === "debate") {
     url = `/api/v1/discuss-board/${id}`;
   } else if (type === "diary") {
-    url = `/api/v1/diary-board/${id}`;
+    url = `/api/v1/diary/${id}`;
   }
 
   return instance.delete(url);

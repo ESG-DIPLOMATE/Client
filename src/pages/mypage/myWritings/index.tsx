@@ -101,12 +101,13 @@ export default function MyWritings() {
                     id: post.id,
                     title: post.title,
                     preview: post.content,
+                    owner: post.owner,
                     date: new Date(post.createdAt).toLocaleDateString(),
                     authorId: "나",
                     category:
                       post.postType === "DISCUSS_BOARD"
                         ? post.discussType || undefined
-                        : post.postType === "DIARY_BOARD"
+                        : post.postType === "DIARY"
                         ? post.action || undefined
                         : undefined,
                   }}
@@ -116,7 +117,7 @@ export default function MyWritings() {
                       navigate(`/free/${post.id}`);
                     } else if (post.postType === "DISCUSS_BOARD") {
                       navigate(`/debate/${post.id}`);
-                    } else if (post.postType === "DIARY_BOARD") {
+                    } else if (post.postType === "DIARY") {
                       navigate(`/diary/${post.id}`);
                     }
                   }}

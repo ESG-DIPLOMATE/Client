@@ -34,7 +34,6 @@ export default function DiaryPostDetail() {
 
   return (
     <PostDetail
-      id={data.id}
       owner={data.owner ?? false}
       type="diary"
       title={data.title}
