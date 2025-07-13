@@ -21,6 +21,7 @@ import {
   toggleLike,
 } from "@/apis/community/community";
 import { toast } from "react-toastify";
+import Modal from "@/components/common/Modal";
 
 export interface PostEditorFormData {
   title: string;
@@ -77,7 +78,7 @@ export default function PostDetail({
   const { id } = useParams<{ id: string }>();
   const numericId = id ? Number(id) : undefined;
   const location = useLocation();
-
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   if (!numericId) {
     return <p>잘못된 요청입니다.</p>;
@@ -93,25 +94,6 @@ export default function PostDetail({
       const res = await toggleLike(targetTypeMap[type], numericId);
       setIsLiked(res.data.liked);
       setLikeCountState(res.data.likeCount);
-    } catch (e) {
-      console.error(e);
-      toast("잠시 후 다시 시도해주세요.");
-    }
-  };
-
-  const handleDelete = async () => {
-    if (!numericId) {
-      toast("잠시 후 다시 시도해주세요.");
-      return;
-    }
-
-    const confirm = window.confirm("정말 삭제하시겠습니까?");
-    if (!confirm) return;
-
-    try {
-      await deletePost(type, numericId);
-      toast("삭제되었습니다.");
-      navigate(-1);
     } catch (e) {
       console.error(e);
       toast("잠시 후 다시 시도해주세요.");
@@ -162,7 +144,6 @@ export default function PostDetail({
       } else if (type === "free") {
         await deleteFreeComment(commentId);
       }
-      toast("댓글이 삭제되었습니다.");
       window.location.reload();
     } catch (e) {
       console.error(e);
@@ -179,14 +160,33 @@ export default function PostDetail({
     const from = location.state?.from;
     console.log(from);
 
-  
     if (from && from === "postPage") {
       navigate(-2);
     } else {
       navigate(-1);
     }
   };
-  
+
+  const handleDelete = () => {
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await deletePost(type, numericId);
+      toast("삭제되었습니다.");
+      navigate(-2);
+    } catch (e) {
+      console.error(e);
+      toast("잠시 후 다시 시도해주세요.");
+    } finally {
+      setShowDeleteModal(false);
+    }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+  };
 
   return (
     <div className={$.wrapper}>
@@ -247,6 +247,11 @@ export default function PostDetail({
           onDelete={handleCommentDelete}
         />
       </div>
+      {showDeleteModal && (
+        <Modal onConfirm={confirmDelete} onCancel={cancelDelete}>
+          정말로 이 게시글을 삭제하시겠습니까?
+        </Modal>
+      )}
     </div>
   );
 }

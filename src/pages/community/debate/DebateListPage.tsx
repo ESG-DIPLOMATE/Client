@@ -5,6 +5,7 @@ import AppBar from "@/components/common/Appbar";
 import DropDownButton, {
   type Option,
 } from "@/components/common/Button/DropDownButton";
+import Modal from "@/components/common/Modal";
 import { deletePost, getDiscussBoardList } from "@/apis/community/community";
 import $ from "../../diary/Diary.module.scss";
 import { FiEdit3 } from "react-icons/fi";
@@ -26,6 +27,8 @@ function DebateListPage() {
   const [entries, setEntries] = useState<Preview[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasNext, setHasNext] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [targetDeleteId, setTargetDeleteId] = useState<number | null>(null);
 
   const pageRef = useRef(0);
   const observerRef = useRef<HTMLDivElement>(null);
@@ -102,17 +105,30 @@ function DebateListPage() {
     navigate("/debate/new");
   };
 
-  const handleDelete = async (id: number) => {
-    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+  const handleDelete = (id: number) => {
+    setTargetDeleteId(id);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (targetDeleteId == null) return;
     try {
-      await deletePost("debate", id);
+      await deletePost("debate", targetDeleteId);
       toast("삭제가 완료되었습니다.");
       pageRef.current = 0;
       fetchList(0, true);
     } catch (e) {
       console.error(e);
       toast("잠시 후 다시 시도해주세요.");
+    } finally {
+      setShowDeleteModal(false);
+      setTargetDeleteId(null);
     }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+    setTargetDeleteId(null);
   };
 
   return (
@@ -137,10 +153,6 @@ function DebateListPage() {
               <strong>환경·문화·평화·경제</strong> 4개 분야의 국제 이슈에 대해
               누구나 자유롭게 의견을 나누고, 서로의 시각을 넓힐 수 있는
               공간입니다.
-            </p>
-            <p style={{ marginTop: "10px" }}>
-              내가 가진 생각이나 궁금증, 제안하고 싶은 아이디어를 올려보세요.
-              다양한 의견이 모여 세상에 작은 변화를 만들어갈 수 있습니다!
             </p>
           </div>
         </div>
@@ -181,6 +193,11 @@ function DebateListPage() {
           <div ref={observerRef} style={{ height: "1px" }} />
         </div>
       </div>
+      {showDeleteModal && (
+        <Modal onConfirm={confirmDelete} onCancel={cancelDelete}>
+          정말로 이 게시글을 삭제하시겠습니까?
+        </Modal>
+      )}
     </div>
   );
 }

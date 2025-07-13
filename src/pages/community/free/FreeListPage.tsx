@@ -5,6 +5,7 @@ import DropDownButton, {
   type Option,
 } from "@/components/common/Button/DropDownButton";
 import PreviewCard, { type Preview } from "@/components/Card/PreviewCard";
+import Modal from "@/components/common/Modal";
 import { getFreeBoardList, deletePost } from "@/apis/community/community";
 import $ from "../../diary/Diary.module.scss";
 import { FiEdit3 } from "react-icons/fi";
@@ -25,14 +26,15 @@ function FreeListPage() {
   const [entries, setEntries] = useState<Preview[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const pageRef = useRef(0);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [targetDeleteId, setTargetDeleteId] = useState<number | null>(null);
 
+  const pageRef = useRef(0);
   const observerRef = useRef<HTMLDivElement>(null);
 
   const fetchList = async (page: number, reset = false) => {
     try {
       setLoading(true);
-
       const res = await getFreeBoardList({
         page,
         size: 10,
@@ -74,10 +76,8 @@ function FreeListPage() {
   const observerCallback = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       const [entry] = entries;
-
       if (entry.isIntersecting && hasMore && !loading) {
-        const nextPage = pageRef.current + 1;
-        fetchList(nextPage);
+        fetchList(pageRef.current + 1);
       }
     },
     [hasMore, loading, currentSort]
@@ -93,7 +93,7 @@ function FreeListPage() {
     observer.observe(observerRef.current);
 
     return () => observer.disconnect();
-  }, [observerRef, observerCallback]);
+  }, [observerCallback]);
 
   const handleSortChange = (sort: SortOption) => {
     setCurrentSort(sort);
@@ -103,18 +103,30 @@ function FreeListPage() {
     navigate("/free/new");
   };
 
-  const handleDelete = async (id: number) => {
-    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+  const handleDelete = (id: number) => {
+    setTargetDeleteId(id);
+    setShowDeleteModal(true);
+  };
 
+  const confirmDelete = async () => {
+    if (targetDeleteId == null) return;
     try {
-      await deletePost("free", id);
+      await deletePost("free", targetDeleteId);
       toast("삭제되었습니다.");
       pageRef.current = 0;
       fetchList(0, true);
     } catch (e) {
       console.error(e);
       toast("잠시 후 다시 시도해주세요.");
+    } finally {
+      setShowDeleteModal(false);
+      setTargetDeleteId(null);
     }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+    setTargetDeleteId(null);
   };
 
   return (
@@ -139,10 +151,6 @@ function FreeListPage() {
               외교 이야기는 물론, 일상에서 느낀 점이나 관심사 등 어떤 주제든
               편하게 올릴 수 있는 공간입니다.
             </p>
-            <p style={{ marginTop: "10px" }}>
-              외교, 사회, 문화에 대한 자유로운 생각이나 일상의 소소한 이야기들을
-              공유해보세요!
-            </p>
           </div>
         </div>
 
@@ -158,6 +166,7 @@ function FreeListPage() {
               />
             </div>
           </div>
+          <div className={$.divider}></div>
         </div>
 
         <div className={$.diaryList}>
@@ -172,7 +181,9 @@ function FreeListPage() {
                 post={entry}
                 type="free"
                 owner={entry.owner}
-                onClick={() => navigate(`/free/${entry.id}`, { state: { from: "prev" } })}
+                onClick={() =>
+                  navigate(`/free/${entry.id}`, { state: { from: "prev" } })
+                }
                 onDelete={() => handleDelete(entry.id)}
               />
             ))
@@ -181,6 +192,11 @@ function FreeListPage() {
           <div ref={observerRef} style={{ height: "1px" }}></div>
         </div>
       </div>
+      {showDeleteModal && (
+        <Modal onConfirm={confirmDelete} onCancel={cancelDelete}>
+          정말로 이 게시글을 삭제하시겠습니까?
+        </Modal>
+      )}
     </div>
   );
 }
