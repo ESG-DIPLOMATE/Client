@@ -6,6 +6,7 @@ import { getMyPage } from "@/apis/mypage/mypage";
 import type { MyPageResponse } from "@/apis/mypage/mypage.type";
 import TextButton from "@/components/common/Button/TextButton";
 import { toast } from "react-toastify";
+import LoadingSpinner from "@/components/common/Spinner";
 
 export default function Mypage() {
   const navigate = useNavigate();
@@ -32,9 +33,12 @@ export default function Mypage() {
     navigate(-1);
   };
 
-  if (loading) {
-    return <div className={$.wrapper}>로딩중...</div>;
-  }
+  if (loading)
+    return (
+      <div className={$.loadingOverlay}>
+        <LoadingSpinner />
+      </div>
+    );
 
   if (!data) {
     return <div className={$.wrapper}>데이터를 불러올 수 없습니다.</div>;

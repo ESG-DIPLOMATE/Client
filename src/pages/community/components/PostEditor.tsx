@@ -27,6 +27,7 @@ export interface PostEditorProps<T extends string> {
     images?: File[];
   };
   submitText?: string;
+  loading?: boolean;
 }
 
 export default function PostEditor<T extends string>({
@@ -38,6 +39,7 @@ export default function PostEditor<T extends string>({
   defaultValues,
   submitText,
   mode,
+  loading,
 }: PostEditorProps<T>) {
   const navigate = useNavigate();
   submitText = mode === "edit" ? "수정하기" : "작성 완료";
@@ -172,7 +174,7 @@ export default function PostEditor<T extends string>({
           <Button
             variant="primary"
             size="large"
-            disabled={!isValid}
+            disabled={!isValid || loading}
             onClick={() =>
               onSubmit({
                 title: postTitle.trim(),
@@ -182,7 +184,11 @@ export default function PostEditor<T extends string>({
               })
             }
           >
-            {submitText}
+            {loading
+              ? mode === "edit"
+                ? "수정 중..."
+                : "업로드 중..."
+              : submitText}
           </Button>
         </div>
       </div>

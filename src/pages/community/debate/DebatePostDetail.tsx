@@ -3,6 +3,8 @@ import PostDetail from "../components/detail";
 import { getDiscussBoardDetail } from "@/apis/community/community";
 import type { DiscussBoardDetail } from "@/apis/community/community.type";
 import { useEffect, useState } from "react";
+import LoadingSpinner from "@/components/common/Spinner";
+import $ from "../../main/Main.module.scss";
 
 export default function DebatePostDetail() {
   const { id } = useParams<{ id: string }>();
@@ -29,7 +31,12 @@ export default function DebatePostDetail() {
     fetchData();
   }, [id]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className={$.loadingOverlay}>
+        <LoadingSpinner />
+      </div>
+    );
   if (!data) return <p>데이터가 없습니다.</p>;
 
   return (

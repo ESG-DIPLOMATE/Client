@@ -14,6 +14,7 @@ import type {
   StampHistoryResponse,
   LevelGuideResponse,
 } from "@/apis/mypage/mypage.type";
+import LoadingSpinner from "@/components/common/Spinner";
 
 export default function StampHistory() {
   const navigate = useNavigate();
@@ -45,9 +46,12 @@ export default function StampHistory() {
     fetchData();
   }, []);
 
-  if (loading) {
-    return <div className={$.wrapper}>로딩중...</div>;
-  }
+  if (loading)
+    return (
+      <div className={$.loadingOverlay}>
+        <LoadingSpinner />
+      </div>
+    );
 
   if (!stampData || !guideData) {
     return <div className={$.wrapper}>데이터를 불러올 수 없습니다.</div>;

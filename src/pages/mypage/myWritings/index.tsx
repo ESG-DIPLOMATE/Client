@@ -7,6 +7,7 @@ import $ from "./MyWritings.module.scss";
 import { getMyPosts } from "@/apis/mypage/mypage";
 import type { MyPost, PostFilter } from "@/apis/mypage/mypage.type";
 import { deletePost } from "@/apis/community/community";
+import LoadingSpinner from "@/components/common/Spinner";
 
 const filterLabelToQuery: Record<string, PostFilter> = {
   전체: "ALL",
@@ -68,7 +69,7 @@ export default function MyWritings() {
           </div>
 
           {loading ? (
-            <p className={$.emptyText}>로딩중...</p>
+            <LoadingSpinner />
           ) : posts.length === 0 ? (
             <p className={$.emptyText}>작성한 글이 없습니다.</p>
           ) : (
