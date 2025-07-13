@@ -96,7 +96,11 @@ export default function Mypage() {
                   onClick={() => navigate("/startTest")}
                 />
               ) : (
-                <p className={$.citizenType}>{data.citizenType}</p>
+                <TextButton
+                  text={data.citizenType}
+                  onClick={() => navigate("/testResult")}
+                  underline
+                />
               )}
             </section>
 
