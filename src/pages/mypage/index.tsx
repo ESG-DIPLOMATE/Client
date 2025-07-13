@@ -7,12 +7,16 @@ import type { MyPageResponse } from "@/apis/mypage/mypage.type";
 import TextButton from "@/components/common/Button/TextButton";
 import { toast } from "react-toastify";
 import LoadingSpinner from "@/components/common/Spinner";
+import Modal from "@/components/common/Modal";
+import { withdrawUser } from "@/apis/auth/auth";
 
 export default function Mypage() {
   const navigate = useNavigate();
 
   const [data, setData] = useState<MyPageResponse | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,6 +53,36 @@ export default function Mypage() {
     localStorage.removeItem("refreshToken");
     toast("로그아웃 되었습니다.");
     navigate("/login");
+  };
+
+  const handleWithdrawClick = () => {
+    setShowModal(true);
+  };
+
+  const handleConfirmWithdraw = async () => {
+    try {
+      await withdrawUser({
+        userId: data.userId,
+        password,
+      });
+      toast("회원 탈퇴가 완료되었습니다.");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+      toast("비밀번호가 맞지 않습니다.");
+      return;
+    } finally {
+      //
+    }
+    setShowModal(false);
+    setPassword("");
+  };
+
+  const handleCancelWithdraw = () => {
+    setShowModal(false);
+    setPassword("");
   };
 
   return (
@@ -121,15 +155,43 @@ export default function Mypage() {
           </div>
 
           <div className={$.withdrawWrapper}>
-            <button
-              className={$.withdrawButton}
-              onClick={() => console.log("탈퇴하기")}
-            >
+            <button className={$.withdrawButton} onClick={handleWithdrawClick}>
               탈퇴하기
             </button>
           </div>
         </div>
       </div>
+
+      {showModal && (
+        <Modal
+          onConfirm={handleConfirmWithdraw}
+          onCancel={handleCancelWithdraw}
+        >
+          <div className={$.modalContent}>
+            <span style={{ margin: "auto" }}>
+              본인 확인을 위해 비밀번호를 입력해주세요.
+            </span>
+            <label>
+              아이디
+              <input
+                type="text"
+                value={data.userId}
+                readOnly
+                className={$.input}
+              />
+            </label>
+            <label>
+              비밀번호
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={$.input}
+              />
+            </label>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

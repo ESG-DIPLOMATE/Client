@@ -28,3 +28,14 @@ export const checkUserId = (userId: string) => {
     userId,
   });
 };
+
+// 회원탈퇴
+export const withdrawUser = async (payload: {
+  userId: string;
+  password: string;
+}) => {
+  const { data } = await instance.delete("/api/v1/user/withdraw", {
+    data: payload,
+  });
+  return data;
+};
