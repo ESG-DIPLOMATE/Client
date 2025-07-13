@@ -37,98 +37,85 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 30px;
+  gap: 100px;
   margin-bottom: 24px;
 
   button {
     background: none;
     border: none;
     font-size: 24px;
-    color: $Blue400;
+    color: $Gray400;
     cursor: pointer;
 
     &:hover {
       color: $Blue400;
     }
+
+    &:disabled {
+      color: $Gray200;
+      cursor: not-allowed;
+    }
   }
 
   span {
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 700;
     color: $Gray400;
   }
 }
 
 .section {
   margin-bottom: 32px;
-  background-color: #ffff;
-  border-radius: 8px;
-  padding: 16px;
 
   h2 {
     font-size: 18px;
     font-weight: 700;
     color: $Gray400;
-    margin-bottom: 12px;
-  }
-
-  p {
-    font-size: 14px;
-    color: $Gray300;
     margin-bottom: 16px;
   }
-
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    li {
-      border-radius: 8px;
-      padding: 12px 16px;
-      margin-bottom: 8px;
-      font-size: 14px;
-      color: $Gray400;
-
-      strong {
-        color: $Blue400;
-        margin-right: 8px;
-      }
-    }
-  }
 }
 
-p {
-  font-size: 14px;
-  color: $Gray400;
-  text-align: center;
+.card {
+  background: $Blue50;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: inset 0 0 3px 0 #aeecff, 12px 12px 28px 0 rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
+.placeholderBox {
+  position: relative;
+  width: 100%;
+  background: White;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  box-sizing: border-box;
+}
 
 .rank {
-  font-weight: 700;
-  color: $Blue400;
-  font-size: 16px;
-  margin-right: 12px;
-  flex-shrink: 0;
-}
-
-.diaryAuthor {
-  font-size: 13px;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: $White50;
   color: $Gray300;
-}
-
-
-.voteItem {
+  font-size: 12px;
+  font-weight: 600;
   display: flex;
-  align-items: flex-start;
-  background: #fff;
-  border-radius: 8px;
-  padding: 12px 16px;
-  margin-bottom: 8px;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  border: 1px solid #80bfff;
 }
 
 .voteTextBox {
+  margin-left: 25px;
   display: flex;
   flex-direction: column;
 }
@@ -145,15 +132,8 @@ p {
   color: $Gray300;
 }
 
-.rank {
-  font-weight: 700;
-  color: $Blue400;
-  font-size: 16px;
-  margin-right: 12px;
-  flex-shrink: 0;
-}
-
-.monthSelector button:disabled {
-  color: $Gray200;
-  cursor: not-allowed;
+.emptyMessage {
+  font-size: 14px;
+  color: $Gray300;
+  text-align: center;
 }

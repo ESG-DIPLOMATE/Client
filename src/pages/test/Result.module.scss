@@ -127,11 +127,6 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.15);
-  }
-
   &::before {
     content: "💡";
     font-size: 20px;
@@ -230,10 +225,4 @@
   font-weight: 600;
   box-shadow: 0 2px 6px rgba(25, 118, 210, 0.2);
   transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4);
-    background: linear-gradient(45deg, #1565c0, #42a5f5);
-  }
 }

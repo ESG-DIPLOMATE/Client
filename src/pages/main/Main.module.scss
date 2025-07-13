@@ -72,10 +72,6 @@
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
-
-  &:hover {
-    opacity: 0.9;
-  }
 }
 
 .voteLinks {
@@ -141,7 +137,7 @@
   h2 {
     font-size: 18px;
     font-weight: 700;
-    color: $Gray400;
+    color: $Blue300;
   }
 }
 
