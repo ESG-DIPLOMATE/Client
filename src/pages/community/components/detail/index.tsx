@@ -6,7 +6,7 @@ import ImageSlider from "@/components/Slider";
 import CommentList from "@/components/common/comment/CommentList";
 import CommentInput from "@/components/common/comment/CommentInput";
 import AppBar from "@/components/common/Appbar";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   createDiaryComment,
   createDiscussComment,
@@ -76,6 +76,8 @@ export default function PostDetail({
   const [likeCountState, setLikeCountState] = useState(likeCount);
   const { id } = useParams<{ id: string }>();
   const numericId = id ? Number(id) : undefined;
+  const location = useLocation();
+
 
   if (!numericId) {
     return <p>잘못된 요청입니다.</p>;
@@ -173,10 +175,23 @@ export default function PostDetail({
     diary: "/diary/new",
   };
 
+  const handleBack = () => {
+    const from = location.state?.from;
+    console.log(from);
+
+  
+    if (from && from === "postPage") {
+      navigate(-2);
+    } else {
+      navigate(-1);
+    }
+  };
+  
+
   return (
     <div className={$.wrapper}>
       <div className={$.PaddingContainer}>
-        <AppBar leftRole="back" onClickLeftButton={() => navigate(-1)} />
+        <AppBar leftRole="back" onClickLeftButton={handleBack} />
       </div>
       <div className={$.container}>
         {owner && (

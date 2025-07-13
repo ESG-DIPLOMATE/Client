@@ -116,11 +116,12 @@ export default function MyWritings() {
                   type={postType}
                   onClick={() => {
                     if (post.postType === "FREE_BOARD") {
-                      navigate(`/free/${post.id}`);
+                      navigate(`/free/${post.id}`, { state: { from: "prev" } });
+
                     } else if (post.postType === "DISCUSS_BOARD") {
-                      navigate(`/debate/${post.id}`);
+                      navigate(`/debate/${post.id}`, { state: { from: "prev" } });
                     } else if (post.postType === "DIARY") {
-                      navigate(`/diary/${post.id}`);
+                      navigate(`/diary/${post.id}`, { state: { from: "prev" } });
                     }
                   }}
                   onDelete={handleDelete}

@@ -172,7 +172,7 @@ function FreeListPage() {
                 post={entry}
                 type="free"
                 owner={entry.owner}
-                onClick={() => navigate(`/free/${entry.id}`)}
+                onClick={() => navigate(`/free/${entry.id}`, { state: { from: "prev" } })}
                 onDelete={() => handleDelete(entry.id)}
               />
             ))

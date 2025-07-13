@@ -41,6 +41,8 @@ export default function FreePostDetail() {
     );
   if (!data) return <p>데이터가 없습니다.</p>;
 
+  
+
   return (
     <PostDetail
       owner={data.owner}
