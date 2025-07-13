@@ -9,6 +9,7 @@ import { deletePost, getDiaryList } from "@/apis/community/community";
 import $ from "./Diary.module.scss";
 import { FiEdit3 } from "react-icons/fi";
 import LoadingSpinner from "@/components/common/Spinner";
+import { toast } from "react-toastify";
 
 type SortOption = "latest" | "likes" | "views";
 
@@ -61,7 +62,7 @@ function DiaryListPage() {
       pageRef.current = page;
     } catch (e) {
       console.error(e);
-      alert("실천일지 목록을 불러오지 못했습니다.");
+      toast("잠시 후 다시 시도해주세요.");
     } finally {
       setLoading(false);
     }
@@ -106,12 +107,12 @@ function DiaryListPage() {
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
     try {
       await deletePost("diary", id);
-      alert("삭제가 완료되었습니다.");
+      toast("삭제되었습니다.");
       pageRef.current = 0;
       fetchList(0, true);
     } catch (e) {
       console.error(e);
-      alert("삭제 중 오류가 발생했습니다.");
+      toast("잠시 후 다시 시도해주세요.");
     }
   };
 

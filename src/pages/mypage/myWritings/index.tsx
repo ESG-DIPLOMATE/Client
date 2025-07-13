@@ -8,6 +8,7 @@ import { getMyPosts } from "@/apis/mypage/mypage";
 import type { MyPost, PostFilter } from "@/apis/mypage/mypage.type";
 import { deletePost } from "@/apis/community/community";
 import LoadingSpinner from "@/components/common/Spinner";
+import { toast } from "react-toastify";
 
 const filterLabelToQuery: Record<string, PostFilter> = {
   전체: "ALL",
@@ -86,11 +87,11 @@ export default function MyWritings() {
 
                 try {
                   await deletePost(postType, post.id);
-                  alert("삭제되었습니다.");
+                  toast("삭제되었습니다.");
                   fetchPosts(selectedFilter);
                 } catch (error) {
                   console.error("삭제 실패", error);
-                  alert("삭제에 실패했습니다.");
+                  toast("잠시 후 다시 시도해주세요.");
                 }
               };
 

@@ -5,6 +5,7 @@ import Input from "@/components/common/Input";
 import Button from "@/components/common/Button";
 import BackgroundImg from "@/assets/img/BackgroundImg3.png";
 import instance from "@/apis/instance";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const [id, setId] = useState("");
@@ -19,24 +20,24 @@ export default function Login() {
         userId: id,
         password: pw,
       });
-  
+
       const { accessToken, refreshToken } = res.data;
-  
+
       if (accessToken && refreshToken) {
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
+        toast("로그인 성공!");
         navigate("/");
       } else {
-        alert("로그인 실패: 토큰이 없습니다.");
+        toast("로그인에 실패하였습니다.");
       }
     } catch (error) {
       console.error(error);
-      alert("로그인에 실패했습니다.");
+      toast("로그인에 실패하였습니다.");
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
     <div className={$.Wrapper}>
@@ -68,9 +69,7 @@ export default function Login() {
               textAlign: "left",
             }}
           >
-            <p style={{ fontSize: "35px", marginBottom: "5px" }}>
-              한터내셔널:
-            </p>
+            <p style={{ fontSize: "35px", marginBottom: "5px" }}>한터내셔널:</p>
             <p style={{ fontSize: "40px" }}>나도 외교관</p>
           </div>
           <div>

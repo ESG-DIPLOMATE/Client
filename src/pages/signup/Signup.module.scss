@@ -1,5 +1,5 @@
-@use '@/_colors.scss' as *; 
-@use '@/styles/mixin.scss' as *;
+@use "@/_colors.scss" as *;
+@use "@/styles/mixin.scss" as *;
 
 .Wrapper {
   overflow: hidden;
@@ -16,11 +16,11 @@
   .BackgroundImg {
     position: absolute;
     left: 50%;
-    top: 23vh; 
+    top: 23vh;
     transform: translateX(-50%);
     width: 48%;
-    z-index: -9; 
-}
+    z-index: -9;
+  }
 }
 
 .formContainer {
@@ -32,7 +32,7 @@
 .inputsWrapper {
   display: flex;
   flex-direction: column;
-  gap: 10px; 
+  gap: 10px;
 }
 
 .inputRow {
@@ -47,14 +47,18 @@
 
 .checkButtonWrapper {
   flex: 1;
+  white-space: nowrap;
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }
 
 .errorWrapper {
-  height: 16px; 
+  height: 16px;
 }
 
 .errorText {
-  color: #e03131; 
+  color: #e03131;
   font-size: 12px;
   margin-left: 10px;
   margin-top: -5px;

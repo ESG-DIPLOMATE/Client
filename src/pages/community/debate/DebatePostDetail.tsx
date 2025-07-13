@@ -5,6 +5,7 @@ import type { DiscussBoardDetail } from "@/apis/community/community.type";
 import { useEffect, useState } from "react";
 import LoadingSpinner from "@/components/common/Spinner";
 import $ from "../../main/Main.module.scss";
+import { toast } from "react-toastify";
 
 export default function DebatePostDetail() {
   const { id } = useParams<{ id: string }>();
@@ -22,7 +23,7 @@ export default function DebatePostDetail() {
         setData(res.data);
       } catch (e) {
         console.error(e);
-        alert("글을 불러오지 못했습니다.");
+        toast("잠시 후 다시 시도해주세요.");
       } finally {
         setLoading(false);
       }
@@ -47,6 +48,7 @@ export default function DebatePostDetail() {
       date={data.createdAt.slice(0, 10).replaceAll("-", ".")}
       authorId={data.userId}
       category={data.discussType}
+      discussTypeDisplay={data.discussTypeDisplay}
       content={data.content ?? ""}
       images={data.discussBoardImages.map(
         (img) => `https://hihigh.lion.it.kr${img.imageUrl}`

@@ -47,6 +47,7 @@ export type PostDetailProps = {
   date: string;
   authorId: string;
   category?: string;
+  discussTypeDisplay?: string;
   content: string;
   images: string[];
   likeCount: number;
@@ -62,6 +63,7 @@ export default function PostDetail({
   date,
   authorId,
   category,
+  discussTypeDisplay,
   content,
   images,
   likeCount,
@@ -106,7 +108,8 @@ export default function PostDetail({
 
     try {
       await deletePost(type, numericId);
-      window.location.reload();
+      toast("삭제되었습니다.");
+      navigate(-1);
     } catch (e) {
       console.error(e);
       toast("잠시 후 다시 시도해주세요.");
@@ -191,7 +194,9 @@ export default function PostDetail({
           <span className={$.date}>작성일 | {date}</span>
           {type !== "free" && category && (
             <span className={$.category}>
-              {type === "diary" ? `항목 | ${category}` : `분야 | ${category}`}
+              {type === "diary"
+                ? `항목 | ${category}`
+                : `분야 | ${discussTypeDisplay}`}
             </span>
           )}
         </div>

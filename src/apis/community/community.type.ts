@@ -143,6 +143,7 @@ export interface DiscussBoardDetail {
   createdAt: string;
   updatedAt: string;
   owner: boolean;
+  discussTypeDisplay: string;
   discussBoardComments: DiscussBoardComment[];
   discussBoardImages: BoardImage[];
 }
