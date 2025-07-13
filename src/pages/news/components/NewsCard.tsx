@@ -5,7 +5,7 @@ import { convertMofaUrl } from "@/utils/convertMofaUrl";
 
 interface NewsCardProps {
   news: NewsItem;
-  onBookmarkToggle: (id: number) => void;
+  onBookmarkToggle?: (id: number) => void;
 }
 
 export default function NewsCard({ news, onBookmarkToggle }: NewsCardProps) {
@@ -28,18 +28,20 @@ export default function NewsCard({ news, onBookmarkToggle }: NewsCardProps) {
         </div>
       </div>
 
-      <button
-        className={$.bookmarkButton}
-        onClick={(e) => {
-          e.stopPropagation();
-          onBookmarkToggle(news.id);
-        }}
-      >
-        <RiBookmarkFill
-          size={20}
-          color={news.scrapped ? "#007BFF" : "#ADB5BD"} // 파랑 or 회색
-        />
-      </button>
+      {news.scrapped !== undefined && onBookmarkToggle && (
+        <button
+          className={$.bookmarkButton}
+          onClick={(e) => {
+            e.stopPropagation();
+            onBookmarkToggle(news.id);
+          }}
+        >
+          <RiBookmarkFill
+            size={20}
+            color={news.scrapped ? "#007BFF" : "#ADB5BD"}
+          />
+        </button>
+      )}
     </div>
   );
 }

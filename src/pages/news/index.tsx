@@ -12,6 +12,7 @@ import NewsCard from "./components/NewsCard";
 import TextButton from "@/components/common/Button/TextButton";
 import $ from "./News.module.scss";
 import { toast } from "react-toastify";
+import LoadingSpinner from "@/components/common/Spinner";
 
 const keywordMap: Record<string, string> = {
   전체: "ALL",
@@ -200,7 +201,7 @@ export default function News() {
                 onBookmarkToggle={() => toggleBookmark(news.id, "all")}
               />
             ))}
-            {loading && <p>Loading...</p>}
+            {loading && <LoadingSpinner />}
             <div ref={observerRef} style={{ height: "1px" }} />
           </div>
         </section>

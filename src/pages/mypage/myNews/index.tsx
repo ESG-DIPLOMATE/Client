@@ -8,6 +8,7 @@ import { getMyScraps } from "@/apis/news/news";
 import type { NewsItem } from "@/apis/news/news.type";
 
 import $ from "./MyNews.module.scss";
+import LoadingSpinner from "@/components/common/Spinner";
 
 export default function MyNews() {
   const navigate = useNavigate();
@@ -66,17 +67,19 @@ export default function MyNews() {
           </div>
 
           {loading ? (
-            <p>Loading...</p>
+            <LoadingSpinner />
           ) : filteredList.length === 0 ? (
             <p className={$.emptyText}>스크랩한 뉴스가 없습니다.</p>
           ) : (
-            filteredList.map((news) => (
-              <NewsCard
-                key={news.newsId}
-                news={news}
-                onBookmarkToggle={() => handleBookmarkToggle(news.newsId)}
-              />
-            ))
+            <div className={$.newsList}>
+              {filteredList.map((news) => (
+                <NewsCard
+                  key={news.newsId}
+                  news={news}
+                  onBookmarkToggle={() => handleBookmarkToggle(news.newsId)}
+                />
+              ))}
+            </div>
           )}
         </section>
       </div>

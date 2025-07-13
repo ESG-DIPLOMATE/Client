@@ -9,6 +9,8 @@ import {
 } from "@/apis/community/community";
 import type { PostEditorFormData } from "../components/detail";
 import { toast } from "react-toastify";
+import LoadingSpinner from "@/components/common/Spinner";
+import $ from "../../main/Main.module.scss";
 
 const DISCUSS_OPTIONS = [
   { label: "환경", value: "ENVIRONMENT" },
@@ -44,7 +46,7 @@ export default function DebatePostPage() {
         });
       } catch (e) {
         console.error(e);
-        toast("글 정보를 불러오지 못했어요.");
+        toast("잠시 후 다시 시도해주세요.");
       } finally {
         setLoading(false);
       }
@@ -54,6 +56,7 @@ export default function DebatePostPage() {
   }, [editId]);
 
   const handleSubmit = async (data: PostEditorFormData) => {
+    setLoading(true);
     try {
       const compressedImages = data.images
         ? await compressImages(data.images)
@@ -66,7 +69,7 @@ export default function DebatePostPage() {
           discussType: data.dropdownValue!,
           images: compressedImages,
         });
-        toast("수정되었습니다!");
+        toast("수정 완료되었습니다!");
         navigate(`/debate/${editId}`);
       } else {
         const res = await createDiscussBoard({
@@ -82,13 +85,18 @@ export default function DebatePostPage() {
       }
     } catch (e) {
       console.error(e);
-      toast("작성 실패");
+      toast("잠시 후 다시 시도해주세요.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (editId && loading) {
-    return <p>불러오는 중...</p>;
-  }
+  if (editId && loading)
+    return (
+      <div className={$.loadingOverlay}>
+        <LoadingSpinner />
+      </div>
+    );
 
   return (
     <PostEditor
@@ -99,6 +107,7 @@ export default function DebatePostPage() {
       onSubmit={handleSubmit}
       defaultValues={defaultValues ?? undefined}
       submitText={editId ? "수정하기" : "작성 완료"}
+      loading={loading}
     />
   );
 }

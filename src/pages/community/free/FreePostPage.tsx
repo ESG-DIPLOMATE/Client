@@ -8,6 +8,9 @@ import {
   editFreeBoard,
 } from "@/apis/community/community";
 import type { PostEditorFormData } from "../components/detail";
+import { toast } from "react-toastify";
+import LoadingSpinner from "@/components/common/Spinner";
+import $ from "../../main/Main.module.scss";
 
 export default function FreePostPage() {
   const navigate = useNavigate();
@@ -35,7 +38,7 @@ export default function FreePostPage() {
         });
       } catch (e) {
         console.error(e);
-        alert("글 불러오기 실패");
+        toast("잠시 후 다시 시도해주세요.");
         navigate(-1);
       } finally {
         setLoading(false);
@@ -46,6 +49,7 @@ export default function FreePostPage() {
   }, [id, isEdit, navigate]);
 
   const handleSubmit = async (data: PostEditorFormData) => {
+    setLoading(true);
     try {
       const compressedImages = data.images
         ? await compressImages(data.images)
@@ -57,7 +61,7 @@ export default function FreePostPage() {
           content: data.content,
           images: compressedImages,
         });
-        alert("수정 완료!");
+        toast("수정 완료되었습니다!");
         navigate(`/free/${id}`);
       } else {
         const res = await createFreeBoard({
@@ -70,11 +74,18 @@ export default function FreePostPage() {
       }
     } catch (e) {
       console.error(e);
-      alert("작성 실패");
+      toast("잠시 후 다시 시도해주세요.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (isEdit && loading) return <p>로딩 중...</p>;
+  if (isEdit && loading)
+    return (
+      <div className={$.loadingOverlay}>
+        <LoadingSpinner />
+      </div>
+    );
 
   return (
     <PostEditor
@@ -83,6 +94,7 @@ export default function FreePostPage() {
       onSubmit={handleSubmit}
       defaultValues={defaultValues || undefined}
       submitText={isEdit ? "수정하기" : "작성완료"}
+      loading={loading}
     />
   );
 }

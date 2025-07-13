@@ -9,7 +9,7 @@ export interface NewsItem {
   scrapedAt: string;
   category: string;
   categoryDisplay: string;
-  scrapped: boolean;
+  scrapped?: boolean;
 }
 
 // api 전체 응답 통일되면 공통 타입으로 분리하기

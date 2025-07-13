@@ -12,6 +12,7 @@ import LineCard from "@/components/Card/LineCard";
 import { getMainPage } from "@/apis/main/main";
 import type { MainPageResponse } from "@/apis/main/main";
 import NewsCard from "../news/components/NewsCard";
+import LoadingSpinner from "@/components/common/Spinner";
 
 function Main() {
   const navigate = useNavigate();
@@ -39,7 +40,12 @@ function Main() {
     navigate("/startTest");
   };
 
-  if (loading) return <p style={{ textAlign: "center" }}>로딩 중...</p>;
+  if (loading)
+    return (
+      <div className={$.loadingOverlay}>
+        <LoadingSpinner />
+      </div>
+    );
 
   return (
     <div className={$.container}>

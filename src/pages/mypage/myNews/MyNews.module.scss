@@ -46,3 +46,9 @@
   font-size: 14px;
   margin-top: 40px;
 }
+
+.newsList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}

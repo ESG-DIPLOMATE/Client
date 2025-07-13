@@ -9,6 +9,7 @@ import { deletePost, getDiscussBoardList } from "@/apis/community/community";
 import $ from "../../diary/Diary.module.scss";
 import { FiEdit3 } from "react-icons/fi";
 import { toast } from "react-toastify";
+import LoadingSpinner from "@/components/common/Spinner";
 
 type SortOption = "latest" | "likes" | "views";
 
@@ -161,7 +162,7 @@ function DebateListPage() {
 
         <div className={$.diaryList}>
           {loading && entries.length === 0 ? (
-            <p>로딩 중...</p>
+            <LoadingSpinner />
           ) : entries.length === 0 ? (
             <p>게시글이 없습니다.</p>
           ) : (
@@ -176,7 +177,7 @@ function DebateListPage() {
               />
             ))
           )}
-          {loading && entries.length > 0 && <p>더 불러오는 중...</p>}
+          {loading && entries.length > 0 && <LoadingSpinner />}
           <div ref={observerRef} style={{ height: "1px" }} />
         </div>
       </div>

@@ -8,6 +8,7 @@ import PreviewCard, { type Preview } from "@/components/Card/PreviewCard";
 import { getFreeBoardList, deletePost } from "@/apis/community/community";
 import $ from "../../diary/Diary.module.scss";
 import { FiEdit3 } from "react-icons/fi";
+import LoadingSpinner from "@/components/common/Spinner";
 
 type SortOption = "latest" | "likes" | "views";
 
@@ -160,7 +161,7 @@ function FreeListPage() {
 
         <div className={$.diaryList}>
           {loading && entries.length === 0 ? (
-            <p>로딩 중...</p>
+            <LoadingSpinner />
           ) : entries.length === 0 ? (
             <p>게시글이 없습니다.</p>
           ) : (
@@ -175,7 +176,7 @@ function FreeListPage() {
               />
             ))
           )}
-          {loading && entries.length > 0 && <p>더 불러오는 중...</p>}
+          {loading && entries.length > 0 && <LoadingSpinner />}
           <div ref={observerRef} style={{ height: "1px" }}></div>
         </div>
       </div>
