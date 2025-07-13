@@ -71,13 +71,15 @@ export default function MyNews() {
           ) : filteredList.length === 0 ? (
             <p className={$.emptyText}>스크랩한 뉴스가 없습니다.</p>
           ) : (
-            filteredList.map((news) => (
-              <NewsCard
-                key={news.newsId}
-                news={news}
-                onBookmarkToggle={() => handleBookmarkToggle(news.newsId)}
-              />
-            ))
+            <div className={$.newsList}>
+              {filteredList.map((news) => (
+                <NewsCard
+                  key={news.newsId}
+                  news={news}
+                  onBookmarkToggle={() => handleBookmarkToggle(news.newsId)}
+                />
+              ))}
+            </div>
           )}
         </section>
       </div>
