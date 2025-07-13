@@ -72,3 +72,34 @@ export interface DiaryVoteResponse {
 export interface DiaryVoteRequest {
   candidateId: number;
 }
+
+
+export interface MonthlyVoteResultResponse {
+  id: number;
+  year: number;
+  month: number;
+  title: string;
+  description: string;
+  status: string;
+  startDate: string;
+  endDate: string;
+  totalVotes: number;
+  candidates: DiaryVoteCandidate[];
+
+  odaVoteId: number;
+  odaVoteTitle: string;
+  odaVoteDescription: string;
+  odaVoteStatus: string;
+  odaVoteStartDate: string;
+  odaVoteEndDate: string;
+  odaTotalVotes: number;
+  odaCandidates: OdaVoteCandidate[];
+
+  hasUserVoted: boolean;
+  userVotedCandidateId: number | null;
+  userVotedAt: string | null;
+
+  hasUserVotedOda: boolean;
+  userVotedOdaCandidateId: number | null;
+  userVotedOdaAt: string | null;
+}

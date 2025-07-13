@@ -31,3 +31,10 @@ export const fetchDiaryVote = () => {
 export const voteDiary = (body: DiaryVoteRequest) => {
   return instance.post("/api/v1/monthly-vote/vote", body);
 };
+
+//월별 투표 결과 조회
+export const fetchMonthlyVoteResult = (year: number, month: number) => {
+  return instance.get<{ success: boolean; data: MonthlyVoteResultResponse }>(
+    `/api/v1/monthly-vote/result/${year}/${month}`
+  );
+};
