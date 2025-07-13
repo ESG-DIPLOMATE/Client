@@ -4,6 +4,7 @@ import type {
   OdaVoteRequest,
   DiaryVoteResponse,
   DiaryVoteRequest,
+  MonthlyVoteResultResponse,
 } from "./vote.type";
 
 // ODA 투표 조회
