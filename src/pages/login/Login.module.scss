@@ -1,0 +1,41 @@
+@use "@/_colors.scss" as *;
+@use "@/styles/mixin.scss" as *;
+
+.Wrapper {
+  overflow: hidden;
+  position: relative;
+  height: 100dvh;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 50px 30px;
+  height: 100dvh;
+  height: 100%;
+  justify-content: space-between;
+  p {
+    color: $Gray400;
+    font-weight: 800;
+  }
+  .BackgroundImg {
+    position: absolute;
+    left: 60%;
+    top: 20dvh; 
+    transform: translateX(-55%);
+    width: 100%;
+    z-index: -99; 
+}
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  margin-top: 10px;
+}
+
+.signupLink {
+  margin-top: 16px;
+  cursor: pointer;
+}

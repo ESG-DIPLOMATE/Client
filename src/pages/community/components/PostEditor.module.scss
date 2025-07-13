@@ -1,0 +1,171 @@
+@use "@/_colors.scss" as *;
+
+.wrapper {
+  height: 100dvh;
+  padding: 0 20px;
+  overflow-y: auto;
+}
+
+.PaddingContainer {
+  color: $Gray400;
+}
+
+.container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100dvh - 60px);
+  position: relative;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: $Gray400;
+    margin: 0;
+  }
+
+  .date {
+    font-size: 13px;
+    color: $Gray300;
+  }
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+  color: $Gray400;
+  white-space: pre-line;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-top: 20px;
+}
+
+.fieldRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+
+  label {
+    font-size: 14px;
+    font-weight: 600;
+    color: $Gray400;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: 30px;
+  }
+
+  input {
+    font-size: 13px;
+  }
+}
+
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputUnderline {
+  flex: 1;
+  border: none;
+  border-bottom: 1px solid $Gray100;
+  padding: 8px 0;
+  font-size: 15px;
+  color: $Gray400;
+  background: transparent;
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #4c9eff;
+  }
+
+  &::placeholder {
+    color: $Gray300;
+  }
+}
+
+.textarea {
+  width: 100%;
+  min-height: 150px;
+  margin-top: 5px;
+  border: 1px solid $Gray100;
+  border-radius: 2px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: $Gray400;
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #4c9eff;
+  }
+}
+
+.counter {
+  text-align: right;
+  font-size: 10px;
+  color: $Gray300;
+  margin-top: 2px;
+}
+
+.imageWrapper {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.imageBox {
+  width: 80px;
+  height: 80px;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid $Gray200;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.uploadBox {
+  width: 80px;
+  height: 80px;
+  border-radius: 6px;
+  background-color: #f1f3f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 28px;
+  color: $Gray300;
+  transition: background-color 0.2s ease;
+}
+
+.actions {
+  position: absolute;
+  bottom: 30px;
+  left: 24px;
+  right: 24px;
+}

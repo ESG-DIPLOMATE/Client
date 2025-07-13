@@ -1,0 +1,49 @@
+@use "@/_colors.scss" as *;
+@use "@/styles/mixin.scss" as *;
+
+.button {
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+.large {
+  height: 56px;
+  font-size: 16px;
+}
+
+.small {
+  height: 40px;
+  font-size: 14px;
+}
+
+.primary {
+  background-color: $Blue400;
+  color: $White50;
+}
+
+.secondary {
+  background-color: $Gray200;
+  color: $White50;
+}
+
+.kakao {
+  background-color: $Bi-kakao;
+  color: $Gray400;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.disabled {
+  background-color: $Gray100;
+  color: $Gray300;
+  cursor: not-allowed;
+}

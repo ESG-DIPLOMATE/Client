@@ -1,0 +1,45 @@
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+html,
+body,
+div,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+label,
+input,
+textarea {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  font-family: "Noto Sans KR", "Noto Sans SC", "NanumSquare", "-apple-system",
+    "BlinkMacSystemFont", "system-ui", "Malgun Gothic", "Noto Sans CJK KR",
+    "SimSun", "MingLiU", "MS Mincho", sans-serif;
+}
+
+input,
+textarea ::placeholder {
+  font-family: "Noto Sans KR", "Noto Sans SC", "NanumSquare", "-apple-system",
+    "BlinkMacSystemFont", "system-ui", "Malgun Gothic", "Noto Sans CJK KR",
+    "SimSun", "MingLiU", "MS Mincho", sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}

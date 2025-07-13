@@ -1,0 +1,156 @@
+@use "@/_colors.scss" as *;
+
+.wrapper {
+  height: 100dvh;
+  padding: 0 20px;
+}
+
+.PaddingContainer {
+  color: $Gray400;
+}
+
+.container {
+  height: calc(100% - 48px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 30px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid $Gray100;
+
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: $Blue400;
+    margin: 0;
+  }
+
+  .writeButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $Blue50;
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+}
+
+.headerActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.description {
+  background-color: $Gray50;
+  border: 1px solid $Gray100;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+
+  .descriptionContent {
+    h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: $Blue400;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: $Gray300;
+      margin: 0;
+      text-align: start;
+    }
+  }
+}
+.practiceItems {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.practiceColumn {
+  h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: $Gray400;
+    margin: 10px 0;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      font-size: 13px;
+      color: $Gray300;
+      margin-bottom: 4px;
+      line-height: 1.4;
+
+      strong {
+        color: $Gray400;
+      }
+    }
+  }
+}
+
+.viewAllSection {
+  margin-top: 24px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .viewAllText {
+      font-size: 18px;
+      font-weight: 500;
+      color: $Gray400;
+    }
+  }
+}
+
+.dropdownWrapper {
+  position: relative;
+  z-index: 2000;
+}
+
+.diaryList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .loading {
+    font-size: 14px;
+    color: $Gray400;
+  }
+}

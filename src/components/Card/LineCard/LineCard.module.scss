@@ -1,0 +1,76 @@
+@use "@/_colors.scss" as *;
+
+.card {
+  width: 95%;
+  border-top: 1px solid $Gray100;
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  cursor: pointer;
+
+  &:last-child {
+    border-bottom: 1px solid $Gray100;
+  }
+
+  .topRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .title {
+      font-size: 16px;
+      font-weight: 600;
+      color: $Gray400;
+    }
+
+    .category {
+      font-size: 12px;
+      color: $Blue400;
+      font-weight: 500;
+    }
+  }
+
+  .content {
+    margin-top: 4px;
+    font-size: 14px;
+    color: $Gray400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .bottomRow {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: $Gray400;
+
+    .date {
+      flex-shrink: 0;
+    }
+
+    .nickname {
+      flex-shrink: 0;
+    }
+
+    .icons {
+      display: flex;
+      gap: 8px;
+      margin-left: auto;
+
+      .icon {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        color: $Gray400;
+
+        svg {
+          flex-shrink: 0;
+        }
+      }
+    }
+  }
+}

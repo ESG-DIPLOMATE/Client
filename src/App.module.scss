@@ -1,0 +1,35 @@
+@use '_colors.scss' as *; 
+@use '@/styles/mixin.scss' as *;
+
+
+.Wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    max-width: 430px;
+    height: 100dvh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    overflow-y: auto;
+}
+
+.ContentWrapper {
+    max-width: 430px;
+    margin: 0 auto;
+    min-height: 100dvh;
+}
+
+.navigation {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    .navigationButton {
+        @include size(100%, 60px);
+        background-color: white;
+        font-weight: bold;
+        &.state {
+            background-color: $Blue100;
+        }
+    }  
+}

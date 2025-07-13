@@ -1,0 +1,59 @@
+@use "@/_colors.scss" as *;
+
+.wrapper {
+  height: 100dvh;
+  padding: 0 20px;
+}
+
+.PaddingContainer {
+  color: $Gray400;
+}
+
+.container {
+  height: calc(100% - 48px);
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: $Blue400;
+    margin: 16px 0;
+  }
+
+  .description {
+    font-size: 14px;
+    color: $Gray300;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    border-bottom: 1px solid $Gray100;
+    padding-bottom: 16px;
+  }
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 48px;
+  padding: 0 4px;
+
+  .sectionTitle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: $Gray50;
+    padding: 10px 14px;
+    font-weight: 700;
+    font-size: 15px;
+    color: $Gray300;
+    border-left: 4px solid $Blue400;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    svg {
+      color: $Blue400;
+    }
+  }
+}
