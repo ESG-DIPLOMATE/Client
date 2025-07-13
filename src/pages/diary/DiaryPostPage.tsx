@@ -71,7 +71,7 @@ export default function DiaryPostPage() {
           images: compressedImages,
         });
         toast("수정 완료되었습니다!");
-        navigate(`/diary/${editId}`);
+        navigate(`/diary/${editId}`, { state: { from: "postPage" } });
       } else {
         const res = await createDiary({
           title: data.title,
@@ -82,7 +82,7 @@ export default function DiaryPostPage() {
 
         const postId = res.data.postId;
         toast("업로드되었습니다!");
-        navigate(`/diary/${postId}`);
+        navigate(`/diary/${postId}`, { state: { from: "postPage" } });
       }
     } catch (e) {
       console.error(e);

@@ -9,10 +9,11 @@
   color: $Gray400;
 }
 
-.container {
+.Container {
   height: calc(100% - 48px);
   overflow-y: auto;
   overflow-x: hidden;
+  padding-bottom: 30px;
 
   &::-webkit-scrollbar {
     display: none;
@@ -22,11 +23,13 @@
 .header {
   display: flex;
   align-items: center;
+  justify-content: center;
   margin-bottom: 24px;
 
   .title {
     font-size: 24px;
     font-weight: 700;
+    color: $Blue400;
   }
 }
 
@@ -41,8 +44,17 @@
     background: none;
     border: none;
     font-size: 24px;
+    color: $Gray400;
     cursor: pointer;
-    color: $Gray300;
+
+    &:hover {
+      color: $Blue400;
+    }
+
+    &:disabled {
+      color: $Gray200;
+      cursor: not-allowed;
+    }
   }
 
   span {
@@ -52,12 +64,36 @@
   }
 }
 
+.section {
+  margin-bottom: 32px;
+
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: $Gray400;
+    margin-bottom: 16px;
+  }
+}
+
+.card {
+  background: $Blue50;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: inset 0 0 3px 0 #aeecff, 12px 12px 28px 0 rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .placeholderBox {
   position: relative;
   width: 100%;
-  height: 80px;
-  background: #dee2e6;
+  background: White;
   border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  box-sizing: border-box;
 }
 
 .rank {
@@ -78,30 +114,26 @@
   border: 1px solid #80bfff;
 }
 
-.section {
-  margin-bottom: 32px;
-
-  h2 {
-    font-size: 18px;
-    font-weight: 700;
-    color: $Gray400;
-    margin-bottom: 16px;
-  }
-}
-
-.card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+.voteTextBox {
+  margin-left: 25px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
 }
 
-.placeholderBox {
-  width: 100%;
-  height: 80px;
-  background: #dee2e6;
-  border-radius: 8px;
+.voteTitle {
+  font-weight: 600;
+  color: $Gray400;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.voteDescription {
+  font-size: 13px;
+  color: $Gray300;
+}
+
+.emptyMessage {
+  font-size: 14px;
+  color: $Gray300;
+  text-align: center;
 }

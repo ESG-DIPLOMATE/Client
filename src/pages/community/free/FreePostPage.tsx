@@ -62,7 +62,7 @@ export default function FreePostPage() {
           images: compressedImages,
         });
         toast("수정 완료되었습니다!");
-        navigate(`/free/${id}`);
+        navigate(`/free/${id}`, { state: { from: "postPage" } });
       } else {
         const res = await createFreeBoard({
           title: data.title,
@@ -70,7 +70,7 @@ export default function FreePostPage() {
           images: compressedImages,
         });
         const newPostId = res.data.postId;
-        navigate(`/free/${newPostId}`);
+        navigate(`/free/${newPostId}`, { state: { from: "postPage" } });
       }
     } catch (e) {
       console.error(e);

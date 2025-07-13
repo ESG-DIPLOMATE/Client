@@ -5,10 +5,12 @@ import DropDownButton, {
   type Option,
 } from "@/components/common/Button/DropDownButton";
 import PreviewCard, { type Preview } from "@/components/Card/PreviewCard";
+import Modal from "@/components/common/Modal";
 import { deletePost, getDiaryList } from "@/apis/community/community";
 import $ from "./Diary.module.scss";
 import { FiEdit3 } from "react-icons/fi";
 import LoadingSpinner from "@/components/common/Spinner";
+import { toast } from "react-toastify";
 
 type SortOption = "latest" | "likes" | "views";
 
@@ -25,6 +27,8 @@ function DiaryListPage() {
   const [entries, setEntries] = useState<Preview[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasNext, setHasNext] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [targetDeleteId, setTargetDeleteId] = useState<number | null>(null);
 
   const pageRef = useRef(0);
   const observerRef = useRef<HTMLDivElement>(null);
@@ -61,7 +65,7 @@ function DiaryListPage() {
       pageRef.current = page;
     } catch (e) {
       console.error(e);
-      alert("실천일지 목록을 불러오지 못했습니다.");
+      toast("잠시 후 다시 시도해주세요.");
     } finally {
       setLoading(false);
     }
@@ -102,17 +106,30 @@ function DiaryListPage() {
     navigate("/diary/new");
   };
 
-  const handleDelete = async (id: number) => {
-    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+  const handleDelete = (id: number) => {
+    setTargetDeleteId(id);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (targetDeleteId == null) return;
     try {
-      await deletePost("diary", id);
-      alert("삭제가 완료되었습니다.");
+      await deletePost("diary", targetDeleteId);
+      toast("삭제되었습니다.");
       pageRef.current = 0;
       fetchList(0, true);
     } catch (e) {
       console.error(e);
-      alert("삭제 중 오류가 발생했습니다.");
+      toast("잠시 후 다시 시도해주세요.");
+    } finally {
+      setShowDeleteModal(false);
+      setTargetDeleteId(null);
     }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+    setTargetDeleteId(null);
   };
 
   return (
@@ -138,29 +155,6 @@ function DiaryListPage() {
               기록하고 공유하는 공간입니다. 작은 실천이 모여 더 나은 세상을
               만들어가는 여정을 함께 해보세요.
             </p>
-          </div>
-
-          <div className={$.practiceItems}>
-            <div className={$.practiceColumn}>
-              <h4>📝 실천 항목과 예시</h4>
-              <ul>
-                <li>
-                  <strong>탄소감축</strong> - 텀블러 사용, 대중교통 이용
-                </li>
-                <li>
-                  <strong>무역외교</strong> - 공정무역 제품 구매
-                </li>
-                <li>
-                  <strong>디지털외교</strong> - 외교 콘텐츠 공유
-                </li>
-                <li>
-                  <strong>국제연대</strong> - 국제 NGO 기부, 봉사활동
-                </li>
-                <li>
-                  <strong>문화교류</strong> - 한국 문화 소개, 외국 문화 체험
-                </li>
-              </ul>
-            </div>
           </div>
         </div>
 
@@ -200,6 +194,11 @@ function DiaryListPage() {
           <div ref={observerRef} style={{ height: "1px" }} />
         </div>
       </div>
+      {showDeleteModal && (
+        <Modal onConfirm={confirmDelete} onCancel={cancelDelete}>
+          정말로 이 게시글을 삭제하시겠습니까?
+        </Modal>
+      )}
     </div>
   );
 }

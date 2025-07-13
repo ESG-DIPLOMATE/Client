@@ -7,6 +7,7 @@ import QuestionCard from "./components/questionCard";
 import NavigationButton from "./components/navigationButton";
 import $ from "./Test.module.scss";
 import LoadingSpinner from "@/components/common/Spinner";
+import { toast } from "react-toastify";
 
 export default function Test() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function Test() {
         setQuestions(data.questions);
       } catch (e) {
         console.error(e);
-        alert("테스트 질문을 불러오지 못했습니다.");
+        toast("잠시 후 다시 시도해주세요.");
       } finally {
         setLoading(false);
       }
@@ -66,7 +67,7 @@ export default function Test() {
       navigate("/testResult");
     } catch (e) {
       console.error(e);
-      alert("제출 중 오류가 발생했습니다.");
+      toast("잠시 후 다시 시도해주세요.");
     }
   };
 

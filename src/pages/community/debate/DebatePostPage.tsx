@@ -70,7 +70,7 @@ export default function DebatePostPage() {
           images: compressedImages,
         });
         toast("수정 완료되었습니다!");
-        navigate(`/debate/${editId}`);
+        navigate(`/debate/${editId}`, { state: { from: "postPage" } });
       } else {
         const res = await createDiscussBoard({
           title: data.title,
@@ -81,7 +81,7 @@ export default function DebatePostPage() {
 
         const postId = res.data.postId;
         toast("업로드되었습니다!");
-        navigate(`/debate/${postId}`);
+        navigate(`/debate/${postId}`, { state: { from: "postPage" } });
       }
     } catch (e) {
       console.error(e);

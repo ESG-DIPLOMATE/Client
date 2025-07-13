@@ -15,6 +15,7 @@ import type {
 import NewsCard from "../news/components/NewsCard";
 import { fetchMyTestResult } from "@/apis/test/test";
 import LoadingSpinner from "@/components/common/Spinner";
+import { toast } from "react-toastify";
 
 export default function TestResult() {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ export default function TestResult() {
         setResult(res.data);
       } catch (e) {
         console.error(e);
-        alert("결과를 불러오지 못했습니다.");
+        toast("잠시 후 다시 시도해주세요.");
       }
     };
 

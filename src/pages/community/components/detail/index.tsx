@@ -6,7 +6,7 @@ import ImageSlider from "@/components/Slider";
 import CommentList from "@/components/common/comment/CommentList";
 import CommentInput from "@/components/common/comment/CommentInput";
 import AppBar from "@/components/common/Appbar";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   createDiaryComment,
   createDiscussComment,
@@ -21,6 +21,7 @@ import {
   toggleLike,
 } from "@/apis/community/community";
 import { toast } from "react-toastify";
+import Modal from "@/components/common/Modal";
 
 export interface PostEditorFormData {
   title: string;
@@ -47,6 +48,7 @@ export type PostDetailProps = {
   date: string;
   authorId: string;
   category?: string;
+  discussTypeDisplay?: string;
   content: string;
   images: string[];
   likeCount: number;
@@ -62,6 +64,7 @@ export default function PostDetail({
   date,
   authorId,
   category,
+  discussTypeDisplay,
   content,
   images,
   likeCount,
@@ -74,6 +77,8 @@ export default function PostDetail({
   const [likeCountState, setLikeCountState] = useState(likeCount);
   const { id } = useParams<{ id: string }>();
   const numericId = id ? Number(id) : undefined;
+  const location = useLocation();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   if (!numericId) {
     return <p>잘못된 요청입니다.</p>;
@@ -89,24 +94,6 @@ export default function PostDetail({
       const res = await toggleLike(targetTypeMap[type], numericId);
       setIsLiked(res.data.liked);
       setLikeCountState(res.data.likeCount);
-    } catch (e) {
-      console.error(e);
-      toast("잠시 후 다시 시도해주세요.");
-    }
-  };
-
-  const handleDelete = async () => {
-    if (!numericId) {
-      toast("잠시 후 다시 시도해주세요.");
-      return;
-    }
-
-    const confirm = window.confirm("정말 삭제하시겠습니까?");
-    if (!confirm) return;
-
-    try {
-      await deletePost(type, numericId);
-      window.location.reload();
     } catch (e) {
       console.error(e);
       toast("잠시 후 다시 시도해주세요.");
@@ -157,7 +144,6 @@ export default function PostDetail({
       } else if (type === "free") {
         await deleteFreeComment(commentId);
       }
-      toast("댓글이 삭제되었습니다.");
       window.location.reload();
     } catch (e) {
       console.error(e);
@@ -170,10 +156,42 @@ export default function PostDetail({
     diary: "/diary/new",
   };
 
+  const handleBack = () => {
+    const from = location.state?.from;
+    console.log(from);
+
+    if (from && from === "postPage") {
+      navigate(-2);
+    } else {
+      navigate(-1);
+    }
+  };
+
+  const handleDelete = () => {
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await deletePost(type, numericId);
+      toast("삭제되었습니다.");
+      navigate(-2);
+    } catch (e) {
+      console.error(e);
+      toast("잠시 후 다시 시도해주세요.");
+    } finally {
+      setShowDeleteModal(false);
+    }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+  };
+
   return (
     <div className={$.wrapper}>
       <div className={$.PaddingContainer}>
-        <AppBar leftRole="back" onClickLeftButton={() => navigate(-1)} />
+        <AppBar leftRole="back" onClickLeftButton={handleBack} />
       </div>
       <div className={$.container}>
         {owner && (
@@ -191,7 +209,9 @@ export default function PostDetail({
           <span className={$.date}>작성일 | {date}</span>
           {type !== "free" && category && (
             <span className={$.category}>
-              {type === "diary" ? `항목 | ${category}` : `분야 | ${category}`}
+              {type === "diary"
+                ? `항목 | ${category}`
+                : `분야 | ${discussTypeDisplay}`}
             </span>
           )}
         </div>
@@ -227,6 +247,11 @@ export default function PostDetail({
           onDelete={handleCommentDelete}
         />
       </div>
+      {showDeleteModal && (
+        <Modal onConfirm={confirmDelete} onCancel={cancelDelete}>
+          정말로 이 게시글을 삭제하시겠습니까?
+        </Modal>
+      )}
     </div>
   );
 }

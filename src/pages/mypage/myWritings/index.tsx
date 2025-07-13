@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import AppBar from "@/components/common/Appbar";
 import KeywordChip from "@/components/Chip/KeywordChip";
 import PreviewCard from "@/components/Card/PreviewCard";
+import Modal from "@/components/common/Modal";
 import $ from "./MyWritings.module.scss";
 import { getMyPosts } from "@/apis/mypage/mypage";
 import type { MyPost, PostFilter } from "@/apis/mypage/mypage.type";
 import { deletePost } from "@/apis/community/community";
 import LoadingSpinner from "@/components/common/Spinner";
+import { toast } from "react-toastify";
 
 const filterLabelToQuery: Record<string, PostFilter> = {
   전체: "ALL",
@@ -23,6 +25,12 @@ export default function MyWritings() {
   const [selectedFilter, setSelectedFilter] = useState<string>("전체");
   const [posts, setPosts] = useState<MyPost[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [targetDeletePost, setTargetDeletePost] = useState<{
+    id: number;
+    type: "free" | "debate" | "diary";
+  } | null>(null);
 
   const fetchPosts = async (filterLabel: string) => {
     try {
@@ -43,6 +51,34 @@ export default function MyWritings() {
 
   const handleFilterChange = (filter: string) => {
     setSelectedFilter(filter);
+  };
+
+  const handleDeleteRequest = (
+    id: number,
+    type: "free" | "debate" | "diary"
+  ) => {
+    setTargetDeletePost({ id, type });
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!targetDeletePost) return;
+    try {
+      await deletePost(targetDeletePost.type, targetDeletePost.id);
+      toast("삭제되었습니다.");
+      fetchPosts(selectedFilter);
+    } catch (error) {
+      console.error("삭제 실패", error);
+      toast("잠시 후 다시 시도해주세요.");
+    } finally {
+      setShowDeleteModal(false);
+      setTargetDeletePost(null);
+    }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+    setTargetDeletePost(null);
   };
 
   return (
@@ -81,19 +117,6 @@ export default function MyWritings() {
                   ? "debate"
                   : "diary";
 
-              const handleDelete = async () => {
-                if (!window.confirm("정말 삭제하시겠습니까?")) return;
-
-                try {
-                  await deletePost(postType, post.id);
-                  alert("삭제되었습니다.");
-                  fetchPosts(selectedFilter);
-                } catch (error) {
-                  console.error("삭제 실패", error);
-                  alert("삭제에 실패했습니다.");
-                }
-              };
-
               return (
                 <PreviewCard
                   key={post.id}
@@ -114,21 +137,22 @@ export default function MyWritings() {
                   }}
                   type={postType}
                   onClick={() => {
-                    if (post.postType === "FREE_BOARD") {
-                      navigate(`/free/${post.id}`);
-                    } else if (post.postType === "DISCUSS_BOARD") {
-                      navigate(`/debate/${post.id}`);
-                    } else if (post.postType === "DIARY") {
-                      navigate(`/diary/${post.id}`);
-                    }
+                    navigate(`/${postType}/${post.id}`, {
+                      state: { from: "prev" },
+                    });
                   }}
-                  onDelete={handleDelete}
+                  onDelete={() => handleDeleteRequest(post.id, postType)}
                 />
               );
             })
           )}
         </section>
       </div>
+      {showDeleteModal && (
+        <Modal onConfirm={confirmDelete} onCancel={cancelDelete}>
+          정말로 이 게시글을 삭제하시겠습니까?
+        </Modal>
+      )}
     </div>
   );
 }

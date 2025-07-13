@@ -56,7 +56,7 @@ export default function PostEditor<T extends string>({
   const [images, setImages] = useState<File[]>(defaultValues?.images || []);
 
   const maxTitleLength = 20;
-  const maxContentLength = 1000;
+  const maxContentLength = 200;
   const maxImages = 3;
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -142,10 +142,6 @@ label {
   position: relative;
   border: 1px solid $Gray200;
 
-  &:hover {
-    border-color: #4c9eff;
-  }
-
   img {
     width: 100%;
     height: 100%;
@@ -165,11 +161,6 @@ label {
   font-size: 28px;
   color: $Gray300;
   transition: background-color 0.2s ease;
-
-  &:hover {
-    background-color: #e3f2fd;
-    color: #4c9eff;
-  }
 }
 
 .actions {

@@ -13,6 +13,7 @@ import { getMainPage } from "@/apis/main/main";
 import type { MainPageResponse } from "@/apis/main/main";
 import NewsCard from "../news/components/NewsCard";
 import LoadingSpinner from "@/components/common/Spinner";
+import { toast } from "react-toastify";
 
 function Main() {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ function Main() {
         setMainData(res);
       } catch (e) {
         console.error(e);
-        alert("메인 데이터를 불러오지 못했습니다.");
+        toast("잠시 후 다시 시도해주세요.");
       } finally {
         setLoading(false);
       }

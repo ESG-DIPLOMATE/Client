@@ -6,6 +6,7 @@ import { getFreeBoardDetail } from "@/apis/community/community";
 import type { FreeBoardDetail } from "@/apis/community/community.type";
 import LoadingSpinner from "@/components/common/Spinner";
 import $ from "../../main/Main.module.scss";
+import { toast } from "react-toastify";
 
 export default function FreePostDetail() {
   const { id } = useParams<{ id: string }>();
@@ -23,7 +24,7 @@ export default function FreePostDetail() {
         setData(res.data);
       } catch (e) {
         console.error(e);
-        alert("글을 불러오지 못했습니다.");
+        toast("잠시 후 다시 시도해주세요.");
       } finally {
         setLoading(false);
       }
@@ -39,6 +40,8 @@ export default function FreePostDetail() {
       </div>
     );
   if (!data) return <p>데이터가 없습니다.</p>;
+
+  
 
   return (
     <PostDetail

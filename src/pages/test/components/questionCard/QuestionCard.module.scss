@@ -42,15 +42,15 @@
   padding: 10px;
 
   .questionText {
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 600;
     color: $Gray400;
     line-height: 1.5;
     margin-bottom: 15px;
     padding: 16px;
     background-color: #f8f9fa;
-    border-radius: 6px;
     border-left: 4px solid #4c9eff;
+    word-break: keep-all;
   }
 
   .optionsContainer {
@@ -61,7 +61,7 @@
     .optionItem {
       display: flex;
       align-items: center;
-      padding: 10px;
+      padding: 15px;
       border: 2px solid #e9ecef;
       border-radius: 8px;
       cursor: pointer;
@@ -112,6 +112,7 @@
         font-weight: 500;
         flex: 1;
         line-height: 1.4;
+        word-break: keep-all;
       }
     }
   }
@@ -126,11 +127,13 @@
     padding: 15px;
 
     .questionText {
-      font-size: 16px;
+      font-size: 15px;
       padding: 12px;
+      word-break: keep-all;
     }
 
     .optionsContainer {
+      height: 100%;
       .optionItem {
         padding: 12px;
 
