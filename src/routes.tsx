@@ -23,6 +23,7 @@ import DebateListPage from "./pages/community/debate/DebateListPage";
 import DiaryListPage from "./pages/diary/DiaryListPage";
 import FreeListPage from "./pages/community/free/FreeListPage";
 import ProtectedRoute from "./ProtectedRoute";
+import Sever500Error from "./pages/error/Sever500Error";
 
 export const routes = [
   {
@@ -31,6 +32,7 @@ export const routes = [
     children: [
       { path: "login", element: <Login /> },
       { path: "signup", element: <Signup /> },
+      { path: "error", element: <Sever500Error /> },
       {
         element: <ProtectedRoute />,
         children: [
