@@ -125,7 +125,7 @@ function Main() {
         <div className={$.cardList}>
           {mainData?.recentNews.length === 0 && <p>데이터가 없습니다.</p>}
           {mainData?.recentNews.map((news) => (
-            <NewsCard key={news.id} news={news} onBookmarkToggle={() => {}} />
+            <NewsCard key={news.id} news={news} isMain />
           ))}
         </div>
       </section>

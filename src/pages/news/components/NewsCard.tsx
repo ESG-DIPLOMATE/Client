@@ -5,10 +5,15 @@ import { convertMofaUrl } from "@/utils/convertMofaUrl";
 
 interface NewsCardProps {
   news: NewsItem;
+  isMain?: boolean;
   onBookmarkToggle?: (id: number) => void;
 }
 
-export default function NewsCard({ news, onBookmarkToggle }: NewsCardProps) {
+export default function NewsCard({
+  news,
+  isMain,
+  onBookmarkToggle,
+}: NewsCardProps) {
   const handleClick = () => {
     const pageUrl = convertMofaUrl(news.url);
     if (pageUrl) {
@@ -19,7 +24,26 @@ export default function NewsCard({ news, onBookmarkToggle }: NewsCardProps) {
   return (
     <div className={$.card} onClick={handleClick}>
       <div className={$.content}>
-        <h3 className={$.title}>{news.title}</h3>
+        <div className={$.titleWrapper}>
+          <h3 className={$.title} style={{ width: isMain ? "100%" : "90%" }}>
+            {news.title}
+          </h3>
+
+          {news.scrapped !== undefined && onBookmarkToggle && !isMain && (
+            <button
+              className={$.bookmarkButton}
+              onClick={(e) => {
+                e.stopPropagation();
+                onBookmarkToggle(news.id);
+              }}
+            >
+              <RiBookmarkFill
+                size={20}
+                color={news.scrapped ? "#007BFF" : "#ADB5BD"}
+              />
+            </button>
+          )}
+        </div>
         <p className={$.description}>{news.summary}</p>
 
         <div className={$.meta}>
@@ -27,21 +51,6 @@ export default function NewsCard({ news, onBookmarkToggle }: NewsCardProps) {
           <span className={$.date}>{news.publishDate}</span>
         </div>
       </div>
-
-      {news.scrapped !== undefined && onBookmarkToggle && (
-        <button
-          className={$.bookmarkButton}
-          onClick={(e) => {
-            e.stopPropagation();
-            onBookmarkToggle(news.id);
-          }}
-        >
-          <RiBookmarkFill
-            size={20}
-            color={news.scrapped ? "#007BFF" : "#ADB5BD"}
-          />
-        </button>
-      )}
     </div>
   );
 }

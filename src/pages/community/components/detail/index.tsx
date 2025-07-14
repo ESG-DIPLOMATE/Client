@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
+import { AiFillHeart, AiOutlineComment } from "react-icons/ai";
 
 import $ from "./PostDetail.module.scss";
 import ImageSlider from "@/components/Slider";
@@ -194,17 +194,6 @@ export default function PostDetail({
         <AppBar leftRole="back" onClickLeftButton={handleBack} />
       </div>
       <div className={$.container}>
-        {owner && (
-          <div className={$.actions}>
-            <button
-              onClick={() => navigate(`${editPaths[type]}?id=${numericId}`)}
-            >
-              수정
-            </button>
-            <span className={$.divider}>|</span>
-            <button onClick={handleDelete}>삭제</button>
-          </div>
-        )}
         <div className={$.topRow}>
           <span className={$.date}>작성일 | {date}</span>
           {type !== "free" && category && (
@@ -226,11 +215,7 @@ export default function PostDetail({
         <div className={$.meta}>
           <div className={$.left}>
             <div className={$.like} onClick={handleLike}>
-              {isLiked ? (
-                <AiFillHeart size={20} color="#3B82F6" />
-              ) : (
-                <AiOutlineHeart size={20} color="#9CA3AF" />
-              )}
+              <AiFillHeart size={20} color={isLiked ? "#3B82F6" : "#9CA3AF"} />
               <span>{likeCountState}</span>
             </div>
             <div className={$.commentsIcon}>
@@ -238,6 +223,17 @@ export default function PostDetail({
               <span>{commentCount}</span>
             </div>
           </div>
+          {owner && (
+            <div className={$.actions}>
+              <button
+                onClick={() => navigate(`${editPaths[type]}?id=${numericId}`)}
+              >
+                수정
+              </button>
+              <span className={$.divider}>|</span>
+              <button onClick={handleDelete}>삭제</button>
+            </div>
+          )}
         </div>
         <CommentInput type={type} onSubmit={handleCommentSubmit} />
         <CommentList

@@ -21,6 +21,7 @@ function App() {
         closeOnClick
         toastStyle={{
           width: "90%",
+          minWidth: "clamp(320px, 50vw, 400px)",
           borderRadius: "10px",
           marginBottom: "10px",
         }}
