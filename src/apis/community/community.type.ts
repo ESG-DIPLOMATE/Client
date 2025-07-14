@@ -176,6 +176,7 @@ export interface DiaryBoardDetail {
   createdAt: string;
   updatedAt: string;
   owner: boolean;
+  commentCount: number;
   diaryComments: DiaryBoardComment[];
   diaryImages: BoardImage[];
 }

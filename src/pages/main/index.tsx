@@ -108,7 +108,7 @@ function Main() {
               createdAt={diary.createdAt}
               type="diary"
               likeCount={diary.likes}
-              commentCount={diary.diaryComments?.length ?? 0}
+              commentCount={diary.commentCount}
             />
           ))}
         </div>

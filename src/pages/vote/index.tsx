@@ -194,8 +194,8 @@ export default function Vote() {
                     <div
                       className={$.cardContent}
                       onClick={() => {
-                        if (item.odaProject.url) {
-                          window.open(item.odaProject.url, "_blank");
+                        if (!odaData.hasUserVoted) {
+                          setSelectedOda(String(item.id));
                         }
                       }}
                     >
