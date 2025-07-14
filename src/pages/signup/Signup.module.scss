@@ -4,14 +4,14 @@
 .Wrapper {
   overflow: hidden;
   position: relative;
-  height: 100dvh;
+  min-height: 100dvh;
 }
 
 .container {
   display: flex;
   flex-direction: column;
   padding: 30px 30px 40px 30px;
-  height: 100dvh;
+  min-height: 100dvh;
   justify-content: space-between;
   .BackgroundImg {
     position: absolute;

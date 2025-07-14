@@ -1,6 +1,6 @@
 import { useState } from "react";
 import $ from "./PreviewCard.module.scss";
-import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { AiFillHeart } from "react-icons/ai";
 import { toggleLike } from "@/apis/community/community";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -85,15 +85,9 @@ const PreviewCard = ({
           <span className={$.title}>{post.title}</span>
         </div>
 
-        {!owner && (
-          <div className={$.heartIcon} onClick={handleLike}>
-            {isLiked ? (
-              <AiFillHeart size={16} color="#3B82F6" />
-            ) : (
-              <AiOutlineHeart size={16} color="#9CA3AF" />
-            )}
-          </div>
-        )}
+        <div className={$.heartIcon} onClick={handleLike}>
+          <AiFillHeart size={20} color={isLiked ? "#3B82F6" : "#9CA3AF"} />
+        </div>
       </div>
 
       <div className={$.preview}>{post.preview}</div>
