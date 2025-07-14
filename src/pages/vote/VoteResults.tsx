@@ -110,25 +110,28 @@ export default function VoteResults() {
             </section>
 
             <section className={$.section}>
-              <h2>{data.title}</h2>
-              <div className={$.card}>
-                {data.candidates.length > 0 ? (
-                  data.candidates.slice(0, 3).map((c, index) => (
-                    <div key={c.candidateId} className={$.placeholderBox}>
-                      <span className={$.rank}>{index + 1}</span>
-                      <div className={$.voteTextBox}>
-                        <span className={$.voteTitle}>{c.diaryTitle}</span>
-                        <span className={$.voteDescription}>
-                          작성자: {c.authorName}
-                        </span>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p className={$.emptyMessage}>외교 실천일지 투표 결과가 없습니다.</p>
-                )}
-              </div>
-            </section>
+  <h2>{data.title || '의미있는 외교 실천일지 투표'}</h2>
+  <div className={$.card}>
+    {Array.isArray(data.candidates) && data.candidates.length > 0 ? (
+      data.candidates.slice(0, 3).map((c, index) => (
+        <div key={c.candidateId} className={$.placeholderBox}>
+          <span className={$.rank}>{index + 1}</span>
+          <div className={$.voteTextBox}>
+            <span className={$.voteTitle}>{c.diaryTitle}</span>
+            <span className={$.voteDescription}>
+              작성자: {c.authorName}
+            </span>
+          </div>
+        </div>
+      ))
+    ) : (
+      <p className={$.emptyMessage}>
+        시행한 실천일지 투표 내역이 없습니다.
+      </p>
+    )}
+  </div>
+</section>
+
           </>
         )}
       </div>

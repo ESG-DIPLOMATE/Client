@@ -221,44 +221,53 @@ export default function Vote() {
           {/* Diary Vote */}
           {activeTab === "diary" && diaryData && (
             <section className={$.section}>
-              <div className={$.cardList}>
-                {diaryData?.candidates.map((item: DiaryVoteCandidate) => (
-                  <div key={item.candidateId} className={$.card}>
-                    <input
-                      type="radio"
-                      name="diary"
-                      checked={selectedDiary === String(item.candidateId)}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (!diaryData.hasUserVoted) {
-                          setSelectedDiary(String(item.candidateId));
-                        }
-                      }}
-                      readOnly
-                      className={$.radio}
-                    />
-                    <div
-                      className={$.cardContent}
-                      onClick={() => {
-                        navigate(`/diary/${item.diaryId}`);
-                      }}
-                    >
-                      <h3 className={$.cardTitle}>{item.diaryTitle}</h3>
-                      <p className={$.cardDescription}>
-                        {item.diaryDescription}
-                      </p>
-                    </div>
+              {Array.isArray(diaryData.candidates) &&
+              diaryData.candidates.length > 0 ? (
+                <>
+                  <div className={$.cardList}>
+                    {diaryData.candidates.map((item: DiaryVoteCandidate) => (
+                      <div key={item.candidateId} className={$.card}>
+                        <input
+                          type="radio"
+                          name="diary"
+                          checked={selectedDiary === String(item.candidateId)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (!diaryData.hasUserVoted) {
+                              setSelectedDiary(String(item.candidateId));
+                            }
+                          }}
+                          readOnly
+                          className={$.radio}
+                        />
+                        <div
+                          className={$.cardContent}
+                          onClick={() => {
+                            navigate(`/diary/${item.diaryId}`);
+                          }}
+                        >
+                          <h3 className={$.cardTitle}>{item.diaryTitle}</h3>
+                          <p className={$.cardDescription}>
+                            {item.diaryDescription}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-              <Button
-                onClick={handleVoteDiary}
-                disabled={diaryData?.hasUserVoted || selectedDiary === null}
-                variant="primary"
-                size="large"
-              >
-                {diaryData?.hasUserVoted ? "투표 완료" : "투표 하기"}
-              </Button>
+                  <Button
+                    onClick={handleVoteDiary}
+                    disabled={diaryData?.hasUserVoted || selectedDiary === null}
+                    variant="primary"
+                    size="large"
+                  >
+                    {diaryData?.hasUserVoted ? "투표 완료" : "투표 하기"}
+                  </Button>
+                </>
+              ) : (
+                <p className={$.emptyMessage}>
+                  외교 실천일지 투표 후보가 없습니다.
+                </p>
+              )}
             </section>
           )}
         </div>
