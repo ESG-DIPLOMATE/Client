@@ -27,7 +27,7 @@ export default function VoteResults() {
 
   const handlePrevMonth = () => {
     if (month === 7) {
-      toast("투표가 시행되지 않았습니다.");
+      toast("당월에는 투표가 시행되지 않았습니다.");
       return;
     }
     const newMonth = month > 1 ? month - 1 : 12;
@@ -36,7 +36,7 @@ export default function VoteResults() {
 
   const handleNextMonth = () => {
     if (month === thisMonth) {
-      toast("투표가 시행되지 않았습니다.");
+      toast("투표가 아직 시행되지 않았습니다.");
       return;
     }
     const newMonth = month < 12 ? month + 1 : 1;
