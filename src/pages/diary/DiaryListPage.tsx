@@ -26,7 +26,7 @@ function DiaryListPage() {
   const [currentSort, setCurrentSort] = useState<SortOption>("latest");
   const [entries, setEntries] = useState<Preview[]>([]);
   const [loading, setLoading] = useState(false);
-  const [hasNext, setHasNext] = useState(true);
+  const [hasMore, setHasNext] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [targetDeleteId, setTargetDeleteId] = useState<number | null>(null);
 
@@ -79,11 +79,11 @@ function DiaryListPage() {
   const observerCallback = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       const [entry] = entries;
-      if (entry.isIntersecting && hasNext && !loading) {
+      if (entry.isIntersecting && hasMore && !loading) {
         fetchList(pageRef.current + 1);
       }
     },
-    [hasNext, loading, currentSort]
+    [hasMore, loading, currentSort]
   );
 
   useEffect(() => {
