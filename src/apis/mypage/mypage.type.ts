@@ -1,13 +1,10 @@
 // 내 정보 조회 응답 타입
 export interface MyPageResponse {
   userId: string;
-  maskedPassword: string;
-  currentLevel: string;
   currentLevelDisplay: string;
   totalStamps: number;
   stampsToNextLevel: number;
   citizenType: string;
-  isMaxLevel: boolean;
 }
 
 // 내가 올린 글 모아보기 응답 타입
@@ -18,11 +15,7 @@ export interface MyPost {
   postType: "FREE_BOARD" | "DISCUSS_BOARD" | "DIARY";
   discussType?: "ENVIRONMENT" | "CULTURE" | "PEACE" | "ECONOMY";
   action?: string;
-  likes: number;
-  viewCount: number;
-  commentCount: number;
   createdAt: string;
-  updatedAt: string;
   owner: true;
 }
 

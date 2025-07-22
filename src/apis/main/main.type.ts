@@ -1,3 +1,6 @@
+import type { DiaryBoardDetail } from "../community/community.type";
+import type { NewsItem } from "../news/news.type";
+
 export interface MainPopularCommunityPost {
     id: number;
     title: string;
@@ -13,4 +16,9 @@ export interface MainPopularCommunityPost {
     boardType: "FREE" | "DISCUSS";
     boardTypeName: string;
   }
-  
+
+export interface MainPageResponse {
+  recentDiaries: DiaryBoardDetail[];
+  recentNews: NewsItem[];
+  popularCommunityPosts: MainPopularCommunityPost[];
+}
