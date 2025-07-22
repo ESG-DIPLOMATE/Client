@@ -10,10 +10,10 @@ import $ from "./Main.module.scss";
 import TextButton from "@/components/common/Button/TextButton";
 import LineCard from "@/components/Card/LineCard";
 import { getMainPage } from "@/apis/main/main";
-import type { MainPageResponse } from "@/apis/main/main";
 import NewsCard from "../news/components/NewsCard";
 import LoadingSpinner from "@/components/common/Spinner";
 import { toast } from "react-toastify";
+import type { MainPageResponse } from "@/apis/main/main.type";
 
 function Main() {
   const navigate = useNavigate();

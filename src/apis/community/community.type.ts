@@ -1,3 +1,5 @@
+import type { ApiResponse, Pagination } from "../api.type";
+
 //커뮤니티 메인 인기글 조회
 export interface PopularFreeBoard {
   id: number;
@@ -75,31 +77,15 @@ export interface BoardImage {
   fileSize: number;
 }
 
-export interface BoardListResponse {
-  success: boolean;
-  message: string;
-  data: {
-    content: CommunityPostBase[];
-    pagination: {
-      currentPage: number;
-      totalPages: number;
-      pageSize: number;
-      totalCount: number;
-      hasMore: boolean;
-      hasPrevious: boolean;
-      first: boolean;
-      last: boolean;
-    };
-  };
-  timestamp: string;
-}
+export type BoardListResponse = ApiResponse<{
+  content: CommunityPostBase[];
+  pagination: Pagination;
+}>;
 
-export interface FreeBoardDetailResponse {
-  success: boolean;
-  message: string;
-  data: FreeBoardDetail;
-  timestamp: string;
-}
+export type FreeBoardDetailResponse = ApiResponse<FreeBoardDetail>;
+export type DiscussBoardDetailResponse = ApiResponse<DiscussBoardDetail>;
+export type DiaryBoardDetailResponse = ApiResponse<DiaryBoardDetail>;
+
 
 export interface FreeBoardDetail {
   id: number;
@@ -124,12 +110,6 @@ export interface FreeBoardComment {
   owner: boolean;
 }
 
-export interface DiscussBoardDetailResponse {
-  success: boolean;
-  message: string;
-  data: DiscussBoardDetail;
-  timestamp: string;
-}
 
 export interface DiscussBoardDetail {
   id: number;
@@ -158,13 +138,6 @@ export interface DiscussBoardComment {
   owner: boolean;
 }
 
-export interface DiaryBoardDetailResponse {
-  success: boolean;
-  message: string;
-  data: DiaryBoardDetail;
-  timestamp: string;
-}
-
 export interface DiaryBoardDetail {
   id: number;
   title: string;
@@ -189,15 +162,12 @@ export interface DiaryBoardComment {
   owner: boolean;
 }
 
-export interface CreateBoardResponse {
-  success: boolean;
+export interface CreateBoardData {
+  postId: number;
   message: string;
-  data: {
-    postId: number;
-    message: string;
-  };
-  timestamp: string;
 }
+export type CreateBoardResponse = ApiResponse<CreateBoardData>;
+
 
 export interface ToggleLikeResponse {
   likeCount: number;

@@ -1,3 +1,6 @@
+import type { Pagination } from "../api.type";
+
+// 개별 뉴스 아이템
 export interface NewsItem {
   id: number;
   scrapId: number;
@@ -5,23 +8,13 @@ export interface NewsItem {
   title: string;
   summary: string;
   url: string;
-  publishDate: string;
-  scrapedAt: string;
+  publishDate: string
   category: string;
   categoryDisplay: string;
   scrapped?: boolean;
 }
 
-// api 전체 응답 통일되면 공통 타입으로 분리하기
-export interface Pagination {
-  currentPage: number;
-  totalPages: number;
-  pageSize: number;
-  totalCount: number;
-  hasNext: boolean;
-  hasPrev: boolean;
-}
-
+// 뉴스 필터 정보
 export interface Filter {
   currentFilter: string;
   currentFilterDisplay: string;
@@ -32,12 +25,14 @@ export interface Filter {
   }[];
 }
 
+// 전체 뉴스 조회 응답
 export interface NewsResponse {
   news: NewsItem[];
   pagination: Pagination;
   filter: Filter;
 }
 
+// 맞춤형 뉴스 응답
 export interface PersonalizedNewsResponse {
   news: NewsItem[];
   pagination: Pagination;
@@ -46,15 +41,8 @@ export interface PersonalizedNewsResponse {
   citizenTypeDisplay: string;
 }
 
-//스크랩한 뉴스 조회 응답 타입
+// 스크랩한 뉴스 조회 응답
 export interface MyScrapResponse {
   scraps: NewsItem[];
-  pagination: {
-    currentPage: number;
-    totalPages: number;
-    pageSize: number;
-    totalCount: number;
-    hasNext: boolean;
-    hasPrev: boolean;
-  };
+  pagination: Pagination;
 }
