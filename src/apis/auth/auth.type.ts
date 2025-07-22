@@ -12,6 +12,7 @@ export interface AuthRequest {
     expiresIn: number;
   }  
   
+  //중복확인 응답
   export interface CheckUserIdResponse {
     available: boolean;
   }

@@ -16,11 +16,16 @@ export const signup = (data: AuthRequest) => {
 };
 
 // 리프레시 api
-export const refreshToken = (refreshToken: string) => {
-  return instance
-    .post<AuthResponse>("/api/v1/auth/refresh", { refreshToken })
-    .then((res) => res.data);
+export const refreshToken = async (refreshToken: string): Promise<AuthResponse> => {
+  try {
+    const res = await instance.post<AuthResponse>("/api/v1/auth/refresh", { refreshToken });
+    return res.data;
+  } catch (error) {
+    console.error("🔁 Refresh Token 요청 실패", error);
+    throw error;
+  }
 };
+
 
 // 회원가입 시 아이디 중복체크 api
 export const checkUserId = (userId: string) => {

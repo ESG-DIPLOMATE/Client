@@ -35,7 +35,7 @@ export default function News() {
   const [myCitizenTypeDisplay, setMyCitizenTypeDisplay] = useState<string>("");
 
   const pageRef = useRef(0);
-  const [hasNext, setHasNext] = useState(true);
+  const [hasMore, setHasNext] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const observerRef = useRef<HTMLDivElement>(null);
@@ -67,7 +67,7 @@ export default function News() {
       setNewsList((prev) => [...prev, ...data.news]);
     }
 
-    setHasNext(data.pagination.hasNext);
+    setHasNext(data.pagination.hasMore);
     pageRef.current = pageNum;
     setLoading(false);
   };
@@ -76,12 +76,12 @@ export default function News() {
     (entries: IntersectionObserverEntry[]) => {
       const [entry] = entries;
 
-      if (entry.isIntersecting && hasNext && !loading) {
+      if (entry.isIntersecting && hasMore && !loading) {
         const nextPage = pageRef.current + 1;
         fetchAllNews(nextPage);
       }
     },
-    [hasNext, loading, selectedKeyword]
+    [hasMore, loading, selectedKeyword]
   );
 
   useEffect(() => {
