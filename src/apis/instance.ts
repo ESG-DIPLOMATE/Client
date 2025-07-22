@@ -34,6 +34,12 @@ instance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    if (originalRequest?.url?.includes("/auth/refresh")) {
+      console.error("리프레시 요청 실패, handleUnauthorized 실행");
+      handleUnauthorized();
+      return Promise.reject(error);
+    }
+
     if (error.response?.status === 500) {
       window.location.href = "/error";
       return Promise.reject(error);
@@ -69,7 +75,8 @@ instance.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${res.accessToken}`;
         return instance(originalRequest);
       } catch (refreshError) {
-        handleUnauthorized();
+        console.error("refreshToken 요청 실패", refreshError);
+        handleUnauthorized(); // ✅ 여기로 진입하게 됨
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
@@ -79,6 +86,7 @@ instance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
 
 function handleUnauthorized() {
   localStorage.removeItem("accessToken");
